@@ -1,0 +1,38 @@
+name: Automated Production Deployment
+
+on:
+  push:
+    branches:
+      - main # Automatically runs every time code is pushed to main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository source code
+      - name: 1. Checkout Repository Code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js environment
+      - name: 2. Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Step 3: Install dependencies and build production bundle
+      - name: 3. Install Dependencies & Build
+        run: |
+          npm ci
+          npm run build
+
+      # Step 4: Incremental FTP Sync to public_html
+      - name: 4. Incremental FTP Deploy to Hosting
+        uses: SamKirsch/ftp-deploy-action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /public_html/
+          local-dir: ./dist/
+          state-name: .ftp-deploy-sync-state.json
