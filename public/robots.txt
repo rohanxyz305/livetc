@@ -4,3 +4,4 @@ Disallow: /admin/
 Disallow: /private/
 
 Sitemap: https://liveteachcreate.com/sitemap.xml
+Sitemap: https://liveteachcreate.com/post-sitemap.xml
