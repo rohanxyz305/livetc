@@ -28,7 +28,7 @@ jobs:
 
       # Step 4: Incremental FTP Sync to public_html
       - name: 4. Incremental FTP Deploy to Hosting
-        uses: SamKirsch/ftp-deploy-action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
