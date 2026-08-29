@@ -1,10 +1,11 @@
 import React from 'react';
 import { Bookmark, Trash2, Download, ExternalLink } from 'lucide-react';
+import Reveal from '../common/Reveal.jsx';
 
 export default function SeologicSaved({ savedKeywords = [], onRemoveKeyword, onClearAll, onSelectKeywordForSerp }) {
   const totalVol = savedKeywords.reduce((acc, curr) => acc + curr.volume, 0);
-  const avgKD = savedKeywords.length > 0 
-    ? Math.round(savedKeywords.reduce((acc, curr) => acc + curr.kd, 0) / savedKeywords.length) 
+  const avgKD = savedKeywords.length > 0
+    ? Math.round(savedKeywords.reduce((acc, curr) => acc + curr.kd, 0) / savedKeywords.length)
     : 0;
 
   const handleExportCSV = () => {
@@ -34,11 +35,11 @@ export default function SeologicSaved({ savedKeywords = [], onRemoveKeyword, onC
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-white flex items-center gap-2 font-display">
-            <Bookmark className="w-5 h-5 text-[#FEE715] fill-[#FEE715]" /> Saved Keyword Campaign List
+          <h2 className="text-display-md text-bone flex items-center gap-3">
+            <Bookmark className="w-5 h-5 text-pine fill-pine/20" aria-hidden="true" /> Saved Keyword Campaign List
           </h2>
-          <p className="text-xs text-gray-400 mt-0.5">
-            Bookmarked keywords for your active SEO campaign & content strategy.
+          <p className="text-sm text-bone-mute mt-1">
+            Bookmarked keywords for your active SEO campaign and content strategy.
           </p>
         </div>
 
@@ -46,79 +47,81 @@ export default function SeologicSaved({ savedKeywords = [], onRemoveKeyword, onC
           <div className="flex items-center gap-2">
             <button
               onClick={handleExportCSV}
-              className="px-3.5 py-1.5 bg-[#FEE715] hover:bg-[#e0ca00] text-[#101820] font-bold rounded-xl text-xs flex items-center gap-1.5 transition shadow-yellowGlow"
+              className="btn btn-accent btn-sweep px-3.5 py-2 text-xs"
             >
-              <Download className="w-3.5 h-3.5" />
-              <span>Export Saved CSV</span>
+              <Download className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Export saved CSV</span>
             </button>
 
             <button
               onClick={onClearAll}
-              className="px-3.5 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-bold rounded-xl border border-rose-500/20 text-xs flex items-center gap-1.5 transition"
+              className="btn btn-outline px-3.5 py-2 text-xs !text-clay !border-clay/40 hover:!bg-clay hover:!text-bone hover:!border-clay"
             >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Clear List</span>
+              <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Clear list</span>
             </button>
           </div>
         )}
       </div>
 
       {savedKeywords.length === 0 ? (
-        <div className="p-12 text-center text-gray-500 bg-gray-900 border border-gray-800 rounded-2xl">
-          No saved keywords yet. Click the bookmark icon next to any keyword in the research table to save it here.
+        <div className="card p-12 text-center font-mono text-xs uppercase tracking-[0.14em] text-bone-mute">
+          No saved keywords yet. Use the bookmark action next to any keyword in the research table to save it here
         </div>
       ) : (
-        <div className="space-y-4">
-          <div className="p-4 rounded-2xl bg-gray-900 border border-gray-800 flex items-center justify-around text-center text-xs shadow-xl">
-            <div>
-              <span className="text-gray-400 block font-medium">Saved Items</span>
-              <strong className="text-lg font-bold text-white">{savedKeywords.length}</strong>
+        <div className="space-y-5">
+          {/* Summary Strip */}
+          <Reveal className="card grid grid-cols-3 divide-x divide-white/10 overflow-hidden">
+            <div className="p-4 text-center">
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bone-faint block">Saved items</span>
+              <strong className="stat-num text-2xl text-marigold block mt-1">{savedKeywords.length}</strong>
             </div>
-            <div className="w-px h-8 bg-gray-800" />
-            <div>
-              <span className="text-gray-400 block font-medium">Combined Volume</span>
-              <strong className="text-lg font-bold text-emerald-400">{totalVol.toLocaleString()}</strong>
+            <div className="p-4 text-center">
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bone-faint block">Combined volume</span>
+              <strong className="stat-num text-2xl text-violet block mt-1">{totalVol.toLocaleString()}</strong>
             </div>
-            <div className="w-px h-8 bg-gray-800" />
-            <div>
-              <span className="text-gray-400 block font-medium">Avg Difficulty</span>
-              <strong className="text-lg font-bold text-amber-400">{avgKD}%</strong>
+            <div className="p-4 text-center">
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bone-faint block">Avg difficulty</span>
+              <strong className="stat-num text-2xl text-royal block mt-1">{avgKD}%</strong>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-2xl">
+          {/* Saved Table */}
+          <Reveal className="bg-cream border border-white/10 rounded-sm overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-black/80 text-gray-400 border-b border-gray-800 font-semibold uppercase tracking-wider">
-                  <th className="p-3">Keyword</th>
-                  <th className="p-3">Intent</th>
-                  <th className="p-3 text-right">Volume</th>
-                  <th className="p-3 text-center">KD%</th>
-                  <th className="p-3 text-right">CPC</th>
-                  <th className="p-3 text-center">Actions</th>
+                <tr className="border-b border-white/15">
+                  <th scope="col" className="p-3.5 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-faint">Keyword</th>
+                  <th scope="col" className="p-3.5 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-faint">Intent</th>
+                  <th scope="col" className="p-3.5 text-right font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-faint">Volume</th>
+                  <th scope="col" className="p-3.5 text-center font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-faint">KD%</th>
+                  <th scope="col" className="p-3.5 text-right font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-faint">CPC</th>
+                  <th scope="col" className="p-3.5 text-center font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-faint">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800/60 font-medium">
+              <tbody className="divide-y divide-white/10">
                 {savedKeywords.map((item) => (
-                  <tr key={item.keyword} className="hover:bg-gray-800/40 transition">
-                    <td className="p-3 font-bold text-white">{item.keyword}</td>
-                    <td className="p-3 text-gray-300">{item.intent.label}</td>
-                    <td className="p-3 text-right font-bold text-gray-200">{item.volume.toLocaleString()}</td>
-                    <td className="p-3 text-center font-bold text-amber-400">{item.kd}%</td>
-                    <td className="p-3 text-right text-emerald-400">${item.cpc.toFixed(2)}</td>
-                    <td className="p-3 text-center">
+                  <tr key={item.keyword} className="hover:bg-white/[0.04] transition-colors border-l-2 border-l-transparent hover:border-l-marigold">
+                    <td className="p-3.5 font-semibold text-bone">{item.keyword}</td>
+                    <td className="p-3.5 text-bone-mute">{item.intent.label}</td>
+                    <td className="p-3.5 text-right font-mono font-semibold text-bone-mute">{item.volume.toLocaleString()}</td>
+                    <td className="p-3.5 text-center font-mono font-semibold text-marigold">{item.kd}%</td>
+                    <td className="p-3.5 text-right font-mono font-semibold text-pine">${item.cpc.toFixed(2)}</td>
+                    <td className="p-3.5 text-center">
                       <div className="flex items-center justify-center gap-2">
                         <button
                           onClick={() => onSelectKeywordForSerp(item.keyword)}
-                          className="p-1 rounded bg-gray-800 hover:bg-gray-700 text-cyan-400"
-                          title="SERP Preview"
+                          className="p-1.5 rounded-sm border border-white/15 text-pine hover:bg-white/10 hover:border-white/30 transition-colors"
+                          title="SERP preview"
+                          aria-label={`Preview SERP for ${item.keyword}`}
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => onRemoveKeyword(item.keyword)}
-                          className="p-1 rounded bg-gray-800 hover:bg-rose-500/20 text-rose-400"
+                          className="p-1.5 rounded-sm border border-white/15 text-bone-mute hover:bg-clay/10 hover:text-clay hover:border-clay/40 transition-colors"
                           title="Remove"
+                          aria-label={`Remove ${item.keyword} from saved list`}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -128,7 +131,7 @@ export default function SeologicSaved({ savedKeywords = [], onRemoveKeyword, onC
                 ))}
               </tbody>
             </table>
-          </div>
+          </Reveal>
         </div>
       )}
     </div>

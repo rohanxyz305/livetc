@@ -15,7 +15,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col justify-between selection:bg-red-500 selection:text-white">
+      <div className="min-h-screen flex flex-col justify-between selection:bg-marigold selection:text-ink">
         <div>
           {/* Top Contact Bar */}
           <Topbar />

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Reveal from '../common/Reveal.jsx';
 
 export default function Footer() {
   const [showScroll, setShowScroll] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,118 +19,182 @@ export default function Footer() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    setSubscribed(true);
+    setNewsletterEmail('');
+  };
+
+  const quickTools = [
+    { to: '/seo-keyword-tool', label: 'SEO Keyword Tool', icon: 'fa-solid fa-magnifying-glass' },
+    { to: '/ecommerce-product-listing-tool', label: 'AI Product Listing Generator', icon: 'fa-solid fa-box-open' },
+    { to: '/email-marketing', label: 'Email Marketing', icon: 'fa-solid fa-envelope' },
+  ];
+
   return (
-    <footer className="bg-[#101820] text-white pt-16 pb-8 border-t border-gray-800 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-12 border-b border-gray-800/80">
-          
-          {/* Column 1: Company Profile & 3rd Logo Design */}
-          <div className="space-y-6">
-            <Link to="/" className="inline-block group">
-              <span className="text-xl sm:text-2xl font-extrabold text-white font-display flex items-center gap-3">
-                <span className="w-10 h-10 rounded-2xl bg-[#FEE715] text-[#101820] flex items-center justify-center font-black text-2xl shadow-yellowGlow group-hover:scale-105 transition-transform shrink-0">
-                  L
-                </span>
-                <span className="text-white font-extrabold tracking-tight">LIVETEACHCREATE</span>
-              </span>
-            </Link>
-            <p className="text-xs text-gray-400 leading-relaxed">
+    <footer className="band band-ink relative overflow-hidden pb-10 sm:pb-12">
+      <div className="shell relative">
+
+        {/* Wordmark */}
+        <div className="flex items-center gap-4 border-b border-white/10 pb-10 sm:gap-5">
+          <span className="relative inline-flex shrink-0">
+            <span aria-hidden="true" className="absolute -left-1.5 -top-1.5 h-4 w-4 bg-marigold"></span>
+            <span className="relative flex h-11 w-11 items-center justify-center rounded-[3px] border border-white/25 bg-ink font-display text-xl font-semibold text-bone sm:h-12 sm:w-12">
+              L
+            </span>
+          </span>
+          <span className="font-display text-3xl font-semibold tracking-tight text-bone sm:text-display-lg lg:text-display-xl">
+            LIVETEACH<span className="grad-text">CREATE</span>
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 gap-y-12 py-12 md:grid-cols-3 md:divide-x md:divide-white/10">
+
+          {/* Column 1: Company Profile & MSME Badge */}
+          <Reveal delay={0} className="space-y-6 md:pr-10">
+            <p className="max-w-sm text-sm leading-relaxed text-bone/60">
               Liveteachcreate is one of the top e-commerce service providers with 6+ years of experience. We assist companies in growing their businesses online through professional seller management for Amazon, Flipkart, Meesho, Blinkit, Zepto, Jiomart, Nykaa, and Myntra.
             </p>
 
             {/* Official MSME Registered Badge */}
-            <div className="p-3 rounded-2xl bg-gray-900/90 border border-gray-800 inline-flex items-center gap-3 shadow-md">
-              <div className="bg-white px-2 py-1 rounded-xl shrink-0">
-                <img 
-                  src="/msme-logo.png" 
-                  alt="MSME Registered Enterprise - Micro, Small & Medium Enterprises" 
+            <div className="inline-flex items-center gap-3 rounded-md border border-white/15 bg-white/5 p-3">
+              <div className="shrink-0 rounded-[3px] bg-cream px-2 py-1.5">
+                <img
+                  src="/msme-logo.png"
+                  alt="MSME Registered Enterprise - Micro, Small & Medium Enterprises"
                   className="h-9 w-auto object-contain"
                 />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold text-[#FEE715] tracking-wider block">Govt. of India Registered</span>
-                <span className="text-xs font-bold text-white">MSME Enterprise</span>
+                <span className="block font-mono text-[10px] uppercase tracking-[0.18em] text-marigold">Govt. of India Registered</span>
+                <span className="mt-0.5 block text-sm font-semibold text-bone">MSME Enterprise</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <a href="#" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FEE715] hover:text-[#101820] transition-colors">
-                <i className="fa-brands fa-facebook text-sm"></i>
+            <div className="flex items-center gap-2.5">
+              <a href="#" target="_blank" rel="noreferrer" aria-label="Facebook" className="pop-hover group flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-bone/70 transition-all duration-300 hover:border-marigold hover:bg-marigold hover:text-ink">
+                <i className="fa-brands fa-facebook text-sm transition-transform duration-300 group-hover:rotate-12" aria-hidden="true"></i>
               </a>
-              <a href="#" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FEE715] hover:text-[#101820] transition-colors">
-                <i className="fa-brands fa-twitter text-sm"></i>
+              <a href="#" target="_blank" rel="noreferrer" aria-label="Twitter" className="pop-hover group flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-bone/70 transition-all duration-300 hover:border-violet hover:bg-violet hover:text-ink">
+                <i className="fa-brands fa-twitter text-sm transition-transform duration-300 group-hover:-rotate-12" aria-hidden="true"></i>
               </a>
-              <a href="#" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FEE715] hover:text-[#101820] transition-colors">
-                <i className="fa-brands fa-instagram text-sm"></i>
+              <a href="#" target="_blank" rel="noreferrer" aria-label="Instagram" className="pop-hover group flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-bone/70 transition-all duration-300 hover:border-pine hover:bg-pine hover:text-ink">
+                <i className="fa-brands fa-instagram text-sm transition-transform duration-300 group-hover:rotate-12" aria-hidden="true"></i>
               </a>
-              <a href="#" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FEE715] hover:text-[#101820] transition-colors">
-                <i className="fa-brands fa-linkedin text-sm"></i>
+              <a href="#" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="pop-hover group flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-bone/70 transition-all duration-300 hover:border-rani hover:bg-rani hover:text-ink">
+                <i className="fa-brands fa-linkedin text-sm transition-transform duration-300 group-hover:-rotate-12" aria-hidden="true"></i>
               </a>
-              <a href="#" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FEE715] hover:text-[#101820] transition-colors">
-                <i className="fa-brands fa-pinterest text-sm"></i>
+              <a href="#" target="_blank" rel="noreferrer" aria-label="Pinterest" className="pop-hover group flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-bone/70 transition-all duration-300 hover:border-royal hover:bg-royal hover:text-ink">
+                <i className="fa-brands fa-pinterest text-sm transition-transform duration-300 group-hover:rotate-12" aria-hidden="true"></i>
               </a>
             </div>
-          </div>
+          </Reveal>
 
           {/* Column 2: E-Commerce Services & Quick Links */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-[#FEE715] border-b border-gray-800 pb-2">
+          <Reveal delay={100} className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:pl-10">
+            <div>
+              <h3 className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-bone-mute">
                 E-Commerce Services
               </h3>
-              <ul className="space-y-2 text-xs text-gray-300">
-                <li><Link to="/services/amazon-seller-account-management-services" className="hover:text-[#FEE715] transition-colors">Amazon Account Management</Link></li>
-                <li><Link to="/services/flipkart-account-management-services" className="hover:text-[#FEE715] transition-colors">Flipkart Account Management</Link></li>
-                <li><Link to="/services/blinkit-seller-account-management-services" className="hover:text-[#FEE715] transition-colors">Blinkit Account Management</Link></li>
-                <li><Link to="/services/meesho-account-management-services" className="hover:text-[#FEE715] transition-colors">Meesho Account Management</Link></li>
-                <li><Link to="/services/shopify-store-management-services" className="hover:text-[#FEE715] transition-colors">Shopify Store Management</Link></li>
-                <li><Link to="/services/myntra-account-management-services" className="hover:text-[#FEE715] transition-colors">Myntra Account Management</Link></li>
+              <span aria-hidden="true" className="mt-3 block h-px w-8 bg-marigold"></span>
+              <ul className="mt-5 space-y-2.5 text-sm">
+                <li><Link to="/services/amazon-seller-account-management-services" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">Amazon Account Management</Link></li>
+                <li><Link to="/services/flipkart-account-management-services" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">Flipkart Account Management</Link></li>
+                <li><Link to="/services/blinkit-seller-account-management-services" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">Blinkit Account Management</Link></li>
+                <li><Link to="/services/meesho-account-management-services" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">Meesho Account Management</Link></li>
+                <li><Link to="/services/shopify-store-management-services" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">Shopify Store Management</Link></li>
+                <li><Link to="/services/myntra-account-management-services" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">Myntra Account Management</Link></li>
               </ul>
             </div>
 
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-[#FEE715] border-b border-gray-800 pb-2">
+            <div>
+              <h3 className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-bone-mute">
                 Quick Links
               </h3>
-              <ul className="space-y-2 text-xs text-gray-300">
-                <li><Link to="/about-us" className="hover:text-[#FEE715] transition-colors">About Us</Link></li>
-                <li><Link to="/portfolio" className="hover:text-[#FEE715] transition-colors">Portfolio</Link></li>
-                <li><Link to="/blogs" className="hover:text-[#FEE715] transition-colors">Blog</Link></li>
-                <li><Link to="/careers" className="hover:text-[#FEE715] transition-colors">Career</Link></li>
-                <li><Link to="/seo-keyword-tool" className="hover:text-[#FEE715] text-[#FEE715] font-bold transition-colors">🔍 SEO Keyword Tool</Link></li>
-                <li><Link to="/ecommerce-product-listing-tool" className="hover:text-[#FEE715] text-[#FEE715] font-bold transition-colors">📦 AI Product Listing Generator</Link></li>
-                <li><Link to="/email-marketing" className="hover:text-[#FEE715] text-[#FEE715]/90 font-bold transition-colors">✉️ Email Marketing</Link></li>
-                <li><Link to="/contact-us" className="hover:text-[#FEE715] transition-colors">Contact Us</Link></li>
+              <span aria-hidden="true" className="mt-3 block h-px w-8 bg-violet"></span>
+              <ul className="mt-5 space-y-2.5 text-sm">
+                <li><Link to="/about-us" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">About Us</Link></li>
+                <li><Link to="/portfolio" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">Portfolio</Link></li>
+                <li><Link to="/blogs" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">Blog</Link></li>
+                <li><Link to="/careers" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">Career</Link></li>
+                {quickTools.map((tool) => (
+                  <li key={tool.to}>
+                    <Link to={tool.to} className="link-underline group flex items-center gap-2 text-bone/60 hover:text-bone [&::after]:h-0.5">
+                      <i className={`${tool.icon} text-[10px] text-marigold`} aria-hidden="true"></i>
+                      <span>{tool.label}</span>
+                    </Link>
+                  </li>
+                ))}
+                <li><Link to="/contact-us" className="link-underline text-bone/60 hover:text-bone [&::after]:h-0.5">Contact Us</Link></li>
               </ul>
             </div>
-          </div>
+          </Reveal>
 
-          {/* Column 3: Contact Information */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-[#FEE715] border-b border-gray-800 pb-2">
-              Contact Us
-            </h3>
-            <div className="space-y-3 text-xs text-gray-300">
-              <div className="flex gap-3 items-center">
-                <i className="fa-solid fa-mobile-screen text-[#FEE715] text-base"></i>
-                <span>Direct: <a href="tel:+919109266248" className="hover:text-[#FEE715] font-bold text-sm text-white">+91 9109266248</a></span>
-              </div>
-              <div className="flex gap-3 items-center">
-                <i className="fa-solid fa-envelope text-[#FEE715]"></i>
-                <a href="mailto:rohankumar19980211@gmail.com" className="hover:text-[#FEE715]">rohankumar19980211@gmail.com</a>
+          {/* Column 3: Contact + Newsletter */}
+          <Reveal delay={200} className="space-y-6 md:pl-10">
+            <div>
+              <h3 className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-bone-mute">
+                Contact Us
+              </h3>
+              <span aria-hidden="true" className="mt-3 block h-px w-8 bg-royal"></span>
+              <div className="mt-5 space-y-3 text-sm text-bone/60">
+                <div className="flex items-center gap-3">
+                  <i className="fa-solid fa-mobile-screen text-marigold" aria-hidden="true"></i>
+                  <span>
+                    Direct:{' '}
+                    <a href="tel:+919109266248" className="link-underline font-semibold text-bone/70 hover:text-bone [&::after]:h-0.5">+91 9109266248</a>
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <i className="fa-solid fa-envelope text-marigold" aria-hidden="true"></i>
+                  <a href="mailto:rohankumar19980211@gmail.com" className="link-underline break-all text-bone/60 hover:text-bone [&::after]:h-0.5">rohankumar19980211@gmail.com</a>
+                </div>
               </div>
             </div>
-          </div>
+
+            {/* Newsletter */}
+            <div className="border-t border-white/10 pt-6">
+              <h3 className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-bone-mute">
+                Growth Notes
+              </h3>
+              <p className="mt-3 text-xs leading-relaxed text-bone/60">
+                Monthly tactics for marketplace sellers. No spam.
+              </p>
+              <form onSubmit={handleSubscribe} className="mt-4 flex flex-col gap-2 sm:flex-row">
+                <label htmlFor="footer-newsletter-email" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="footer-newsletter-email"
+                  type="email"
+                  required
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  placeholder="you@company.com"
+                  className="field flex-1 py-2.5 text-sm"
+                />
+                <button type="submit" className="btn btn-accent btn-sweep shrink-0 px-5 py-2.5">
+                  Subscribe
+                  <i className="fas fa-arrow-right btn-arrow"></i>
+                </button>
+              </form>
+              {subscribed && (
+                <p className="mt-3 font-mono text-[11px] tracking-wide text-marigold">
+                  You are on the list. Watch your inbox.
+                </p>
+              )}
+            </div>
+          </Reveal>
 
         </div>
 
         {/* Copyright & Legal Links */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 font-mono text-[11px] tracking-wide text-bone-faint md:flex-row">
           <p>© 2020-2026 Liveteachcreate. All rights reserved.</p>
-          <div className="flex items-center gap-6">
-            <Link to="/disclaimer" className="hover:text-[#FEE715] transition-colors">Disclaimer</Link>
-            <Link to="/terms-and-conditions" className="hover:text-[#FEE715] transition-colors">Terms & Conditions</Link>
-            <Link to="/privacy-policy" className="hover:text-[#FEE715] transition-colors">Privacy Policy</Link>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <Link to="/disclaimer" className="link-underline text-bone-faint hover:text-bone [&::after]:h-0.5">Disclaimer</Link>
+            <Link to="/terms-and-conditions" className="link-underline text-bone-faint hover:text-bone [&::after]:h-0.5">Terms &amp; Conditions</Link>
+            <Link to="/privacy-policy" className="link-underline text-bone-faint hover:text-bone [&::after]:h-0.5">Privacy Policy</Link>
           </div>
         </div>
       </div>
@@ -136,10 +203,10 @@ export default function Footer() {
       {showScroll && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 left-6 z-40 bg-[#FEE715] text-[#101820] w-11 h-11 rounded-full shadow-yellowGlow flex items-center justify-center font-bold transition-all duration-300 hover:scale-110"
+          className="fixed bottom-6 left-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-ink text-bone shadow-lift transition-all duration-300 hover:-translate-y-0.5 hover:border-marigold hover:bg-marigold hover:text-ink"
           aria-label="Scroll to top"
         >
-          <i className="fa-solid fa-arrow-up text-lg"></i>
+          <i className="fa-solid fa-arrow-up text-base" aria-hidden="true"></i>
         </button>
       )}
     </footer>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import SEO from '../components/common/SEO';
+import Reveal from '../components/common/Reveal.jsx';
 
 const DEFAULT_BLOG_POSTS = [
   {
@@ -68,6 +69,16 @@ const DEFAULT_BLOG_POSTS = [
   }
 ];
 
+/* Accent rotation for category chips — marigold · pine · rani · violet · royal */
+const CATEGORY_TINTS = [
+  'border-marigold/30 bg-marigold-tint text-marigold-deep',
+  'border-pine/30 bg-pine-tint text-pine-deep',
+  'border-rani/30 bg-rani-tint text-rani-deep',
+  'border-violet/30 bg-violet-tint text-violet-deep',
+  'border-royal/30 bg-royal-tint text-royal-deep',
+];
+const categoryTint = (i) => CATEGORY_TINTS[((i % 5) + 5) % 5];
+
 export default function BlogPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -113,122 +124,230 @@ export default function BlogPage() {
     navigate('/blogs');
   };
 
+  const featuredPost = allPosts[0];
+  const remainingPosts = allPosts.slice(1);
+  const selectedIdx = selectedPost
+    ? allPosts.findIndex((p) => p.slug.toLowerCase() === selectedPost.slug.toLowerCase())
+    : -1;
+
+  const articleBodyStyles = [
+    '[&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:font-display [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-bone',
+    '[&_p]:mt-3 [&_p]:leading-relaxed [&_p]:text-bone-mute',
+    '[&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2',
+    '[&_li]:leading-relaxed [&_li]:text-bone-mute',
+    '[&_strong]:font-semibold [&_strong]:text-bone',
+  ].join(' ');
+
   return (
     <>
-      <SEO 
+      <SEO
         title={selectedPost ? `${selectedPost.title} | Liveteachcreate Blog` : "E-Commerce Growth Blog & Knowledge Hub | Liveteachcreate"}
         description={selectedPost ? selectedPost.summary || selectedPost.metaDescription : "Read comprehensive SEO guides, Flipkart Big Billion Days strategies, Amazon GIF playbooks, and published SEO articles on Liveteachcreate Knowledge Hub."}
       />
 
-      {/* Hero Banner */}
-      <div className="bg-gradient-to-b from-gray-900 to-[#101820] py-16 text-white border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <span className="inline-block px-3.5 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider shadow-yellowGlow">
-            Industry Insights & Published Articles
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white font-display">
-            Liveteachcreate Knowledge Hub
+      {/* Page header */}
+      <header className="shell pt-16 pb-14 sm:pt-24 sm:pb-16">
+        <Reveal>
+          <p className="eyebrow">Industry insights &amp; published articles</p>
+        </Reveal>
+        <Reveal delay={100}>
+          <h1 className="mt-6 max-w-3xl text-display-lg font-display text-bone">
+            Liveteachcreate <span className="grad-text">Knowledge</span> Hub
           </h1>
-          <p className="text-base text-gray-400 max-w-2xl mx-auto">
-            In-depth guides, 1,300+ word strategy blueprints, quick-commerce onboarding steps, and SEO-optimized published articles.
+        </Reveal>
+        <Reveal delay={200}>
+          <p className="lede mt-5 max-w-2xl">
+            In-depth guides, 1,300+ word strategy blueprints, quick-commerce onboarding steps, and
+            SEO-optimized published articles.
           </p>
-        </div>
-      </div>
+        </Reveal>
+        <div className="mt-12 border-t border-white/15" />
+      </header>
 
-      <section className="py-16 bg-[#101820] text-white min-h-[60vh]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          {selectedPost ? (
-            /* Full Article Detail View */
-            <div className="max-w-4xl mx-auto space-y-8 bg-gray-900/60 p-8 sm:p-12 rounded-3xl border border-gray-800 shadow-2xl">
-              
-              <button
-                onClick={handleBackToList}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#FEE715] text-[#101820] rounded-xl font-bold text-xs hover:bg-[#e0ca00] transition-colors shadow-yellowGlow"
-              >
-                ← Back to All Articles
-              </button>
+      {selectedPost ? (
+        /* Full Article Detail View */
+        <section className="pb-20 sm:pb-24">
+          <div className="shell">
+            <article className="card mx-auto max-w-3xl p-6 sm:p-10 lg:p-12">
+              <Reveal>
+                <button type="button" onClick={handleBackToList} className="btn btn-outline">
+                  <i className="fas fa-arrow-left" aria-hidden="true"></i>
+                  Back to all articles
+                </button>
 
-              <div className="space-y-4 border-b border-gray-800 pb-6">
-                <div className="flex flex-wrap items-center gap-3 text-xs">
-                  <span className="px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full font-bold uppercase">
-                    {selectedPost.category || selectedPost.clusterName || 'SEO & Marketing'}
-                  </span>
-                  <span className="text-gray-400">{selectedPost.date || selectedPost.publishedAt}</span>
-                  <span className="text-gray-500">•</span>
-                  <span className="text-[#FEE715] font-semibold">{selectedPost.readTime || `${Math.ceil((selectedPost.wordCount || 1000)/200)} min read`}</span>
-                  {selectedPost.seoScore && (
-                    <span className="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full font-bold">
-                      Semrush Score: {selectedPost.seoScore}/10
+                <div className="mt-8 border-b border-white/15 pb-8">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+                    <span className={`chip ${categoryTint(selectedIdx)}`}>
+                      {selectedPost.category || selectedPost.clusterName || 'SEO & Marketing'}
                     </span>
+                    <span className="font-mono text-xs text-bone-faint">
+                      {selectedPost.date || selectedPost.publishedAt}
+                    </span>
+                    <span className="font-mono text-xs text-bone-faint">
+                      {selectedPost.readTime || `${Math.ceil((selectedPost.wordCount || 1000) / 200)} min read`}
+                    </span>
+                    {selectedPost.seoScore && (
+                      <span className="inline-flex items-center rounded-full border border-sage/30 bg-sage/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-sage">
+                        Semrush score: {selectedPost.seoScore}/10
+                      </span>
+                    )}
+                  </div>
+
+                  <h1 className="mt-5 text-display-lg font-display text-bone">
+                    {selectedPost.title}
+                  </h1>
+
+                  {selectedPost.metaDescription && (
+                    <p className="mt-5 border-l-2 border-marigold-deep pl-4 font-display text-lg italic leading-relaxed text-bone-mute">
+                      {selectedPost.metaDescription}
+                    </p>
                   )}
                 </div>
-                <h1 className="text-2xl sm:text-4xl font-extrabold text-white font-display leading-tight">
-                  {selectedPost.title}
-                </h1>
-                {selectedPost.metaDescription && (
-                  <p className="text-sm text-gray-300 italic border-l-2 border-[#FEE715] pl-4 py-1">
-                    {selectedPost.metaDescription}
-                  </p>
-                )}
-              </div>
+              </Reveal>
 
               {/* Rendered Article HTML Body */}
-              <div className="prose prose-invert max-w-none text-gray-200 text-sm leading-relaxed space-y-6 font-sans">
+              <div className={`mt-8 max-w-none text-base text-bone-mute ${articleBodyStyles}`}>
                 <div dangerouslySetInnerHTML={{ __html: selectedPost.content }} />
               </div>
 
-              <div className="pt-8 border-t border-gray-800 flex justify-between items-center">
+              <div className="mt-10 border-t border-white/15 pt-8">
                 <button
+                  type="button"
                   onClick={handleBackToList}
-                  className="text-xs font-bold text-[#FEE715] hover:underline"
+                  className="link-underline inline-flex items-center gap-2 text-sm font-semibold"
                 >
-                  ← Return to Articles List
+                  <i className="fas fa-arrow-left" aria-hidden="true"></i>
+                  Return to articles list
                 </button>
               </div>
+            </article>
+          </div>
+        </section>
+      ) : (
+        /* Articles List View */
+        <>
+          {/* Featured post — wide card */}
+          <section className="pb-20 sm:pb-24">
+            <div className="shell">
+              {featuredPost && (
+                <Reveal>
+                  <article
+                    key={featuredPost.id || 0}
+                    className="card edge-gradient pop-hover grid grid-cols-1 overflow-hidden lg:grid-cols-12"
+                  >
+                    <div className="flex flex-col justify-between gap-8 border-b border-white/10 bg-paper-soft p-8 sm:p-10 lg:col-span-4 lg:border-b-0 lg:border-r">
+                      <div className="space-y-4">
+                        <span className={`chip ${categoryTint(0)}`}>
+                          {featuredPost.category || featuredPost.clusterName || 'SEO & Content'}
+                        </span>
+                        <p className="font-mono text-xs text-bone-faint">
+                          {featuredPost.date || featuredPost.publishedAt}
+                        </p>
+                        <p className="font-mono text-xs text-bone-faint">
+                          {featuredPost.readTime || `${Math.ceil((featuredPost.wordCount || 1000) / 200)} min read`}
+                        </p>
+                      </div>
+                      <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-marigold">
+                        Latest publication
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col p-8 sm:p-10 lg:col-span-8">
+                      <h2
+                        onClick={() => handleOpenPost(featuredPost)}
+                        className="cursor-pointer text-display-md font-display text-bone transition-colors hover:text-pine"
+                      >
+                        {featuredPost.title}
+                      </h2>
+                      <p className="mt-4 max-w-2xl leading-relaxed text-bone-mute">
+                        {featuredPost.summary || featuredPost.metaDescription}
+                      </p>
+                      <div className="mt-auto pt-8">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenPost(featuredPost)}
+                          className="link-underline inline-flex items-center gap-2 text-sm font-semibold"
+                        >
+                          Read article
+                          <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                </Reveal>
+              )}
             </div>
-          ) : (
-            /* Articles Grid View */
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {allPosts.map((post, idx) => (
-                <article key={post.id || idx} className="p-8 rounded-3xl bg-gray-900/60 border border-gray-800 shadow-lg hover:border-[#FEE715]/60 transition-all space-y-4 flex flex-col justify-between">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between text-xs text-gray-400">
-                      <span className="px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] rounded-full font-bold uppercase border border-[#FEE715]/20">
+          </section>
+
+          {/* Remaining posts — ledger rows */}
+          <section className="well band">
+            <div className="shell">
+              <div className="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                  <Reveal>
+                    <p className="eyebrow">All articles</p>
+                  </Reveal>
+                  <Reveal delay={100}>
+                    <h2 className="mt-4 text-display-md font-display text-bone">More from the hub</h2>
+                  </Reveal>
+                </div>
+                <p className="font-mono text-xs text-bone-faint">
+                  {remainingPosts.length} {remainingPosts.length === 1 ? 'article' : 'articles'}
+                </p>
+              </div>
+
+              <div className="mt-10 border-b border-white/15">
+                {remainingPosts.map((post, idx) => (
+                  <Reveal
+                    as="article"
+                    key={post.id || idx}
+                    delay={(idx % 6) * 80}
+                    className="group pop-hover grid grid-cols-1 gap-4 border-t border-white/10 hover:bg-white/[0.03] py-8 md:grid-cols-[11rem_1fr_auto] md:gap-8"
+                  >
+                    <div className="space-y-2">
+                      <p className="font-mono text-xs text-bone-faint">
+                        {post.date || post.publishedAt}
+                      </p>
+                      <span className={`chip ${categoryTint(idx)}`}>
                         {post.category || post.clusterName || 'SEO & Content'}
                       </span>
-                      <span>{post.date || post.publishedAt}</span>
                     </div>
-                    
-                    <h3 
-                      onClick={() => handleOpenPost(post)}
-                      className="text-xl font-bold text-white font-display hover:text-[#FEE715] cursor-pointer transition-colors leading-snug"
-                    >
-                      {post.title}
-                    </h3>
-                    
-                    <p className="text-xs text-gray-400 leading-relaxed line-clamp-3">
-                      {post.summary || post.metaDescription}
-                    </p>
-                  </div>
 
-                  <div className="pt-6 border-t border-gray-800 flex items-center justify-between">
-                    <span className="text-[11px] text-gray-400 font-medium">{post.readTime || `${Math.ceil((post.wordCount || 1000)/200)} min read`}</span>
-                    <button
-                      onClick={() => handleOpenPost(post)}
-                      className="text-xs font-bold text-[#FEE715] hover:text-white flex items-center gap-1.5 transition-colors"
-                    >
-                      <span>Read Full Article</span>
-                      <span>→</span>
-                    </button>
-                  </div>
-                </article>
-              ))}
+                    <div>
+                      <h3>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenPost(post)}
+                          className="text-left font-display text-lg font-semibold leading-snug text-bone transition-colors group-hover:text-pine sm:text-xl"
+                        >
+                          {post.title}
+                        </button>
+                      </h3>
+                      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-bone-mute line-clamp-2">
+                        {post.summary || post.metaDescription}
+                      </p>
+                      <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-bone-faint">
+                        {post.readTime || `${Math.ceil((post.wordCount || 1000) / 200)} min read`}
+                      </p>
+                    </div>
+
+                    <div className="self-start md:self-center">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenPost(post)}
+                        className="link-underline inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold"
+                      >
+                        Read article
+                        <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
             </div>
-          )}
-
-        </div>
-      </section>
+          </section>
+        </>
+      )}
     </>
   );
 }

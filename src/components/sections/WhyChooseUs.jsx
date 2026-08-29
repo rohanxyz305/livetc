@@ -1,4 +1,8 @@
 import React from 'react';
+import Reveal from '../common/Reveal.jsx';
+
+/* Bright DEFAULT hues read well on the dark pine band — rotate by index % 5 */
+const ROW_ICON_HUES = ['text-marigold', 'text-violet', 'text-royal', 'text-rani', 'text-leaf'];
 
 export default function WhyChooseUs() {
   const reasons = [
@@ -35,36 +39,44 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section className="py-20 bg-[#101820] border-t border-gray-800 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <span className="inline-block px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider">
-            Why Choose Liveteachcreate
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-display">
-            The Preferred E-Commerce Partner for Ambitious Brands
-          </h2>
-          <p className="text-sm text-gray-400">
-            We provide full-funnel management so you can focus on product manufacturing while we handle online sales.
-          </p>
-        </div>
+    <section className="band band-pine relative overflow-hidden">
+      <div className="shell relative">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {reasons.map((item, idx) => (
-            <div 
-              key={idx}
-              className="p-8 rounded-3xl bg-gray-900/60 border border-gray-800 shadow-lg hover:border-[#FEE715]/60 hover:shadow-yellowGlow transition-all duration-300 space-y-4"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-[#FEE715] text-[#101820] flex items-center justify-center text-2xl shadow-yellowGlow font-bold">
-                <i className={item.icon}></i>
-              </div>
-              <h3 className="text-lg font-bold text-white font-display">{item.title}</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
+          {/* Sticky intro column */}
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-24">
+              <p className="eyebrow">Why choose Liveteachcreate</p>
+              <h2 className="mt-5 text-display-lg font-display text-bone">
+                The preferred e-commerce partner for ambitious brands
+              </h2>
+              <p className="lede mt-5">
+                We provide full-funnel management so you can focus on product manufacturing
+                while we handle online sales.
+              </p>
             </div>
-          ))}
-        </div>
+          </div>
 
+          {/* Numbered ledger rows */}
+          <div className="lg:col-span-7">
+            {reasons.map((item, idx) => (
+              <Reveal key={idx} delay={idx * 70} className="ledger-row !border-white/20 group">
+                <span className="num-badge !border-white/30 !bg-white/10 !text-bone">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div>
+                  <h3 className="font-display text-xl text-bone">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-bone/70">{item.desc}</p>
+                </div>
+                <i
+                  className={`${item.icon} hidden text-lg transition-transform duration-300 group-hover:scale-125 sm:block ${ROW_ICON_HUES[idx % ROW_ICON_HUES.length]}`}
+                  aria-hidden="true"
+                ></i>
+              </Reveal>
+            ))}
+          </div>
+
+        </div>
       </div>
     </section>
   );

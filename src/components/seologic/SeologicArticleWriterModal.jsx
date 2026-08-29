@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  PenTool, CheckCircle2, AlertCircle, Copy, Check, Send, 
-  Code, FileText, Eye, X, Image as ImageIcon, Sparkles, RefreshCw, Award
+import {
+  PenTool, CheckCircle2, Copy, Check, Send,
+  Code, FileText, Eye, X, Sparkles, RefreshCw, Award
 } from 'lucide-react';
 
 export default function SeologicArticleWriterModal({ cluster, seed, onClose, onPublishSuccess }) {
@@ -17,7 +17,7 @@ export default function SeologicArticleWriterModal({ cluster, seed, onClose, onP
   const [title, setTitle] = useState(
     `Complete Guide to ${capitalizeWords(primaryKeyword)} Strategies for 2026`
   );
-  
+
   const [metaDescription, setMetaDescription] = useState(
     `Learn actionable ${primaryKeyword} techniques. Discover step by step strategies to boost organic rankings and grow your online business revenue in 2026.`
   );
@@ -222,193 +222,199 @@ export default function SeologicArticleWriterModal({ cluster, seed, onClose, onP
     }, 1200);
   };
 
+  const stepTabs = [
+    { id: 'editor', label: 'Article content', icon: FileText, suffix: `${semrushAudit.words} words` },
+    { id: 'checklist', label: 'Semrush checklist', icon: CheckCircle2, suffix: `${semrushAudit.score10}/10` },
+    { id: 'schema', label: 'Schema JSON-LD', icon: Code, suffix: null },
+    { id: 'preview', label: 'Live preview', icon: Eye, suffix: null },
+  ];
+
+  // Step number accents rotate through the hue register (01 marigold, 02 rani, 03 violet, 04 royal)
+  const stepHues = [
+    'bg-marigold-tint text-marigold-deep',
+    'bg-rani-tint text-rani-deep',
+    'bg-violet-tint text-violet-deep',
+    'bg-royal-tint text-royal-deep',
+  ];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-5xl bg-[#101820] border border-gray-800 rounded-3xl shadow-2xl overflow-hidden my-8 text-white flex flex-col max-h-[90vh]">
-        
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 bg-black/70 backdrop-blur overflow-y-auto">
+      <div
+        className="relative w-full max-w-5xl bg-cream border border-white/15 rounded-md shadow-lift overflow-hidden my-8 text-bone flex flex-col max-h-[90vh] animate-pop"
+        role="dialog"
+        aria-modal="true"
+        aria-label="SEO article studio"
+      >
+
         {/* Header Bar */}
-        <div className="px-6 py-4 bg-gray-900 border-b border-gray-800 flex items-center justify-between">
+        <div className="px-5 sm:px-6 py-4 border-b border-white/10 flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#FEE715] text-[#101820] flex items-center justify-center font-black text-xl shadow-yellowGlow">
-              <PenTool className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-sm bg-ink text-bone flex items-center justify-center shrink-0">
+              <PenTool className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold text-white font-display">Semrush-Optimized Article Studio</h2>
-                <span className="px-2.5 py-0.5 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-[10px] font-extrabold uppercase">
-                  {cluster.name}
-                </span>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-lg text-bone">Semrush-Optimized Article Studio</h2>
+                <span className="chip py-0.5 !text-[10px]">{cluster.name}</span>
               </div>
-              <p className="text-xs text-gray-400">Target Keyword: <strong className="text-[#FEE715]">{primaryKeyword}</strong></p>
+              <p className="text-xs text-bone-mute mt-0.5">
+                Target keyword: <strong className="text-marigold">{primaryKeyword}</strong>
+              </p>
             </div>
           </div>
 
-          <button onClick={onClose} className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 transition">
-            <X className="w-5 h-5" />
+          <button onClick={onClose} aria-label="Close article studio" className="p-2 rounded-sm text-bone-mute hover:text-bone hover:bg-white/10 transition-colors">
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 
         {/* Toolbar: Word Count Selection & Semrush 10/10 Score */}
-        <div className="px-6 py-3 bg-black/60 border-b border-gray-800 flex flex-wrap items-center justify-between gap-4">
-          
-          {/* Word Count Selector Tabs */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mr-1">Target Word Count:</span>
+        <div className="px-5 sm:px-6 py-3 bg-ink border-b border-white/10 flex flex-wrap items-center justify-between gap-4">
+
+          {/* Word Count Selector */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-mute mr-1">Target word count</span>
             {[1000, 1700, 2500].map((target) => (
               <button
                 key={target}
                 onClick={() => handleWordCountSelect(target)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition ${
-                  wordCountTarget === target
-                    ? 'bg-[#FEE715] text-[#101820] shadow-yellowGlow'
-                    : 'bg-gray-800 text-gray-400 hover:text-white'
-                }`}
+                aria-pressed={wordCountTarget === target}
+                className={`chip ${wordCountTarget === target ? 'chip-active' : 'hover:border-white/40 hover:text-bone'}`}
               >
-                {target} Words
+                {target} words
               </button>
             ))}
           </div>
 
-          {/* Semrush On-Page Score Badge (Always 10/10 Perfect Score) */}
+          {/* Semrush On-Page Score Badge */}
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <span className="text-[10px] text-gray-400 font-bold block uppercase tracking-wider">Semrush On-Page Score</span>
-              <span className="text-sm font-extrabold text-emerald-400 flex items-center justify-end gap-1">
-                <Award className="w-4 h-4 text-emerald-400" />
-                {semrushAudit.score10} / 10 Perfect Score
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-mute block">Semrush on-page score</span>
+              <span className="text-sm font-semibold text-sage flex items-center justify-end gap-1">
+                <Award className="w-4 h-4" aria-hidden="true" />
+                {semrushAudit.score10} / 10 perfect score
               </span>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center font-black text-sm text-emerald-400">
+            <div className="w-10 h-10 rounded-sm bg-pine-tint border border-pine/25 flex items-center justify-center font-mono text-sm font-semibold text-pine-deep">
               {semrushAudit.score10}/10
             </div>
           </div>
         </div>
 
-        {/* View Tabs */}
-        <div className="px-6 py-2 bg-gray-900/60 border-b border-gray-800 flex gap-2">
-          <button
-            onClick={() => setActiveTab('editor')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
-              activeTab === 'editor' ? 'bg-[#FEE715] text-[#101820]' : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            <FileText className="w-3.5 h-3.5 inline mr-1" /> Article Content ({semrushAudit.words} words)
-          </button>
-          <button
-            onClick={() => setActiveTab('checklist')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
-              activeTab === 'checklist' ? 'bg-[#FEE715] text-[#101820]' : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            <CheckCircle2 className="w-3.5 h-3.5 inline mr-1" /> Semrush 10-Point Checklist ({semrushAudit.score10}/10)
-          </button>
-          <button
-            onClick={() => setActiveTab('schema')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
-              activeTab === 'schema' ? 'bg-[#FEE715] text-[#101820]' : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            <Code className="w-3.5 h-3.5 inline mr-1" /> Schema JSON-LD
-          </button>
-          <button
-            onClick={() => setActiveTab('preview')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
-              activeTab === 'preview' ? 'bg-[#FEE715] text-[#101820]' : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            <Eye className="w-3.5 h-3.5 inline mr-1" /> Live Preview
-          </button>
+        {/* Step Tabs */}
+        <div className="px-5 sm:px-6 py-2 border-b border-white/10 flex gap-1.5 overflow-x-auto">
+          {stepTabs.map((tab, idx) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                aria-pressed={isActive}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-sm font-mono text-[11px] uppercase tracking-[0.14em] whitespace-nowrap border transition-colors ${
+                  isActive
+                    ? 'bg-bone text-ink border-bone'
+                    : 'border-white/15 text-bone-mute hover:text-bone hover:border-white/40'
+                }`}
+              >
+                <span className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-[2px] font-mono text-[10px] font-semibold ${stepHues[idx % 4]}`}>0{idx + 1}</span>
+                <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>{tab.label}</span>
+                {tab.suffix && <span className={isActive ? 'text-ink/60' : 'text-bone-faint'}>({tab.suffix})</span>}
+              </button>
+            );
+          })}
         </div>
 
         {/* Scrollable Body */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
 
-          {/* TAB 1: ARTICLE EDITOR */}
+          {/* STEP 1: ARTICLE EDITOR */}
           {activeTab === 'editor' && (
             <div className="space-y-6">
-              
+
               {/* Title & Slug */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                      SEO Article Title
+                  <div className="flex items-center justify-between mb-2">
+                    <label htmlFor="article-title" className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-mute">
+                      SEO article title
                     </label>
-                    <span className="text-[11px] font-bold text-emerald-400">
-                      {title.length} / 60 chars
-                    </span>
+                    <span className="font-mono text-[11px] text-sage">{title.length} / 60 chars</span>
                   </div>
                   <input
+                    id="article-title"
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-black border border-gray-800 rounded-xl text-xs text-white focus:border-[#FEE715] focus:outline-none font-medium"
+                    className="field text-sm"
                   />
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                      URL Permalink Slug
+                  <div className="flex items-center justify-between mb-2">
+                    <label htmlFor="article-slug" className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-mute">
+                      URL permalink slug
                     </label>
-                    <span className="text-[11px] text-gray-400">/blogs/{slug}</span>
+                    <span className="font-mono text-[11px] text-bone-faint">/blogs/{slug}</span>
                   </div>
                   <input
+                    id="article-slug"
                     type="text"
                     value={slug}
                     onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/\s+/g, '-'))}
-                    className="w-full px-4 py-2.5 bg-black border border-gray-800 rounded-xl text-xs text-[#FEE715] font-mono focus:border-[#FEE715] focus:outline-none"
+                    className="field font-mono text-xs text-pine"
                   />
                 </div>
               </div>
 
               {/* Meta Description */}
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                    Meta Description (SERP Snippet)
+                <div className="flex items-center justify-between mb-2">
+                  <label htmlFor="article-meta" className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-mute">
+                    Meta description (SERP snippet)
                   </label>
-                  <span className="text-[11px] font-bold text-emerald-400">
-                    {metaDescription.length} / 160 chars
-                  </span>
+                  <span className="font-mono text-[11px] text-sage">{metaDescription.length} / 160 chars</span>
                 </div>
                 <textarea
+                  id="article-meta"
                   rows="2"
                   value={metaDescription}
                   onChange={(e) => setMetaDescription(e.target.value)}
-                  className="w-full p-3 bg-black border border-gray-800 rounded-xl text-xs text-gray-200 focus:border-[#FEE715] focus:outline-none resize-none"
+                  className="field text-xs resize-none"
                 ></textarea>
               </div>
 
-              {/* Main Content Area (Clean text without special markdown symbols) */}
+              {/* Main Content Area */}
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                    Human-Style SEO Article Body (No Special Formatting Chars: #, @, $, %, *)
+                <div className="flex items-center justify-between mb-2">
+                  <label htmlFor="article-body" className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-mute">
+                    Article body (no special formatting chars: #, @, $, %, *)
                   </label>
-                  <span className="text-xs text-emerald-400 font-bold">{semrushAudit.words} words</span>
+                  <span className="font-mono text-xs text-sage font-semibold">{semrushAudit.words} words</span>
                 </div>
                 <textarea
+                  id="article-body"
                   rows="14"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full p-4 bg-black border border-gray-800 rounded-xl text-xs text-gray-200 font-sans leading-relaxed focus:border-[#FEE715] focus:outline-none resize-y"
+                  className="field text-xs leading-relaxed resize-y"
                 ></textarea>
               </div>
 
             </div>
           )}
 
-          {/* TAB 2: SEMRUSH 10-POINT CHECKLIST */}
+          {/* STEP 2: SEMRUSH 10-POINT CHECKLIST */}
           {activeTab === 'checklist' && (
             <div className="space-y-6">
-              <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between">
+              <div className="p-4 rounded-sm bg-pine-tint border border-pine/25 flex items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-base font-bold text-white font-display">Semrush On-Page SEO Checklist</h3>
-                  <p className="text-xs text-gray-300">Reference: Official Semrush On-Page SEO Optimization Framework.</p>
+                  <h3 className="text-base text-ink">Semrush On-Page SEO Checklist</h3>
+                  <p className="text-xs text-pine-deep mt-0.5">Reference: official Semrush on-page SEO optimization framework.</p>
                 </div>
-                <div className="px-4 py-2 bg-emerald-500/20 text-emerald-300 font-black rounded-xl text-sm border border-emerald-500/30">
-                  {semrushAudit.score10} / 10 Perfect Score
+                <div className="px-4 py-2 bg-cream border border-pine/30 text-pine font-mono text-sm font-semibold rounded-sm shrink-0">
+                  {semrushAudit.score10} / 10
                 </div>
               </div>
 
@@ -416,12 +422,12 @@ export default function SeologicArticleWriterModal({ cluster, seed, onClose, onP
                 {semrushAudit.checks.map((item) => (
                   <div
                     key={item.id}
-                    className="p-4 rounded-2xl bg-gray-900 border border-emerald-500/30 flex items-start gap-3"
+                    className="p-4 rounded-sm bg-white/[0.03] border border-white/10 flex items-start gap-3"
                   >
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-sage shrink-0 mt-0.5" aria-hidden="true" />
                     <div>
-                      <h4 className="text-xs font-bold text-white">{item.id}. {item.name}</h4>
-                      <p className="text-xs text-gray-300 mt-0.5">{item.msg}</p>
+                      <h4 className="font-mono text-xs font-semibold text-bone">{item.id}. {item.name}</h4>
+                      <p className="text-xs text-bone-mute mt-0.5">{item.msg}</p>
                     </div>
                   </div>
                 ))}
@@ -429,40 +435,40 @@ export default function SeologicArticleWriterModal({ cluster, seed, onClose, onP
             </div>
           )}
 
-          {/* TAB 3: SCHEMA */}
+          {/* STEP 3: SCHEMA */}
           {activeTab === 'schema' && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white font-display">Structured Data (BlogPosting Schema JSON-LD)</h3>
+              <div className="flex items-center justify-between gap-4">
+                <h3 className="text-sm text-bone">Structured data (BlogPosting schema JSON-LD)</h3>
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(generateSchema());
                     setCopiedCode(true);
                     setTimeout(() => setCopiedCode(false), 1500);
                   }}
-                  className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-xs font-bold rounded-xl flex items-center gap-1.5"
+                  className="btn btn-outline px-3 py-1.5 text-xs"
                 >
-                  {copiedCode ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedCode ? 'Copied!' : 'Copy Schema'}</span>
+                  {copiedCode ? <Check className="w-3.5 h-3.5 text-sage" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedCode ? 'Copied' : 'Copy schema'}</span>
                 </button>
               </div>
 
-              <pre className="p-4 bg-black border border-gray-800 rounded-2xl text-xs text-[#FEE715] font-mono overflow-x-auto max-h-[400px]">
+              <pre className="p-4 rounded-sm bg-ink text-bone/90 border border-white/10 font-mono text-xs overflow-x-auto max-h-[400px]">
                 {generateSchema()}
               </pre>
             </div>
           )}
 
-          {/* TAB 4: LIVE PREVIEW */}
+          {/* STEP 4: LIVE PREVIEW */}
           {activeTab === 'preview' && (
-            <div className="p-8 rounded-3xl bg-gray-900 border border-gray-800 max-w-3xl mx-auto space-y-6 shadow-2xl">
-              <div className="border-b border-gray-800 pb-4 space-y-2">
-                <span className="text-xs font-bold text-[#FEE715] uppercase tracking-wider">Live Site Article Preview</span>
-                <h1 className="text-2xl font-extrabold text-white font-display">{title}</h1>
-                <p className="text-xs text-gray-400">By <strong>Liveteachcreate Editorial Team</strong> • Published on site preview</p>
+            <div className="p-6 sm:p-8 rounded-sm bg-paper-deep border border-white/10 max-w-3xl mx-auto space-y-6">
+              <div className="border-b border-white/10 pb-4 space-y-2">
+                <span className="eyebrow">Live site article preview</span>
+                <h1 className="text-2xl text-bone">{title}</h1>
+                <p className="text-xs text-bone-faint">By <strong className="text-bone-mute">Liveteachcreate Editorial Team</strong> &bull; Published on site preview</p>
               </div>
 
-              <div className="prose prose-invert prose-xs text-gray-200 leading-relaxed space-y-4 font-sans">
+              <div className="text-sm text-bone-mute leading-relaxed space-y-4 [&_h2]:text-bone [&_h2]:text-lg [&_h2]:mt-6 [&_h2]:mb-2 [&_p]:mb-3 [&_strong]:text-bone [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-2 [&_a]:text-marigold [&_a]:underline [&_img]:rounded-sm [&_img]:border [&_img]:border-white/10">
                 <div dangerouslySetInnerHTML={{ __html: content }} />
               </div>
             </div>
@@ -471,15 +477,15 @@ export default function SeologicArticleWriterModal({ cluster, seed, onClose, onP
         </div>
 
         {/* Footer Action Bar */}
-        <div className="px-6 py-4 bg-gray-900 border-t border-gray-800 flex items-center justify-between">
-          <div className="text-xs text-gray-400">
-            On-Page Score: <strong className="text-emerald-400 font-bold">{semrushAudit.score10} / 10 Perfect Score</strong>
+        <div className="px-5 sm:px-6 py-4 bg-ink border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-bone-mute">
+            On-page score: <strong className="text-sage font-semibold">{semrushAudit.score10} / 10</strong>
           </div>
 
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold rounded-xl text-xs transition"
+              className="btn btn-ghost px-4 py-2.5 text-xs"
             >
               Cancel
             </button>
@@ -487,17 +493,18 @@ export default function SeologicArticleWriterModal({ cluster, seed, onClose, onP
             <button
               disabled={isPublishing}
               onClick={handlePublish}
-              className="pulseBtn px-6 py-2.5 font-extrabold text-xs text-[#101820] rounded-full uppercase tracking-wider shadow-yellowGlow flex items-center gap-2 disabled:opacity-50"
+              className="btn btn-accent btn-sweep px-6 py-2.5 text-xs disabled:opacity-50"
             >
               {isPublishing ? (
                 <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Publishing Article on Site...</span>
+                  <RefreshCw className="w-4 h-4 animate-spin" aria-hidden="true" />
+                  <span>Publishing article</span>
                 </>
               ) : (
                 <>
-                  <Send className="w-4 h-4" />
-                  <span>Publish Article on Site</span>
+                  <Send className="w-4 h-4" aria-hidden="true" />
+                  <span>Publish article</span>
+                  <i className="fas fa-arrow-right btn-arrow" aria-hidden="true"></i>
                 </>
               )}
             </button>
@@ -568,8 +575,8 @@ function generateHumanArticle(cluster, seed, targetWords) {
 <p>In this comprehensive guide, we examine the essential components of <strong>${mainKw}</strong>, providing a clear roadmap for organizations seeking higher search engine visibility, improved conversion rates, and long term domain authority.</p>
 
 <div class="my-6">
-  <img src="${liveImageUrl}" alt="Live SEO Analytics and Strategy for ${mainKwCap}" class="rounded-2xl w-full object-cover max-h-[380px] shadow-2xl border border-gray-800" />
-  <p class="text-[11px] text-gray-400 mt-2 text-center">Live Figure 1: Data Analytics and Optimization Dashboard for ${mainKwCap}</p>
+  <img src="${liveImageUrl}" alt="Live SEO Analytics and Strategy for ${mainKwCap}" class="rounded-md w-full object-cover max-h-[380px] border border-white/10" />
+  <p class="text-[11px] text-bone-faint mt-2 text-center">Live Figure 1: Data Analytics and Optimization Dashboard for ${mainKwCap}</p>
 </div>
 
 <h2>Why ${mainKwCap} Holds High Commercial Value</h2>
@@ -619,7 +626,7 @@ A: Initial ranking improvements typically occur within 4 to 8 weeks, with compou
 <h2>Conclusion and Next Steps</h2>
 <p>Mastering <strong>${mainKw}</strong> provides a decisive competitive advantage for growing online brands. By applying structured on page SEO techniques, creating depth of coverage, and maintaining technical excellence, your site can secure top rankings and drive continuous qualified traffic.</p>
 
-<p>For expert assistance with Amazon, Flipkart, Meesho, and Blinkit account management, contact the team at <a href="https://liveteachcreate.com/contact-us" class="text-[#FEE715] font-bold underline">Liveteachcreate E-Commerce Studio</a> today.</p>
+<p>For expert assistance with Amazon, Flipkart, Meesho, and Blinkit account management, contact the team at <a href="https://liveteachcreate.com/contact-us" class="text-marigold-deep font-semibold underline">Liveteachcreate E-Commerce Studio</a> today.</p>
 `;
 
   return stripSpecialChars(body.trim());

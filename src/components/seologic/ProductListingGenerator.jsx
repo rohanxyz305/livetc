@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { 
-  Package, Image as ImageIcon, Sparkles, Copy, Check, Download, 
-  ShoppingBag, Zap, ExternalLink, Tag, CheckCircle2, RefreshCw, Upload, FileImage
+import {
+  Package, Sparkles, Copy, Check, Download,
+  Zap, ExternalLink, Tag, CheckCircle2, RefreshCw, Upload
 } from 'lucide-react';
+import Reveal from '../common/Reveal.jsx';
 
 const SAMPLE_IMGBB_LINKS = [
   {
@@ -29,6 +30,15 @@ const SAMPLE_IMGBB_LINKS = [
 
 // ImgBB API Key for direct client-side upload
 const IMGBB_API_KEY = "6d257850d0322d7d74eda538ec1a72d4";
+
+// Platform tabs carry a fixed hue per marketplace (static list, mapped by name)
+const PLATFORM_TINTS = {
+  amazon: 'bg-marigold-tint text-marigold-deep border-marigold/30 hover:border-marigold/60',
+  flipkart: 'bg-royal-tint text-royal-deep border-royal/25 hover:border-royal/50',
+  meesho: 'bg-rani-tint text-rani-deep border-rani/25 hover:border-rani/50',
+  myntra: 'bg-violet-tint text-violet-deep border-violet/25 hover:border-violet/50',
+  ajio: 'bg-pine-tint text-pine-deep border-pine/25 hover:border-pine/50',
+};
 
 export default function ProductListingGenerator() {
   const [imgbbUrl, setImgbbUrl] = useState('');
@@ -182,44 +192,46 @@ export default function ProductListingGenerator() {
     document.body.removeChild(link);
   };
 
+  const copyBtnCls = 'px-3 py-1 bg-white/5 hover:bg-white/10 text-bone-mute rounded-sm text-xs font-semibold border border-white/15 hover:border-white/30 flex items-center gap-1 transition-colors shrink-0';
+
   return (
-    <div className="space-y-8">
-      
+    <div className="relative space-y-10">
+
       {/* Hero Title */}
-      <div className="text-center space-y-3 max-w-3xl mx-auto">
-        <span className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider shadow-yellowGlow">
-          <Package className="w-3.5 h-3.5" /> DIRECT IMGBB UPLOAD & LISTING GENERATOR
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white font-display">
-          Upload Product Image <span className="text-[#FEE715]">to E-Com Listing</span>
-        </h1>
-        <p className="text-xs sm:text-sm text-gray-400">
-          Upload your product image directly below. Our tool handles direct ImgBB hosting, displays instant live image preview, and builds complete Amazon, Flipkart, Meesho, Myntra & Ajio product listings.
-        </p>
+      <div className="text-center space-y-4 max-w-3xl mx-auto">
+        <Reveal as="p" delay={0} className="eyebrow justify-center">
+          <Package className="w-3.5 h-3.5 text-marigold" aria-hidden="true" />
+          Direct ImgBB upload &amp; listing generator
+        </Reveal>
+        <Reveal as="h1" delay={90} className="text-display-md text-bone">
+          Upload a product image <span className="text-pine">to generate</span> <span className="grad-text">listings</span>
+        </Reveal>
+        <Reveal as="p" delay={170} className="lede text-base sm:text-lg">
+          Upload a product image below. The tool handles direct ImgBB hosting, shows an instant live preview, and builds complete Amazon, Flipkart, Meesho, Myntra &amp; Ajio listings.
+        </Reveal>
       </div>
 
-      {/* Upload & Generator Control Panel */}
-      <div className="p-6 rounded-3xl bg-gray-900 border border-gray-800 shadow-2xl max-w-4xl mx-auto space-y-6">
-        
+      {/* Upload & Generator Control Panel — hero panel of the page (animated gradient edge) */}
+      <Reveal className="edge-gradient p-6 max-w-4xl mx-auto space-y-6" delay={240}>
+
         {/* Brand Name Input */}
         <div className="max-w-xs">
-          <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">
-            Your Brand Name
-          </label>
+          <label htmlFor="generator-brand" className="field-label">Your brand name</label>
           <input
+            id="generator-brand"
             type="text"
             value={brandName}
             onChange={(e) => setBrandName(e.target.value)}
             placeholder="e.g. Liveteachcreate"
-            className="w-full px-4 py-2.5 bg-black border border-gray-800 rounded-xl text-xs text-[#FEE715] font-bold focus:border-[#FEE715] focus:outline-none"
+            className="field text-sm"
           />
         </div>
 
         {/* Direct Drag & Drop Upload Zone */}
         <div>
-          <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
-            Upload Product Image (Direct ImgBB Integration)
-          </label>
+          <span className="field-label font-mono !text-[10px] uppercase tracking-[0.18em] text-bone-faint" id="upload-label">
+            Upload product image (direct ImgBB integration)
+          </span>
 
           <input
             type="file"
@@ -227,6 +239,7 @@ export default function ProductListingGenerator() {
             onChange={handleFileChange}
             accept="image/*"
             className="hidden"
+            aria-describedby="upload-label"
           />
 
           <div
@@ -234,44 +247,53 @@ export default function ProductListingGenerator() {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current && fileInputRef.current.click()}
-            className={`p-8 rounded-2xl border-2 border-dashed transition-all cursor-pointer text-center flex flex-col items-center justify-center gap-3 ${
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                fileInputRef.current && fileInputRef.current.click();
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="Upload product image: click or drag and drop a file"
+            className={`p-8 rounded-sm border-2 border-dashed transition-all duration-200 cursor-pointer text-center flex flex-col items-center justify-center gap-3 ${
               isDragging
-                ? 'bg-[#FEE715]/10 border-[#FEE715]'
-                : 'bg-black/60 border-gray-800 hover:border-[#FEE715]/50 hover:bg-black/80'
+                ? 'bg-marigold-pale border-marigold shadow-glowmarigold'
+                : 'bg-ink border-white/20 hover:border-marigold/60'
             }`}
           >
             {isUploading ? (
               <div className="space-y-2 py-2">
-                <RefreshCw className="w-8 h-8 text-[#FEE715] animate-spin mx-auto" />
-                <p className="text-xs font-bold text-[#FEE715]">Uploading Image to ImgBB...</p>
+                <RefreshCw className="w-8 h-8 text-marigold animate-spin mx-auto" aria-hidden="true" />
+                <p className="font-mono text-xs uppercase tracking-[0.14em] text-marigold">Uploading image to ImgBB</p>
               </div>
             ) : previewImage ? (
               <div className="space-y-3">
                 <div className="relative inline-block">
                   <img
                     src={previewImage}
-                    alt="Uploaded Product Preview"
-                    className="w-40 h-40 object-cover rounded-2xl border-2 border-[#FEE715] shadow-2xl mx-auto"
+                    alt="Uploaded product preview"
+                    className="w-40 h-40 object-cover rounded-sm border-2 border-marigold mx-auto"
                   />
-                  <span className="absolute bottom-2 right-2 px-2 py-0.5 bg-black/90 text-emerald-400 text-[10px] font-bold rounded-md border border-emerald-500/30">
-                    Uploaded Live
+                  <span className="absolute bottom-2 right-2 px-2 py-0.5 bg-ink text-bone font-mono text-[10px] font-medium uppercase tracking-wider rounded-sm">
+                    Uploaded
                   </span>
                 </div>
-                <p className="text-xs text-gray-300 font-semibold">
-                  Image Uploaded Successfully! Click or drop another image to replace.
+                <p className="text-xs text-bone-mute font-medium">
+                  Image uploaded. Click or drop another image to replace it.
                 </p>
               </div>
             ) : (
               <div className="space-y-2 py-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#FEE715]/10 text-[#FEE715] flex items-center justify-center mx-auto border border-[#FEE715]/20 shadow-yellowGlow">
-                  <Upload className="w-6 h-6" />
+                <div className="w-12 h-12 rounded-sm bg-cream text-pine flex items-center justify-center mx-auto border border-white/15">
+                  <Upload className="w-6 h-6" aria-hidden="true" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-white">
-                    Click to Upload Product Image or Drag & Drop File
+                  <p className={`text-sm font-semibold ${isDragging ? 'text-ink' : 'text-bone'}`}>
+                    Click to upload a product image, or drag and drop a file
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Supports JPG, PNG, WEBP. Instant direct upload via ImgBB API.
+                  <p className={`text-xs mt-1 ${isDragging ? 'text-ink/60' : 'text-bone-mute'}`}>
+                    Supports JPG, PNG, WEBP. Instant direct upload via the ImgBB API.
                   </p>
                 </div>
               </div>
@@ -280,15 +302,18 @@ export default function ProductListingGenerator() {
         </div>
 
         {/* Or Paste ImgBB Link Manually */}
-        <div className="pt-2 border-t border-gray-800/80 space-y-2">
-          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Or Paste Existing ImgBB Link Manually</span>
-            <a href="https://imgbb.com/" target="_blank" rel="noreferrer" className="text-[11px] text-[#FEE715] hover:underline flex items-center gap-1">
-              ImgBB.com <ExternalLink className="w-3 h-3" />
+        <div className="pt-4 border-t border-white/10 space-y-2">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <label htmlFor="imgbb-url" className="field-label font-mono !text-[10px] uppercase tracking-[0.18em] text-bone-faint mb-0">
+              Or paste an existing ImgBB link manually
+            </label>
+            <a href="https://imgbb.com/" target="_blank" rel="noreferrer" className="link-underline font-mono text-[11px] font-semibold flex items-center gap-1">
+              ImgBB.com <ExternalLink className="w-3 h-3" aria-hidden="true" />
             </a>
-          </label>
-          <div className="flex gap-2">
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
+              id="imgbb-url"
               type="text"
               value={imgbbUrl}
               onChange={(e) => {
@@ -296,22 +321,23 @@ export default function ProductListingGenerator() {
                 setPreviewImage(e.target.value);
               }}
               placeholder="e.g. https://i.ibb.co/xyz/product.jpg"
-              className="w-full px-4 py-2.5 bg-black border border-gray-800 rounded-xl text-xs text-white placeholder-gray-500 focus:border-[#FEE715] focus:outline-none"
+              className="field font-mono text-xs"
             />
             <button
               disabled={isGenerating || !imgbbUrl.trim()}
               onClick={() => handleGenerateListing()}
-              className="pulseBtn px-5 py-2.5 font-extrabold text-xs text-[#101820] rounded-xl shadow-yellowGlow shrink-0 flex items-center gap-2 disabled:opacity-50"
+              className="btn btn-accent btn-sweep px-5 py-3 text-sm shrink-0 disabled:opacity-50"
             >
               {isGenerating ? (
                 <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Generating...</span>
+                  <RefreshCw className="w-4 h-4 animate-spin" aria-hidden="true" />
+                  <span>Generating</span>
                 </>
               ) : (
                 <>
-                  <Zap className="w-4 h-4 fill-[#101820]" />
-                  <span>Generate Listing</span>
+                  <Zap className="w-4 h-4 fill-ink/20" aria-hidden="true" />
+                  <span>Generate listing</span>
+                  <i className="fas fa-arrow-right btn-arrow" aria-hidden="true"></i>
                 </>
               )}
             </button>
@@ -319,37 +345,37 @@ export default function ProductListingGenerator() {
         </div>
 
         {/* Sample Image Presets */}
-        <div className="pt-4 border-t border-gray-800/80">
-          <span className="text-xs font-bold text-gray-400 block mb-2">
-            Or Click a Sample Product Image:
+        <div className="pt-4 border-t border-white/10">
+          <span className="field-label font-mono !text-[10px] uppercase tracking-[0.18em] text-bone-faint">
+            Or start from a sample product image
           </span>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {SAMPLE_IMGBB_LINKS.map((sample) => (
               <button
                 key={sample.name}
                 onClick={() => handleSampleClick(sample)}
-                className="p-2.5 rounded-xl bg-black/60 border border-gray-800 hover:border-[#FEE715]/50 transition text-left flex items-center gap-2 group"
+                className="p-2.5 rounded-sm bg-white/5 border border-white/15 hover:border-white/40 transition-colors text-left flex items-center gap-2 group"
               >
-                <img src={sample.url} alt={sample.name} className="w-8 h-8 rounded-lg object-cover shrink-0" />
+                <img src={sample.url} alt={`Sample product: ${sample.name}`} className="w-8 h-8 rounded-sm object-cover shrink-0 border border-white/10" />
                 <div className="overflow-hidden">
-                  <p className="text-[11px] font-bold text-gray-200 group-hover:text-[#FEE715] truncate">{sample.name}</p>
-                  <p className="text-[9px] text-gray-400">{sample.category}</p>
+                  <p className="text-[11px] font-semibold text-bone group-hover:text-marigold truncate transition-colors">{sample.name}</p>
+                  <p className="font-mono text-[9px] uppercase tracking-wider text-bone-faint">{sample.category}</p>
                 </div>
               </button>
             ))}
           </div>
         </div>
 
-      </div>
+      </Reveal>
 
       {/* Generated Marketplace Result */}
       {generatedListing && (
-        <div className="max-w-5xl mx-auto space-y-6 animate-in fade-in">
-          
+        <div className="max-w-5xl mx-auto space-y-6 animate-fade-up">
+
           {/* Marketplace Selector Tabs */}
-          <div className="p-4 rounded-2xl bg-gray-900 border border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="card p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
-              <span className="text-xs font-bold text-gray-400 mr-2">Target Platform:</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bone-faint mr-2 shrink-0">Target platform</span>
               {[
                 { id: 'amazon', name: 'Amazon' },
                 { id: 'flipkart', name: 'Flipkart' },
@@ -360,10 +386,11 @@ export default function ProductListingGenerator() {
                 <button
                   key={plat.id}
                   onClick={() => setSelectedPlatform(plat.id)}
-                  className={`px-4 py-2 rounded-xl text-xs font-extrabold transition ${
+                  aria-pressed={selectedPlatform === plat.id}
+                  className={`px-3.5 py-1.5 rounded-sm font-mono text-[11px] uppercase tracking-[0.12em] border transition-colors whitespace-nowrap ${
                     selectedPlatform === plat.id
-                      ? 'bg-[#FEE715] text-[#101820] shadow-yellowGlow'
-                      : 'bg-black text-gray-400 hover:text-white border border-gray-800'
+                      ? 'bg-bone text-ink border-bone'
+                      : PLATFORM_TINTS[plat.id] || 'bg-white/5 text-bone-mute border-white/15 hover:border-white/40 hover:text-bone'
                   }`}
                 >
                   {plat.name}
@@ -373,55 +400,55 @@ export default function ProductListingGenerator() {
 
             <button
               onClick={handleExportCSV}
-              className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-bold rounded-xl border border-gray-700 flex items-center gap-1.5 transition shrink-0"
+              className="btn btn-outline px-4 py-2 text-xs shrink-0"
             >
-              <Download className="w-3.5 h-3.5" />
+              <Download className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Export {selectedPlatform.toUpperCase()} CSV</span>
             </button>
           </div>
 
           {/* Listing Layout Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
+
             {/* Image Preview Sidebar */}
             <div className="lg:col-span-4 space-y-4">
-              <div className="p-4 rounded-3xl bg-gray-900 border border-gray-800 space-y-4 shadow-xl">
-                <div className="relative rounded-2xl overflow-hidden bg-black border border-gray-800">
+              <div className="card p-4 space-y-4">
+                <div className="relative rounded-sm overflow-hidden bg-paper-deep border border-white/10">
                   <img
                     src={generatedListing.imageUrl}
-                    alt="Uploaded Product Image"
+                    alt="Uploaded product image"
                     className="w-full h-64 object-cover"
                   />
-                  <span className="absolute top-3 left-3 px-2.5 py-1 bg-black/80 backdrop-blur-md border border-gray-700 rounded-full text-[10px] font-bold text-[#FEE715]">
-                    ImgBB Hosted
+                  <span className="absolute top-3 left-3 px-2.5 py-1 bg-ink/85 text-bone rounded-sm font-mono text-[10px] font-medium uppercase tracking-wider">
+                    ImgBB hosted
                   </span>
                 </div>
 
-                <div className="space-y-2 text-xs">
-                  <div className="flex justify-between py-1 border-b border-gray-800">
-                    <span className="text-gray-400">Direct Hosted Link</span>
+                <div className="divide-y divide-white/10 text-xs">
+                  <div className="flex justify-between items-center py-2 gap-3">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-bone-faint">Hosted link</span>
                     <button
                       onClick={() => handleCopyText(generatedListing.imageUrl, 'link')}
-                      className="text-[#FEE715] hover:underline font-bold text-[11px]"
+                      className="link-underline font-mono text-[11px] font-semibold shrink-0"
                     >
-                      {copiedField === 'link' ? 'Copied Link!' : 'Copy Link'}
+                      {copiedField === 'link' ? 'Copied' : 'Copy link'}
                     </button>
                   </div>
-                  <div className="flex justify-between py-1 border-b border-gray-800">
-                    <span className="text-gray-400">Brand</span>
-                    <strong className="text-[#FEE715] font-bold">{brandName}</strong>
+                  <div className="flex justify-between items-center py-2 gap-3">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-bone-faint">Brand</span>
+                    <strong className="text-bone font-semibold truncate">{brandName}</strong>
                   </div>
-                  <div className="flex justify-between py-1 border-b border-gray-800">
-                    <span className="text-gray-400">Category</span>
-                    <strong className="text-gray-200">{generatedListing.category}</strong>
+                  <div className="flex justify-between items-center py-2 gap-3">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-bone-faint">Category</span>
+                    <strong className="text-bone font-semibold text-right">{generatedListing.category}</strong>
                   </div>
-                  <div className="flex justify-between py-1 border-b border-gray-800">
-                    <span className="text-gray-400">Suggested Price</span>
-                    <strong className="text-emerald-400 font-bold">{generatedListing[selectedPlatform].price}</strong>
+                  <div className="flex justify-between items-center py-2 gap-3">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-bone-faint">Suggested price</span>
+                    <strong className="text-sage font-semibold">{generatedListing[selectedPlatform].price}</strong>
                   </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-gray-400">Estimated HSN</span>
-                    <strong className="text-indigo-400 font-mono font-bold">{generatedListing.hsnCode}</strong>
+                  <div className="flex justify-between items-center py-2 gap-3">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-bone-faint">Estimated HSN</span>
+                    <strong className="text-bone font-mono font-semibold">{generatedListing.hsnCode}</strong>
                   </div>
                 </div>
               </div>
@@ -429,47 +456,47 @@ export default function ProductListingGenerator() {
 
             {/* Generated Listing Outputs */}
             <div className="lg:col-span-8 space-y-6">
-              
+
               {/* Product Title */}
-              <div className="p-6 rounded-3xl bg-gray-900 border border-gray-800 space-y-3 shadow-xl">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-[#FEE715] uppercase tracking-wider flex items-center gap-1.5">
-                    <Tag className="w-3.5 h-3.5" />
-                    <span>{selectedPlatform.toUpperCase()} Product Title (Optimized)</span>
+              <div className="card p-6 space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <label className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-marigold flex items-center gap-1.5">
+                    <Tag className="w-3.5 h-3.5" aria-hidden="true" />
+                    <span>{selectedPlatform.toUpperCase()} product title (optimized)</span>
                   </label>
                   <button
                     onClick={() => handleCopyText(generatedListing[selectedPlatform].title, 'title')}
-                    className="px-3 py-1 bg-black hover:bg-gray-800 text-gray-300 rounded-lg text-xs font-bold border border-gray-800 flex items-center gap-1 transition"
+                    className={copyBtnCls}
                   >
-                    {copiedField === 'title' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                    <span>{copiedField === 'title' ? 'Copied' : 'Copy Title'}</span>
+                    {copiedField === 'title' ? <Check className="w-3 h-3 text-sage" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedField === 'title' ? 'Copied' : 'Copy title'}</span>
                   </button>
                 </div>
-                <div className="p-3.5 bg-black rounded-xl border border-gray-800 text-sm font-semibold text-white leading-relaxed">
+                <div className="p-3.5 rounded-sm bg-paper-deep border border-white/10 text-sm font-semibold text-bone leading-relaxed">
                   {generatedListing[selectedPlatform].title}
                 </div>
               </div>
 
               {/* 5 Bullet Points */}
-              <div className="p-6 rounded-3xl bg-gray-900 border border-gray-800 space-y-3 shadow-xl">
-                <div className="flex items-center justify-between border-b border-gray-800 pb-3">
-                  <label className="text-xs font-bold text-[#FEE715] uppercase tracking-wider flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Key Product Features / Bullet Points</span>
+              <div className="card p-6 space-y-3">
+                <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+                  <label className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-marigold flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" />
+                    <span>Key product features / bullet points</span>
                   </label>
                   <button
                     onClick={() => handleCopyText(generatedListing[selectedPlatform].bullets.join('\n\n'), 'bullets')}
-                    className="px-3 py-1 bg-black hover:bg-gray-800 text-gray-300 rounded-lg text-xs font-bold border border-gray-800 flex items-center gap-1 transition"
+                    className={copyBtnCls}
                   >
-                    {copiedField === 'bullets' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                    <span>{copiedField === 'bullets' ? 'Copied All Bullets' : 'Copy All Bullets'}</span>
+                    {copiedField === 'bullets' ? <Check className="w-3 h-3 text-sage" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedField === 'bullets' ? 'Copied all' : 'Copy all bullets'}</span>
                   </button>
                 </div>
 
                 <div className="space-y-2.5 pt-1">
                   {generatedListing[selectedPlatform].bullets.map((bullet, idx) => (
-                    <div key={idx} className="p-3 bg-black rounded-xl border border-gray-800 text-xs text-gray-200 flex items-start gap-2.5">
-                      <span className="w-5 h-5 rounded-full bg-[#FEE715]/10 text-[#FEE715] flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                    <div key={idx} className="p-3 rounded-sm bg-paper-deep border border-white/10 text-xs text-bone-mute flex items-start gap-2.5">
+                      <span className="num-badge !w-5 !h-5 !text-[10px] shrink-0 mt-0.5">
                         {idx + 1}
                       </span>
                       <p className="leading-relaxed">{bullet}</p>
@@ -480,36 +507,36 @@ export default function ProductListingGenerator() {
 
               {/* Description & Search Keywords */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-6 rounded-3xl bg-gray-900 border border-gray-800 space-y-3 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                      Product Description
+                <div className="card p-6 space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <label className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-faint">
+                      Product description
                     </label>
                     <button
                       onClick={() => handleCopyText(generatedListing[selectedPlatform].description, 'desc')}
-                      className="text-xs text-[#FEE715] hover:underline font-bold"
+                      className="link-underline font-mono text-[11px] font-semibold shrink-0"
                     >
-                      {copiedField === 'desc' ? 'Copied!' : 'Copy'}
+                      {copiedField === 'desc' ? 'Copied' : 'Copy'}
                     </button>
                   </div>
-                  <div className="p-3.5 bg-black rounded-xl border border-gray-800 text-xs text-gray-300 leading-relaxed max-h-48 overflow-y-auto">
+                  <div className="p-3.5 rounded-sm bg-paper-deep border border-white/10 text-xs text-bone-mute leading-relaxed max-h-48 overflow-y-auto">
                     {generatedListing[selectedPlatform].description}
                   </div>
                 </div>
 
-                <div className="p-6 rounded-3xl bg-gray-900 border border-gray-800 space-y-3 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                      Backend Search Terms
+                <div className="card p-6 space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <label className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-faint">
+                      Backend search terms
                     </label>
                     <button
                       onClick={() => handleCopyText(generatedListing[selectedPlatform].keywords, 'kw')}
-                      className="text-xs text-[#FEE715] hover:underline font-bold"
+                      className="link-underline font-mono text-[11px] font-semibold shrink-0"
                     >
-                      {copiedField === 'kw' ? 'Copied!' : 'Copy'}
+                      {copiedField === 'kw' ? 'Copied' : 'Copy'}
                     </button>
                   </div>
-                  <div className="p-3.5 bg-black rounded-xl border border-gray-800 text-xs text-[#FEE715] font-mono leading-relaxed max-h-48 overflow-y-auto">
+                  <div className="p-3.5 rounded-sm bg-paper-deep border border-white/10 text-xs text-bone font-mono leading-relaxed max-h-48 overflow-y-auto">
                     {generatedListing[selectedPlatform].keywords}
                   </div>
                 </div>

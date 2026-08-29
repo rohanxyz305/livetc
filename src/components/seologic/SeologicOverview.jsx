@@ -1,77 +1,94 @@
 import React from 'react';
 import { Key, Target, TrendingUp, DollarSign } from 'lucide-react';
+import Reveal from '../common/Reveal.jsx';
 
 export default function SeologicOverview({ summary, topOpportunity }) {
   if (!summary) return null;
 
   const getKDColorClass = (kd) => {
-    if (kd <= 30) return { label: 'Easy', bg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' };
-    if (kd <= 60) return { label: 'Medium', bg: 'bg-amber-500/10 text-amber-400 border-amber-500/20' };
-    return { label: 'Hard', bg: 'bg-rose-500/10 text-rose-400 border-rose-500/20' };
+    if (kd <= 30) return { label: 'Easy', cls: 'bg-pine-tint text-pine-deep border-pine/25' };
+    if (kd <= 60) return { label: 'Medium', cls: 'bg-marigold-tint text-marigold-deep border-marigold/30' };
+    return { label: 'Hard', cls: 'bg-clay/10 text-clay border-clay/30' };
   };
 
   const kdStatus = getKDColorClass(summary.avgKD);
 
+  // Rotating accent tints for the metric icon squares (marigold / pine / rani / royal)
+  const iconTints = [
+    'bg-marigold-tint text-marigold-deep border-marigold/30',
+    'bg-pine-tint text-pine border-pine/25',
+    'bg-rani-tint text-rani-deep border-rani/25',
+    'bg-royal-tint text-royal-deep border-royal/30',
+  ];
+
+  const metrics = [
+    {
+      icon: Key,
+      label: 'Total keywords',
+      value: summary.totalKeywords,
+      note: `Discovered for "${summary.seed}"`,
+    },
+    {
+      icon: Target,
+      label: 'Avg. difficulty',
+      badge: kdStatus,
+      value: `${summary.avgKD}%`,
+      note: 'Competition level',
+    },
+    {
+      icon: TrendingUp,
+      label: 'Est. total volume',
+      value: summary.totalVolume.toLocaleString(),
+      note: 'Monthly searches',
+    },
+    {
+      icon: DollarSign,
+      label: 'Top opportunity',
+      value: topOpportunity ? topOpportunity.keyword : 'N/A',
+      isKeyword: true,
+      note: topOpportunity ? (
+        <>Score: <span className="text-sage font-semibold">{topOpportunity?.opportunity || 0}/100</span></>
+      ) : (
+        'No keywords yet'
+      ),
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      
-      {/* Card 1: Total Keywords */}
-      <div className="p-4 rounded-2xl bg-gray-900/90 border border-gray-800 flex items-center gap-4 shadow-xl">
-        <div className="w-12 h-12 rounded-xl bg-[#FEE715]/10 border border-[#FEE715]/30 flex items-center justify-center text-[#FEE715]">
-          <Key className="w-6 h-6" />
-        </div>
-        <div>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Keywords</p>
-          <p className="text-2xl font-bold text-white mt-0.5">{summary.totalKeywords}</p>
-          <p className="text-xs text-gray-500 mt-1">Discovered for "{summary.seed}"</p>
-        </div>
-      </div>
+    <Reveal className="card grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-white/10 overflow-hidden">
 
-      {/* Card 2: Average KD */}
-      <div className="p-4 rounded-2xl bg-gray-900/90 border border-gray-800 flex items-center gap-4 shadow-xl">
-        <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-          <Target className="w-6 h-6" />
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Avg. Difficulty</p>
-            <span className={`px-2 py-0.5 text-[10px] font-bold border rounded-full ${kdStatus.bg}`}>
-              {kdStatus.label}
-            </span>
+      {metrics.map((metric, idx) => {
+        const Icon = metric.icon;
+        return (
+          <div key={idx} className="p-5 flex items-start gap-4 border-white/10">
+            <div className={`w-10 h-10 rounded-sm border flex items-center justify-center shrink-0 ${iconTints[idx % 4]}`}>
+              <Icon className="w-5 h-5" aria-hidden="true" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-bone-mute">
+                  {metric.label}
+                </p>
+                {metric.badge && (
+                  <span className={`px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider border rounded-full ${metric.badge.cls}`}>
+                    {metric.badge.label}
+                  </span>
+                )}
+              </div>
+              {metric.isKeyword ? (
+                <p className="text-sm font-semibold text-marigold mt-1 truncate" title={metric.value}>
+                  {metric.value}
+                </p>
+              ) : (
+                <p className="stat-num text-2xl text-bone mt-0.5">{metric.value}</p>
+              )}
+              <p className="text-xs text-bone-faint mt-1">{metric.note}</p>
+            </div>
           </div>
-          <p className="text-2xl font-bold text-white mt-0.5">{summary.avgKD}%</p>
-          <p className="text-xs text-gray-500 mt-1">Competition level</p>
-        </div>
-      </div>
+        );
 
-      {/* Card 3: Total Search Volume */}
-      <div className="p-4 rounded-2xl bg-gray-900/90 border border-gray-800 flex items-center gap-4 shadow-xl">
-        <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-          <TrendingUp className="w-6 h-6" />
-        </div>
-        <div>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Est. Total Volume</p>
-          <p className="text-2xl font-bold text-white mt-0.5">{summary.totalVolume.toLocaleString()}</p>
-          <p className="text-xs text-gray-500 mt-1">Monthly searches</p>
-        </div>
-      </div>
+      })}
 
-      {/* Card 4: Top Opportunity */}
-      <div className="p-4 rounded-2xl bg-gray-900/90 border border-gray-800 flex items-center gap-4 shadow-xl">
-        <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-          <DollarSign className="w-6 h-6" />
-        </div>
-        <div className="overflow-hidden">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Top Opportunity</p>
-          <p className="text-sm font-bold text-[#FEE715] truncate mt-0.5">
-            {topOpportunity ? topOpportunity.keyword : 'N/A'}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            Score: <span className="text-emerald-400 font-bold">{topOpportunity?.opportunity || 0}/100</span>
-          </p>
-        </div>
-      </div>
-
-    </div>
+    </Reveal>
   );
 }

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import SEO from '../components/common/SEO';
+import Reveal from '../components/common/Reveal.jsx';
 
 export default function EmailMarketingPage() {
   const DEFAULT_SENDER = "rohankumar19980211@gmail.com";
-  
+
   const [senderEmail, setSenderEmail] = useState(DEFAULT_SENDER);
   const [senderName, setSenderName] = useState("Liveteachcreate E-Commerce");
-  
+
   // Gmail SMTP Settings
   const [useSmtp, setUseSmtp] = useState(true);
   const [gmailAppPassword, setGmailAppPassword] = useState("vvztcmdqxdgvbzfo");
@@ -80,17 +81,17 @@ export default function EmailMarketingPage() {
 <head>
   <meta charset="utf-8">
   <style>
-    body { font-family: 'Plus Jakarta Sans', Arial, sans-serif; background-color: #101820; margin: 0; padding: 20px; color: #ffffff; }
-    .container { max-width: 600px; margin: 0 auto; background: #17222d; border-radius: 16px; border: 1px solid #2d3b48; overflow: hidden; }
-    .header { background: #101820; padding: 30px; text-align: center; border-bottom: 2px solid #FEE715; }
-    .logo-emblem { width: 44px; height: 44px; background: #FEE715; color: #101820; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; }
-    .brand-title { color: #ffffff; font-size: 20px; font-weight: 800; margin-top: 10px; letter-spacing: 1px; }
-    .content { padding: 35px 30px; }
-    .heading { color: #FEE715; font-size: 22px; font-weight: 800; margin-bottom: 16px; line-height: 1.3; }
-    .body-text { color: #e2e8f0; font-size: 14px; line-height: 1.7; margin-bottom: 28px; }
-    .cta-btn { display: inline-block; background: #FEE715; color: #101820; font-weight: 800; font-size: 14px; text-decoration: none; padding: 14px 28px; border-radius: 30px; text-transform: uppercase; letter-spacing: 1px; }
-    .footer { background: #101820; padding: 20px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #2d3b48; }
-    .unsub { color: #94a3b8; text-decoration: underline; margin-top: 6px; display: inline-block; }
+    body { font-family: Georgia, 'Times New Roman', serif; background-color: #EFE8D8; margin: 0; padding: 24px; color: #15211A; }
+    .container { max-width: 600px; margin: 0 auto; background: #FFFDF6; border: 1px solid #D8CFBB; border-radius: 6px; overflow: hidden; }
+    .header { background: #15211A; padding: 28px 30px; text-align: center; border-bottom: 2px solid #E9762B; }
+    .logo-emblem { width: 40px; height: 40px; background: #E9762B; color: #15211A; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; font-family: Arial, sans-serif; }
+    .brand-title { color: #F7F3EA; font-size: 15px; font-weight: 700; margin-top: 10px; letter-spacing: 4px; font-family: Arial, sans-serif; }
+    .content { padding: 32px 30px; }
+    .heading { color: #15211A; font-size: 22px; font-weight: 700; margin-bottom: 16px; line-height: 1.3; }
+    .body-text { color: #55645B; font-size: 14px; line-height: 1.7; margin-bottom: 28px; }
+    .cta-btn { display: inline-block; background: #E9762B; color: #15211A; font-weight: 700; font-size: 14px; text-decoration: none; padding: 13px 26px; border-radius: 3px; font-family: Arial, sans-serif; }
+    .footer { background: #EFE8D8; padding: 18px; text-align: center; font-size: 11px; color: #55645B; border-top: 1px solid #D8CFBB; font-family: Arial, sans-serif; }
+    .unsub { color: #55645B; text-decoration: underline; margin-top: 6px; display: inline-block; }
   </style>
 </head>
 <body>
@@ -142,19 +143,19 @@ export default function EmailMarketingPage() {
   // Send 1 Test Email
   const handleSendTestEmail = async () => {
     if (!testEmailInput) {
-      alert("Please enter a test email address!");
+      alert("Please enter a test email address.");
       return;
     }
     setIsSending(true);
     try {
       const res = await sendEmailApi(testEmailInput);
       if (res.status === 'success') {
-        alert(`✅ SUCCESS: ${res.message}\n\nPlease check inbox / primary tab for ${testEmailInput}!`);
+        alert(`SUCCESS: ${res.message}\n\nPlease check inbox / primary tab for ${testEmailInput}.`);
       } else {
-        alert(`❌ DELIVERY ERROR:\n${res.message}`);
+        alert(`DELIVERY ERROR:\n${res.message}`);
       }
     } catch (e) {
-      alert("⚠️ Error connecting to /api/send-email.php. Make sure your production build is uploaded to public_html.");
+      alert("Error connecting to /api/send-email.php. Make sure your production build is uploaded to public_html.");
     }
     setIsSending(false);
   };
@@ -164,7 +165,7 @@ export default function EmailMarketingPage() {
     const recipients = getRecipientsList();
 
     if (recipients.length === 0) {
-      alert("Please enter at least one valid recipient email address!");
+      alert("Please enter at least one valid recipient email address.");
       return;
     }
 
@@ -186,7 +187,7 @@ export default function EmailMarketingPage() {
         const logItem = {
           time: new Date().toLocaleTimeString(),
           email: email,
-          status: success ? 'SENT ✅' : 'FAILED ❌',
+          status: success ? 'SENT' : 'FAILED',
           message: result.message || 'Email dispatched.'
         };
 
@@ -212,350 +213,371 @@ export default function EmailMarketingPage() {
     setIsSending(false);
   };
 
+  const tabs = [
+    { id: "composer", label: "Composer", icon: "fa-solid fa-pen-to-square" },
+    { id: "preview", label: "Live Preview", icon: "fa-solid fa-eye" },
+    { id: "logs", label: `Broadcast Logs (${logs.length})`, icon: "fa-solid fa-list-check" },
+  ];
+
+  const labelCls = "field-label font-mono !text-[10px] uppercase tracking-[0.18em] text-bone-mute";
+
   return (
     <>
-      <SEO 
+      <SEO
         title="Free Email Marketing Studio"
         description="Internal Email Marketing Tool for Liveteachcreate. Send daily broadcasts to client lists directly from rohankumar19980211@gmail.com."
       />
 
-      <div className="bg-gradient-to-b from-gray-900 via-[#101820] to-[#101820] py-12 text-white border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 text-center md:text-left">
-            <span className="inline-flex items-center gap-2 px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider shadow-yellowGlow">
-              <i className="fa-solid fa-paper-plane"></i>
-              <span>FREE EMAIL MARKETING DASHBOARD</span>
-            </span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white font-display">
-              Client Broadcast Studio
-            </h1>
-            <p className="text-xs text-gray-400">
-              Primary Sender: <strong className="text-[#FEE715]">{senderEmail}</strong> • Free Daily Limit: Up to 500 Emails/Day
-            </p>
+      {/* Hero / App Bar */}
+      <div className="band-ink relative overflow-hidden border-b border-white/10">
+        {/* aurora glow — subtle marigold + violet + rani on ink */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <span
+            className="aurora"
+            style={{
+              width: '440px',
+              height: '440px',
+              background: '#F97316',
+              top: '-170px',
+              right: '-110px',
+              opacity: 0.3,
+              animationDelay: '0s'
+            }}
+          ></span>
+          <span
+            className="aurora"
+            style={{
+              width: '380px',
+              height: '380px',
+              background: '#8B5CF6',
+              top: '-150px',
+              left: '18%',
+              opacity: 0.25,
+              animationDelay: '-3s'
+            }}
+          ></span>
+          <span
+            className="aurora"
+            style={{
+              width: '360px',
+              height: '360px',
+              background: '#E42A8A',
+              bottom: '-180px',
+              left: '4%',
+              opacity: 0.2,
+              animationDelay: '-6s'
+            }}
+          ></span>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 relative">
+          <div className="space-y-3 text-center lg:text-left">
+            <Reveal as="p" delay={0} className="eyebrow justify-center lg:justify-start">
+              <i className="fa-solid fa-paper-plane" aria-hidden="true"></i>
+              <span>Free email marketing dashboard</span>
+            </Reveal>
+            <Reveal as="h1" delay={90} className="text-display-md text-bone">
+              Client <span className="grad-text">Broadcast</span> Studio
+            </Reveal>
+            <Reveal as="p" delay={170} className="font-mono text-[11px] uppercase tracking-[0.16em] text-bone/60">
+              Primary sender: <span className="text-marigold">{senderEmail}</span> &bull; Free daily limit: up to 500 emails/day
+            </Reveal>
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex gap-2 bg-gray-900 p-1.5 rounded-2xl border border-gray-800">
-            <button
-              onClick={() => setActiveTab("composer")}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeTab === "composer" ? "bg-[#FEE715] text-[#101820] shadow-yellowGlow" : "text-gray-400 hover:text-white"
-              }`}
-            >
-              <i className="fa-solid fa-pen-to-square mr-1.5"></i> Composer
-            </button>
-            <button
-              onClick={() => setActiveTab("preview")}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeTab === "preview" ? "bg-[#FEE715] text-[#101820] shadow-yellowGlow" : "text-gray-400 hover:text-white"
-              }`}
-            >
-              <i className="fa-solid fa-eye mr-1.5"></i> Live Preview
-            </button>
-            <button
-              onClick={() => setActiveTab("logs")}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeTab === "logs" ? "bg-[#FEE715] text-[#101820] shadow-yellowGlow" : "text-gray-400 hover:text-white"
-              }`}
-            >
-              <i className="fa-solid fa-list-check mr-1.5"></i> Broadcast Logs ({logs.length})
-            </button>
-          </div>
+          <nav aria-label="Broadcast studio sections" className="flex gap-2 flex-wrap">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                aria-pressed={activeTab === tab.id}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-sm font-mono text-[11px] uppercase tracking-[0.14em] border transition-colors ${
+                  activeTab === tab.id
+                    ? "bg-marigold text-ink border-marigold"
+                    : "border-white/25 text-bone/70 hover:text-bone hover:border-white/50"
+                }`}
+              >
+                <i className={`${tab.icon} text-[10px]`} aria-hidden="true"></i> {tab.label}
+              </button>
+            ))}
+          </nav>
         </div>
       </div>
 
-      <div className="py-12 bg-[#101820] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="bg-paper-deep min-h-[60vh]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
 
           {/* INBOX PLACEMENT GUIDE BANNER */}
-          <div className="p-6 rounded-3xl bg-gradient-to-r from-gray-900 via-gray-900 to-black border border-gray-800 shadow-xl space-y-4">
+          <div className="card p-5 sm:p-6 space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-xl shrink-0">
-                  📥
+                <div className="w-10 h-10 rounded-sm bg-pine-tint text-pine-deep border border-pine/25 flex items-center justify-center shrink-0">
+                  <i className="fa-solid fa-inbox" aria-hidden="true"></i>
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Inbox Placement Strategy Active</h3>
-                  <p className="text-xs text-gray-400">
-                    Subject lines formatted without spam trigger words. Click <strong>"Report Not Spam"</strong> once in Gmail to permanently trust future broadcasts!
+                  <h3 className="text-sm font-semibold text-bone">Inbox placement strategy active</h3>
+                  <p className="text-xs text-bone-mute">
+                    Subject lines formatted without spam trigger words. Click <strong className="text-bone">&quot;Report Not Spam&quot;</strong> once in Gmail to permanently trust future broadcasts.
                   </p>
                 </div>
               </div>
 
               <button
                 onClick={() => setShowSmtpGuide(!showSmtpGuide)}
-                className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-[#FEE715] border border-gray-700 rounded-xl text-xs font-bold transition-colors shrink-0"
+                className="btn btn-outline px-4 py-2 text-xs shrink-0"
               >
-                {showSmtpGuide ? "Hide Setup Guide" : "Inbox Optimization Tips"}
+                {showSmtpGuide ? "Hide setup guide" : "Inbox optimization tips"}
               </button>
             </div>
 
             {showSmtpGuide && (
-              <div className="pt-4 border-t border-gray-800 text-xs text-gray-300 space-y-3 animate-in fade-in">
-                <p className="font-bold text-[#FEE715]">3 Tips for 100% Primary Inbox Delivery:</p>
-                <ol className="list-decimal pl-5 space-y-1.5 text-gray-300">
-                  <li>In your recipient inbox (`rohantoaws@gmail.com`), click the test email inside Spam and select <strong>"Report Not Spam"</strong> once. Gmail will permanently move all future broadcasts to Primary Inbox!</li>
-                  <li>Keep subject lines natural and professional (avoid fire/dollar emojis in subject lines).</li>
-                  <li>All emails now include an automated Unsubscribe footer header for Google compliance.</li>
+              <div className="pt-4 border-t border-white/10 text-xs text-bone-mute space-y-2.5 animate-fade-up">
+                <p className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-marigold">3 tips for 100% primary inbox delivery</p>
+                <ol className="list-decimal pl-5 space-y-1.5">
+                  <li>In your recipient inbox, open the test email inside Spam and select <strong className="text-bone">&quot;Report Not Spam&quot;</strong> once. Gmail will permanently move all future broadcasts to Primary Inbox.</li>
+                  <li>Keep subject lines natural and professional (avoid emojis in subject lines).</li>
+                  <li>All emails include an automated Unsubscribe footer header for Google compliance.</li>
                 </ol>
               </div>
             )}
           </div>
-          
+
           {/* TAB 1: COMPOSER */}
           {activeTab === "composer" && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
               {/* Left Column: Sender & Recipient List */}
               <div className="lg:col-span-5 space-y-6">
-                
+
                 {/* Sender Setup Card */}
-                <div className="p-6 rounded-3xl bg-gray-900/80 border border-gray-800 space-y-4">
-                  <h3 className="text-base font-bold text-white font-display border-b border-gray-800 pb-3 flex items-center justify-between">
-                    <span className="flex items-center gap-2">
-                      <i className="fa-solid fa-user-gear text-[#FEE715]"></i>
-                      <span>Sender Setup</span>
+                <Reveal className="card p-6 space-y-4" delay={0}>
+                  <h3 className="text-base text-bone border-b border-white/10 pb-3 flex items-center justify-between">
+                    <span className="flex items-center gap-2 font-semibold">
+                      <i className="fa-solid fa-user-gear text-pine" aria-hidden="true"></i>
+                      <span>Sender setup</span>
                     </span>
-                    <span className="text-[10px] text-emerald-400 font-bold px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
-                      Gmail Verified
+                    <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-pine-deep px-2 py-0.5 bg-pine-tint border border-pine/25 rounded-full">
+                      Gmail verified
                     </span>
                   </h3>
 
                   <div>
-                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                      Sender Email Address
-                    </label>
+                    <label htmlFor="sender-email" className={labelCls}>Sender email address</label>
                     <input
+                      id="sender-email"
                       type="email"
                       value={senderEmail}
                       onChange={(e) => setSenderEmail(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-black border border-gray-800 rounded-xl text-xs text-[#FEE715] font-mono focus:outline-none"
+                      className="field font-mono text-xs text-pine"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                      Sender Display Name
-                    </label>
+                    <label htmlFor="sender-name" className={labelCls}>Sender display name</label>
                     <input
+                      id="sender-name"
                       type="text"
                       value={senderName}
                       onChange={(e) => setSenderName(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white focus:outline-none"
+                      className="field text-xs"
                     />
                   </div>
 
                   {/* Gmail App Password Input */}
-                  <div className="pt-2 border-t border-gray-800 space-y-2">
+                  <div className="pt-3 border-t border-white/10 space-y-2">
                     <div className="flex items-center justify-between">
-                      <label className="text-[11px] font-bold text-gray-300 uppercase tracking-wider">
-                        Gmail App Password
-                      </label>
-                      <span className="text-[10px] text-emerald-400 font-bold">Authenticated</span>
+                      <label htmlFor="gmail-password" className={labelCls}>Gmail app password</label>
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-sage font-semibold">Authenticated</span>
                     </div>
                     <input
+                      id="gmail-password"
                       type="password"
-                      placeholder="Paste 16-character Gmail App Password"
+                      placeholder="Paste 16-character Gmail app password"
                       value={gmailAppPassword}
                       onChange={(e) => setGmailAppPassword(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-black border border-gray-800 rounded-xl text-xs text-white focus:border-[#FEE715] focus:outline-none font-mono"
+                      className="field font-mono text-xs"
                     />
                   </div>
-                </div>
+                </Reveal>
 
                 {/* Test Email Box */}
-                <div className="p-6 rounded-3xl bg-gray-900/80 border border-gray-800 space-y-4">
-                  <h3 className="text-sm font-bold text-white font-display flex items-center gap-2">
-                    <i className="fa-solid fa-vial text-[#FEE715]"></i>
-                    <span>Send Test Email First</span>
+                <Reveal className="card p-6 space-y-4" delay={80}>
+                  <h3 className="text-sm font-semibold text-bone flex items-center gap-2">
+                    <i className="fa-solid fa-vial text-pine" aria-hidden="true"></i>
+                    <span>Send test email first</span>
                   </h3>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <label htmlFor="test-email" className="sr-only">Test email address</label>
                     <input
+                      id="test-email"
                       type="email"
                       value={testEmailInput}
                       onChange={(e) => setTestEmailInput(e.target.value)}
                       placeholder="Your test email"
-                      className="w-full px-3 py-2 bg-black border border-gray-800 rounded-xl text-xs text-white focus:outline-none"
+                      className="field text-xs"
                     />
                     <button
                       disabled={isSending}
                       onClick={handleSendTestEmail}
-                      className="px-4 py-2 bg-[#FEE715] hover:bg-[#e0ca00] text-[#101820] font-bold text-xs rounded-xl shrink-0 shadow-yellowGlow"
+                      className="btn btn-accent px-4 py-2.5 text-xs shrink-0 disabled:opacity-50"
                     >
-                      {isSending ? "Sending..." : "Test Send"}
+                      {isSending ? "Sending" : "Send test"}
                     </button>
                   </div>
-                </div>
+                </Reveal>
 
                 {/* Recipients List Manager */}
-                <div className="p-6 rounded-3xl bg-gray-900/80 border border-gray-800 space-y-4">
-                  <div className="flex items-center justify-between border-b border-gray-800 pb-3">
-                    <h3 className="text-base font-bold text-white font-display flex items-center gap-2">
-                      <i className="fa-solid fa-users text-[#FEE715]"></i>
-                      <span>Client Email List</span>
+                <Reveal className="card p-6 space-y-4" delay={160}>
+                  <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                    <h3 className="text-base text-bone font-semibold flex items-center gap-2">
+                      <i className="fa-solid fa-users text-pine" aria-hidden="true"></i>
+                      <span>Client email list</span>
                     </h3>
-                    <span className="px-2.5 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-[10px] font-extrabold">
-                      {getRecipientsList().length} Recipients
-                    </span>
+                    <span className="chip py-1 !text-[10px]">{getRecipientsList().length} recipients</span>
                   </div>
 
-                  <p className="text-[11px] text-gray-400">
-                    Paste your list of 250 client emails (one email address per line).
+                  <p className="text-xs text-bone-mute">
+                    Paste your list of client emails (one email address per line).
                   </p>
 
-                  <textarea
-                    rows="8"
-                    value={recipientInput}
-                    onChange={(e) => setRecipientInput(e.target.value)}
-                    placeholder="client1@example.com&#10;client2@example.com&#10;client3@example.com"
-                    className="w-full p-4 bg-black border border-gray-800 rounded-xl text-xs text-gray-200 font-mono focus:border-[#FEE715] focus:outline-none resize-y"
-                  ></textarea>
+                  <div>
+                    <label htmlFor="recipient-list" className="sr-only">Recipient email list</label>
+                    <textarea
+                      id="recipient-list"
+                      rows="8"
+                      value={recipientInput}
+                      onChange={(e) => setRecipientInput(e.target.value)}
+                      placeholder={"client1@example.com\nclient2@example.com\nclient3@example.com"}
+                      className="field font-mono text-xs resize-y"
+                    ></textarea>
+                  </div>
 
-                  <div className="flex justify-between items-center text-[11px] text-gray-400">
+                  <div className="flex justify-between items-center font-mono text-[11px] text-bone-faint">
                     <span>Duplicates automatically filtered</span>
                     <button
                       onClick={() => setRecipientInput("")}
-                      className="text-red-400 hover:underline"
+                      className="text-clay hover:underline"
                     >
-                      Clear List
+                      Clear list
                     </button>
                   </div>
-                </div>
+                </Reveal>
 
               </div>
 
               {/* Right Column: Template Builder */}
               <div className="lg:col-span-7 space-y-6">
-                
-                <div className="p-6 rounded-3xl bg-gray-900/80 border border-gray-800 space-y-6">
-                  
+
+                <Reveal className="card p-6 space-y-6" delay={240}>
+
                   {/* Template Picker */}
                   <div className="space-y-2">
-                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                      Select Pre-built Campaign Template
-                    </label>
-                    <div className="grid grid-cols-3 gap-3">
-                      <button
-                        onClick={() => handleTemplateChange("promo")}
-                        className={`p-3 rounded-xl border text-xs font-bold transition-all ${
-                          selectedTemplate === "promo"
-                            ? "bg-[#FEE715] text-[#101820] border-[#FEE715] shadow-yellowGlow"
-                            : "bg-gray-800 text-gray-300 border-gray-700 hover:border-gray-600"
-                        }`}
-                      >
-                        🚀 Free Audit Offer
-                      </button>
-                      <button
-                        onClick={() => handleTemplateChange("festival")}
-                        className={`p-3 rounded-xl border text-xs font-bold transition-all ${
-                          selectedTemplate === "festival"
-                            ? "bg-[#FEE715] text-[#101820] border-[#FEE715] shadow-yellowGlow"
-                            : "bg-gray-800 text-gray-300 border-gray-700 hover:border-gray-600"
-                        }`}
-                      >
-                        🔥 Big Billion / GIF
-                      </button>
-                      <button
-                        onClick={() => handleTemplateChange("qcommerce")}
-                        className={`p-3 rounded-xl border text-xs font-bold transition-all ${
-                          selectedTemplate === "qcommerce"
-                            ? "bg-[#FEE715] text-[#101820] border-[#FEE715] shadow-yellowGlow"
-                            : "bg-gray-800 text-gray-300 border-gray-700 hover:border-gray-600"
-                        }`}
-                      >
-                        ⚡ Quick Commerce
-                      </button>
+                    <span className={labelCls}>Select pre-built campaign template</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3" role="group" aria-label="Campaign template">
+                      {[
+                        { id: "promo", label: "Free audit offer" },
+                        { id: "festival", label: "Big Billion / GIF" },
+                        { id: "qcommerce", label: "Quick commerce" },
+                      ].map((tpl) => (
+                        <button
+                          key={tpl.id}
+                          onClick={() => handleTemplateChange(tpl.id)}
+                          aria-pressed={selectedTemplate === tpl.id}
+                          className={`p-3 rounded-sm border text-xs font-semibold transition-colors ${
+                            selectedTemplate === tpl.id
+                              ? "bg-bone text-ink border-bone"
+                              : "bg-white/5 text-bone-mute border-white/15 hover:border-white/40 hover:text-bone"
+                          }`}
+                        >
+                          {tpl.label}
+                        </button>
+                      ))}
                     </div>
                   </div>
 
                   {/* Form Controls */}
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                        Email Subject Line (Inbox Optimized)
-                      </label>
+                      <label htmlFor="email-subject" className={labelCls}>Email subject line (inbox optimized)</label>
                       <input
+                        id="email-subject"
                         type="text"
                         value={subject}
                         onChange={(e) => setSubject(e.target.value)}
-                        className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white focus:outline-none"
+                        className="field text-xs"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                        Main Banner Heading
-                      </label>
+                      <label htmlFor="email-heading" className={labelCls}>Main banner heading</label>
                       <input
+                        id="email-heading"
                         type="text"
                         value={heading}
                         onChange={(e) => setHeading(e.target.value)}
-                        className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-[#FEE715] font-bold focus:outline-none"
+                        className="field text-xs"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                        Email Body Content
-                      </label>
+                      <label htmlFor="email-body" className={labelCls}>Email body content</label>
                       <textarea
+                        id="email-body"
                         rows="7"
                         value={bodyText}
                         onChange={(e) => setBodyText(e.target.value)}
-                        className="w-full p-4 bg-gray-800 border border-gray-700 rounded-xl text-xs text-gray-200 focus:outline-none resize-none leading-relaxed"
+                        className="field text-xs resize-none leading-relaxed"
                       ></textarea>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                          Call To Action Button Text
-                        </label>
+                        <label htmlFor="cta-text" className={labelCls}>Call to action button text</label>
                         <input
+                          id="cta-text"
                           type="text"
                           value={ctaText}
                           onChange={(e) => setCtaText(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white focus:outline-none"
+                          className="field text-xs"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                          Target Button Link / WhatsApp
-                        </label>
+                        <label htmlFor="cta-link" className={labelCls}>Target button link / WhatsApp</label>
                         <input
+                          id="cta-link"
                           type="text"
                           value={ctaLink}
                           onChange={(e) => setCtaLink(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white focus:outline-none"
+                          className="field font-mono text-xs"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Send Action Bar */}
-                  <div className="pt-4 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <button
                       onClick={() => setActiveTab("preview")}
-                      className="text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5"
+                      className="text-xs font-semibold text-bone-mute hover:text-bone flex items-center gap-1.5 transition-colors"
                     >
-                      <i className="fa-solid fa-eye"></i> Preview Email HTML
+                      <i className="fa-solid fa-eye" aria-hidden="true"></i> Preview email HTML
                     </button>
 
                     <button
                       disabled={isSending || getRecipientsList().length === 0}
                       onClick={handleStartBroadcast}
-                      className="w-full sm:w-auto pulseBtn font-extrabold text-xs px-8 py-3.5 rounded-full uppercase tracking-wider shadow-yellowGlow disabled:opacity-50"
+                      className="btn btn-accent w-full sm:w-auto px-7 py-3.5 text-xs disabled:opacity-50"
                     >
                       {isSending ? (
-                        <span><i className="fa-solid fa-spinner animate-spin mr-2"></i> Sending Broadcast...</span>
+                        <span><i className="fa-solid fa-spinner animate-spin mr-2" aria-hidden="true"></i> Sending broadcast</span>
                       ) : (
-                        <span><i className="fa-solid fa-paper-plane mr-2"></i> Send Broadcast To {getRecipientsList().length} Clients</span>
+                        <span><i className="fa-solid fa-paper-plane mr-2" aria-hidden="true"></i> Send broadcast to {getRecipientsList().length} clients</span>
                       )}
                     </button>
                   </div>
 
-                </div>
+                </Reveal>
 
               </div>
 
@@ -564,22 +586,22 @@ export default function EmailMarketingPage() {
 
           {/* TAB 2: LIVE HTML PREVIEW */}
           {activeTab === "preview" && (
-            <div className="max-w-3xl mx-auto space-y-6">
+            <div className="max-w-3xl mx-auto space-y-5">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-white font-display">Live Email HTML Preview</h3>
+                <h3 className="text-lg text-bone">Live email HTML preview</h3>
                 <button
                   onClick={() => setActiveTab("composer")}
-                  className="text-xs text-[#FEE715] hover:underline font-bold"
+                  className="link-underline text-xs font-semibold"
                 >
-                  ← Back to Composer
+                  &larr; Back to composer
                 </button>
               </div>
 
-              <div className="rounded-3xl border border-gray-800 overflow-hidden shadow-2xl bg-[#101820] p-6">
+              <div className="card p-5 sm:p-6">
                 <iframe
                   title="Email HTML Preview"
                   srcDoc={generateEmailHTML()}
-                  className="w-full h-[550px] rounded-2xl bg-white border-0"
+                  className="w-full h-[550px] rounded-sm bg-white border border-white/10"
                 ></iframe>
               </div>
             </div>
@@ -588,58 +610,62 @@ export default function EmailMarketingPage() {
           {/* TAB 3: BROADCAST LOGS & PROGRESS */}
           {activeTab === "logs" && (
             <div className="max-w-4xl mx-auto space-y-6">
-              
+
               {/* Progress Card */}
-              <div className="p-8 rounded-3xl bg-gray-900 border border-gray-800 space-y-4 shadow-xl">
-                <div className="flex items-center justify-between">
+              <div className="card p-7 sm:p-8 space-y-4">
+                <div className="flex items-center justify-between gap-4">
                   <div>
-                    <h3 className="text-xl font-bold text-white font-display">Broadcast Progress Tracker</h3>
-                    <p className="text-xs text-gray-400">Sending from: {senderEmail}</p>
+                    <h3 className="text-xl text-bone">Broadcast progress tracker</h3>
+                    <p className="font-mono text-[11px] text-bone-faint mt-1">Sending from: {senderEmail}</p>
                   </div>
-                  <span className="text-2xl font-black text-[#FEE715] font-display">
+                  <span className="stat-num text-3xl text-marigold">
                     {progress.percentage}%
                   </span>
                 </div>
 
-                <div className="w-full bg-gray-800 h-3 rounded-full overflow-hidden">
-                  <div 
-                    className="bg-[#FEE715] h-full transition-all duration-300 rounded-full"
+                <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden" role="progressbar" aria-valuenow={progress.percentage} aria-valuemin="0" aria-valuemax="100">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-marigold to-marigold-bright transition-[width] duration-500 ease-out"
                     style={{ width: `${progress.percentage}%` }}
                   ></div>
                 </div>
 
-                <div className="flex justify-between text-xs font-semibold text-gray-300">
-                  <span>Processed: {progress.current} / {progress.total} Emails</span>
-                  <span>Status: {isSending ? "Active Batch Dispatch..." : "Completed / Idle"}</span>
+                <div className="flex justify-between font-mono text-[11px] uppercase tracking-wider text-bone-mute">
+                  <span>Processed: {progress.current} / {progress.total} emails</span>
+                  <span>Status: {isSending ? "Active batch dispatch" : "Completed / idle"}</span>
                 </div>
               </div>
 
               {/* Live Dispatch Log Table */}
-              <div className="p-6 rounded-3xl bg-gray-900/80 border border-gray-800 space-y-4">
-                <h4 className="text-sm font-bold text-white uppercase tracking-wider border-b border-gray-800 pb-3 flex items-center justify-between">
-                  <span>Live Dispatch Activity Log</span>
-                  <span className="text-xs text-gray-400 font-normal">{logs.length} Total Logs</span>
+              <div className="card bg-ink p-6 space-y-4">
+                <h4 className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-bone-mute border-b border-white/10 pb-3 flex items-center justify-between">
+                  <span>Live dispatch activity log</span>
+                  <span className="text-bone/60 normal-case tracking-normal">{logs.length} total logs</span>
                 </h4>
 
                 <div className="space-y-2 max-h-[400px] overflow-y-auto font-mono text-xs">
                   {logs.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
-                      No broadcast activity recorded yet. Click "Send Broadcast" to start!
+                    <div className="text-center py-8 text-bone/60">
+                      No broadcast activity recorded yet. Click &quot;Send broadcast&quot; to start.
                     </div>
                   ) : (
                     logs.map((log, index) => (
-                      <div key={index} className="p-3 rounded-xl bg-black border border-gray-800 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <span className="text-gray-500 text-[10px]">{log.time}</span>
-                          <span className="text-gray-200 font-bold">{log.email}</span>
+                      <div key={index} className="p-3 rounded-sm bg-white/[0.04] border border-white/10 flex items-center justify-between gap-3 text-bone/80">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="text-bone/50 text-[10px] shrink-0">{log.time}</span>
+                          <span className="text-bone font-semibold truncate">{log.email}</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                            log.status.includes('SENT') ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30'
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className={`px-2 py-0.5 rounded-sm font-mono text-[10px] font-semibold border ${
+                            log.status.includes('SENT')
+                              ? 'bg-pine-tint text-pine-deep border-pine/25'
+                              : log.status === 'FAILED'
+                                ? 'bg-clay/10 text-clay border-clay/30'
+                                : 'bg-royal-tint text-royal-deep border-royal/25'
                           }`}>
                             {log.status}
                           </span>
-                          <span className="text-[10px] text-gray-400 hidden sm:inline">{log.message}</span>
+                          <span className="text-[10px] text-bone/60 hidden sm:inline">{log.message}</span>
                         </div>
                       </div>
                     ))

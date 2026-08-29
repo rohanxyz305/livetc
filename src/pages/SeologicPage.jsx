@@ -85,8 +85,8 @@ export default function SeologicPage() {
         description="Free SEO Keyword Research & AI Product Listing Studio by Liveteachcreate. Upload ImgBB images to generate Amazon, Flipkart, Meesho, Myntra & Ajio listings."
       />
 
-      <div className="min-h-screen bg-[#101820] text-white">
-        
+      <div className="min-h-screen bg-paper-deep text-bone">
+
         {/* Tool Header Sub-Navbar */}
         <SeologicNavbar
           activeTab={activeTab}
@@ -105,20 +105,20 @@ export default function SeologicPage() {
 
         {/* Main Content Body */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-          
+
           {/* Loading Indicator */}
           {isLoading && activeTab !== 'generator' && (
-            <div className="p-12 text-center bg-gray-900 border border-gray-800 rounded-2xl animate-pulse space-y-3 shadow-xl">
-              <div className="w-8 h-8 border-4 border-[#FEE715] border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="text-xs font-semibold text-gray-300">
-                Fetching Autocomplete & LSI Keyword metrics for "{currentSeed}"...
+            <div className="card p-12 text-center space-y-4 animate-pop">
+              <div className="w-8 h-8 border-[3px] border-marigold border-t-transparent rounded-full animate-spin mx-auto" />
+              <p className="font-mono text-xs uppercase tracking-[0.18em] text-bone-mute">
+                Fetching autocomplete & LSI keyword metrics for "{currentSeed}"
               </p>
             </div>
           )}
 
           {/* Tab 1: Overview & Keyword Research Table */}
           {!isLoading && activeTab === 'overview' && (
-            <>
+            <div key={activeTab} className="space-y-8 animate-fade-up">
               <SeologicOverview summary={data.summary} topOpportunity={topOpportunity} />
               <SeologicTable
                 keywords={data.keywords}
@@ -126,37 +126,47 @@ export default function SeologicPage() {
                 savedKeywords={savedKeywords}
                 onSelectKeywordForSerp={handleSelectKeywordForSerp}
               />
-            </>
+            </div>
           )}
 
           {/* Tab 2: Questions Explorer */}
           {!isLoading && activeTab === 'questions' && (
-            <SeologicQuestions keywords={data.keywords} seed={currentSeed} />
+            <div key={activeTab} className="animate-fade-up">
+              <SeologicQuestions keywords={data.keywords} seed={currentSeed} />
+            </div>
           )}
 
           {/* Tab 3: Topic Clusters */}
           {!isLoading && activeTab === 'clusters' && (
-            <SeologicClusters keywords={data.keywords} seed={currentSeed} />
+            <div key={activeTab} className="animate-fade-up">
+              <SeologicClusters keywords={data.keywords} seed={currentSeed} />
+            </div>
           )}
 
           {/* Tab 4: AI Listing Generator */}
           {activeTab === 'generator' && (
-            <ProductListingGenerator />
+            <div key={activeTab} className="animate-fade-up">
+              <ProductListingGenerator />
+            </div>
           )}
 
           {/* Tab 5: SERP Simulator */}
           {!isLoading && activeTab === 'serp' && (
-            <SeologicSERP targetKeyword={selectedSerpKeyword || currentSeed} />
+            <div key={activeTab} className="animate-fade-up">
+              <SeologicSERP targetKeyword={selectedSerpKeyword || currentSeed} />
+            </div>
           )}
 
           {/* Tab 6: Saved Project List */}
           {!isLoading && activeTab === 'saved' && (
-            <SeologicSaved
-              savedKeywords={savedKeywords}
-              onRemoveKeyword={handleRemoveSaved}
-              onClearAll={handleClearSaved}
-              onSelectKeywordForSerp={handleSelectKeywordForSerp}
-            />
+            <div key={activeTab} className="animate-fade-up">
+              <SeologicSaved
+                savedKeywords={savedKeywords}
+                onRemoveKeyword={handleRemoveSaved}
+                onClearAll={handleClearSaved}
+                onSelectKeywordForSerp={handleSelectKeywordForSerp}
+              />
+            </div>
           )}
 
         </div>

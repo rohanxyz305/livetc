@@ -1,5 +1,24 @@
 import React from 'react';
 import SEO from '../components/common/SEO';
+import Reveal from '../components/common/Reveal.jsx';
+
+const PERKS = [
+  'On-site & hybrid roles',
+  'Full-time positions',
+  'Direct client ownership',
+  'Performance-linked growth',
+  'Learning & certification support',
+  'Small senior teams',
+];
+
+/* Accent rotation — perk chips & role num-badges — marigold · pine · rani · violet · royal */
+const ACCENT_TINTS = [
+  'border-marigold/30 bg-marigold-tint text-marigold-deep',
+  'border-pine/30 bg-pine-tint text-pine-deep',
+  'border-rani/30 bg-rani-tint text-rani-deep',
+  'border-violet/30 bg-violet-tint text-violet-deep',
+  'border-royal/30 bg-royal-tint text-royal-deep',
+];
 
 export default function CareerPage() {
   const jobOpenings = [
@@ -11,49 +30,111 @@ export default function CareerPage() {
 
   return (
     <>
-      <SEO 
-        title="Careers at Liveteachcreate" 
-        description="Join India's premier tech and e-commerce growth team. Open roles for SEO Engineer, Agentic Developer, Meta Ads Manager, and Social Media Manager." 
+      <SEO
+        title="Careers at Liveteachcreate"
+        description="Join India's premier tech and e-commerce growth team. Open roles for SEO Engineer, Agentic Developer, Meta Ads Manager, and Social Media Manager."
       />
 
-      <div className="bg-gradient-to-b from-gray-900 to-[#101820] py-16 text-white border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <span className="inline-block px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider">
-            Join Our Team
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white font-display">
-            Careers at Liveteachcreate
+      {/* Page header */}
+      <header className="shell pt-16 pb-14 sm:pt-24 sm:pb-16">
+        <Reveal>
+          <p className="eyebrow">Join our team</p>
+        </Reveal>
+        <Reveal delay={100}>
+          <h1 className="mt-6 max-w-3xl text-display-lg font-display text-bone">
+            Careers at <span className="grad-text">Liveteachcreate</span>
           </h1>
-          <p className="text-base text-gray-400 max-w-2xl mx-auto">
-            Build your career alongside passion-driven tech and growth specialists shaping the future of Indian e-commerce & AI.
+        </Reveal>
+        <Reveal delay={200}>
+          <p className="lede mt-5 max-w-2xl">
+            Build your career alongside passion-driven tech and growth specialists shaping the
+            future of Indian e-commerce &amp; AI.
           </p>
-        </div>
-      </div>
+        </Reveal>
+        <div className="mt-12 border-t border-white/15" />
+      </header>
 
-      <section className="py-16 bg-[#101820] text-white">
-        <div className="max-w-4xl mx-auto px-4 space-y-6">
-          <h2 className="text-2xl font-bold text-white font-display mb-6">Current Openings</h2>
-          {jobOpenings.map((job, idx) => (
-            <div key={idx} className="p-6 rounded-2xl bg-gray-900/60 border border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-[#FEE715]/40 transition-colors">
-              <div className="space-y-1 max-w-2xl">
-                <div className="flex flex-wrap items-center gap-3">
-                  <h3 className="text-lg font-bold text-white font-display">{job.title}</h3>
-                  <span className="px-2.5 py-0.5 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-[10px] font-bold uppercase">
-                    {job.type}
-                  </span>
-                </div>
-                <p className="text-xs text-[#FEE715]">{job.location} • Experience: {job.exp}</p>
-                <p className="text-xs text-gray-400 leading-relaxed pt-1">{job.desc}</p>
-              </div>
+      {/* Culture + perks */}
+      <section className="pb-20 sm:pb-24">
+        <div className="shell grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          <Reveal className="lg:col-span-5">
+            <h2 className="text-display-md font-display text-bone">
+              Small teams, real accounts, measurable outcomes
+            </h2>
+            <p className="mt-5 leading-relaxed text-bone-mute">
+              Liveteachcreate manages listings, advertising, and full account operations across
+              Amazon, Flipkart, Myntra, Meesho, Blinkit, and Shopify. We hire people who like
+              ownership — your work ships to live marketplaces, and the numbers tell you how it
+              did.
+            </p>
+          </Reveal>
 
-              <a
-                href={`mailto:info@liveteachcreate.com?subject=Application%20for%20${encodeURIComponent(job.title)}`}
-                className="shrink-0 px-6 py-3 bg-[#FEE715] hover:bg-[#e0ca00] text-[#101820] font-bold text-xs rounded-xl text-center shadow-yellowGlow transition-transform hover:scale-105"
-              >
-                Apply Now
-              </a>
+          <div className="lg:col-span-7">
+            <Reveal delay={100}>
+              <p className="eyebrow">What you can expect</p>
+            </Reveal>
+            <div className="mt-6 flex flex-wrap gap-2.5">
+              {PERKS.map((perk, idx) => (
+                <Reveal
+                  as="span"
+                  key={perk}
+                  delay={(idx % 6) * 80}
+                  className={`inline-flex items-center rounded-full border px-3.5 py-1.5 text-xs font-medium ${ACCENT_TINTS[idx % 5]}`}
+                >
+                  {perk}
+                </Reveal>
+              ))}
             </div>
-          ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Openings — numbered ledger */}
+      <section className="well band">
+        <div className="shell">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <Reveal>
+                <p className="eyebrow">Open roles</p>
+              </Reveal>
+              <Reveal delay={100}>
+                <h2 className="mt-4 text-display-md font-display text-bone">Current openings</h2>
+              </Reveal>
+            </div>
+            <p className="font-mono text-xs text-bone-faint">
+              {jobOpenings.length} positions · Jaipur
+            </p>
+          </div>
+
+          <div className="mt-10 border-b border-white/15">
+            {jobOpenings.map((job, idx) => (
+              <Reveal key={idx} delay={(idx % 6) * 80} className="ledger-row pop-hover">
+                <span className={`num-badge ${ACCENT_TINTS[idx % 5]}`}>{idx + 1}</span>
+                <div>
+                  <h3 className="font-display text-xl font-semibold text-bone">{job.title}</h3>
+                  <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-bone-faint">
+                    {job.location} · {job.type} · {job.exp}
+                  </p>
+                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-bone-mute">{job.desc}</p>
+                </div>
+                <a
+                  href={`mailto:info@liveteachcreate.com?subject=Application%20for%20${encodeURIComponent(job.title)}`}
+                  className="btn btn-outline btn-sweep col-span-2 justify-self-start sm:col-span-1 sm:justify-self-end sm:self-center"
+                >
+                  Apply now
+                  <i className="fas fa-arrow-right btn-arrow" aria-hidden="true"></i>
+                </a>
+              </Reveal>
+            ))}
+          </div>
+
+          <p className="mt-8 text-sm text-bone-mute">
+            Don't see your role? Write to{' '}
+            <a href="mailto:info@liveteachcreate.com" className="link-underline font-semibold">
+              info@liveteachcreate.com
+            </a>
+            .
+          </p>
         </div>
       </section>
     </>

@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(npx vite build 2 >& 1)",
+      "Shell(node node_modules/vite/bin/vite.js build 2 >& 1)",
+      "Shell(sed:*)",
+      "Shell(node node_modules/vite/bin/vite.js --port 5199 --strictPort)",
+      "Shell(agent-browser:*)",
+      "Shell(npm:*)",
+      "Shell(export:*)",
+      "Shell(sleep:*)",
+      "Shell(curl -s -o /dev/null -w %{http_code} http://localhost:5173)",
+      "Shell(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3002)",
+      "Shell(find src -name '*.jsx' -o -name '*.js' | xargs sed -i '' \\ -e 's/text-ink-mute/text-bone-mute/g' \\ -e 's/text-ink-faint/text-bone-faint/g' \\ -e 's/text-ink\\//text-bone\\//g' \\ -e 's/text-ink/text-bone/g' \\ -e 's/text-paper\\//text-bone\\//g' \\ -e 's/text-paper/text-bone/g' \\ -e 's/border-paper\\//border-white\\//g' \\ -e 's/bg-paper\\//bg-white\\//g' \\ -e 's/border-ink\\//border-white\\//g' \\ -e 's/hover:bg-paper /hover:bg-bone /g' && echo MIGRATED)",
+      "Shell(find src -name '*.jsx' | xargs sed -i '' \\ -e 's/hover:bg-marigold hover:text-bone/hover:bg-marigold hover:text-ink/g' \\ -e 's/bg-marigold text-bone/bg-marigold text-ink/g' \\ -e 's/bg-marigold text-bone\\/90/bg-marigold text-ink/g' \\ -e 's/bg-ink text-bone border-ink/bg-bone text-ink border-bone/g' \\ -e 's/band-ink grid-paper relative overflow-hidden border-b border-ink/band-ink grid-paper relative overflow-hidden border-b border-white\\/10/' && \\ grep -rn \"bg-rani text-bone\\|bg-violet text-bone\\|bg-royal text-bone\\|bg-pine text-bone\\|bg-marigold-deep text-bone\\|bg-leaf text-bone\\|bg-sage text-bone\" src --include='*.jsx' | head; \\ grep -rn \"text-bone\" src --include='*.jsx' | grep -i \"marigold\\|rani\\|violet\\|royal\\|bg-pine \\|bg-leaf\\|bg-sage\" | grep -v \"tint\\|pale\" | head)",
+      "Shell(find src -name '*.jsx' | xargs sed -i '' \\ -e 's/hover:bg-rani hover:text-bone/hover:bg-rani hover:text-ink/g' \\ -e 's/hover:bg-pine hover:text-bone/hover:bg-pine hover:text-ink/g' \\ -e 's/hover:bg-royal hover:text-bone/hover:bg-royal hover:text-ink/g' \\ -e 's/hover:bg-violet hover:text-bone/hover:bg-violet hover:text-ink/g' \\ -e 's/hover:bg-leaf hover:text-bone/hover:bg-leaf hover:text-ink/g' \\ -e 's/hover:bg-sage hover:text-bone/hover:bg-sage hover:text-ink/g' \\ -e 's/hover:bg-marigold-deep hover:text-bone/hover:bg-marigold-deep hover:text-bone/g' && \\ sed -i '' 's/selection:bg-red-500 selection:text-white/selection:bg-marigold selection:text-ink/' src/App.jsx && \\ grep -c \"text-bone\" src/App.jsx 2>/dev/null; echo CLEAN)"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}

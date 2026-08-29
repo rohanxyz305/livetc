@@ -1,37 +1,75 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import useInView from '../../hooks/useInView.js';
 
-export default function ReviewCard({ review }) {
+/* Avatar squares rotate deep hues by index % 5 — paper text stays contrast-safe */
+const AVATAR_HUES = [
+  'bg-marigold-deep',
+  'bg-violet-deep',
+  'bg-royal-deep',
+  'bg-pine-deep',
+  'bg-rani-deep'
+];
+
+export default function ReviewCard({ review, index = 0 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { threshold: 0.25 });
+  const avatarHue = AVATAR_HUES[index % AVATAR_HUES.length];
+
   return (
-    <div className="card-hover p-6 rounded-3xl bg-[#101820] border border-gray-800 flex flex-col justify-between relative shadow-lg text-white">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-[#FEE715] text-[#101820] font-extrabold flex items-center justify-center text-sm shadow-yellowGlow">
-              {review.initial}
-            </div>
-            <div>
-              <h4 className="font-bold text-sm text-white">{review.name}</h4>
-              <div className="flex items-center text-[#FEE715] text-xs">
-                {'★'.repeat(review.stars)}
-                {'☆'.repeat(5 - review.stars)}
-              </div>
-            </div>
+    <figure ref={ref} className="card pop-hover group flex flex-col p-6 sm:p-7">
+      {/* oversized serif quotation mark */}
+      <span
+        className="font-display text-[3.25rem] leading-[0.6] text-marigold select-none origin-bottom-left transition-transform duration-300 group-hover:scale-110"
+        aria-hidden="true"
+      >
+        &ldquo;
+      </span>
+
+      {/* star rating — staggered fade-up on first reveal */}
+      <div
+        className="mt-5 flex items-center gap-1"
+        role="img"
+        aria-label={`Rated ${review.stars} out of 5 stars`}
+      >
+        {Array.from({ length: 5 }).map((_, i) => (
+          <i
+            key={i}
+            style={{ animationDelay: `${i * 70}ms` }}
+            className={`fa-star text-[11px] ${i < review.stars ? 'fas text-marigold' : 'far text-bone-faint'} ${
+              inView ? 'animate-fade-up' : 'opacity-0'
+            }`}
+            aria-hidden="true"
+          ></i>
+        ))}
+      </div>
+
+      <blockquote className="mt-3 flex-1 text-[15px] leading-relaxed text-bone">
+        {review.text}
+      </blockquote>
+
+      {/* attribution */}
+      <figcaption className="mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-5">
+        <div className="flex items-center gap-3">
+          <span
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[4px] font-display text-sm text-paper ${avatarHue}`}
+            aria-hidden="true"
+          >
+            {review.initial}
+          </span>
+          <div>
+            <p className="font-mono text-xs text-bone">{review.name}</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-bone-faint">
+              Verified client
+            </p>
           </div>
-          <i className="fa-solid fa-quote-right text-gray-800 text-3xl"></i>
         </div>
-
-        <p className="text-xs text-gray-300 leading-relaxed italic">
-          "{review.text}"
-        </p>
-      </div>
-
-      <div className="mt-6 pt-4 border-t border-gray-800 flex items-center justify-between text-[11px] text-gray-400">
-        <div className="flex items-center gap-1.5">
-          <img src="https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png" alt="Google Review" className="w-3.5 h-3.5" />
-          <span>Google Review</span>
-        </div>
-        <span className="text-[#FEE715] font-semibold">Verified Client</span>
-      </div>
-    </div>
+        <img
+          src="https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
+          alt="Google review"
+          className="h-4 w-4 opacity-80"
+          loading="lazy"
+        />
+      </figcaption>
+    </figure>
   );
 }
