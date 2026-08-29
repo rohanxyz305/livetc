@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #101820;
+    color: #ffffff;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Sora', sans-serif;
+    letter-spacing: -0.025em;
+  }
+}
+
+/* Custom Gradients & Animations for #101820 & #FEE715 */
+.hero-bg {
+  background:
+    radial-gradient(1000px 700px at 85% 0%, rgba(254, 231, 21, 0.18), transparent 55%),
+    radial-gradient(800px 600px at 10% 90%, rgba(254, 231, 21, 0.12), transparent 55%),
+    linear-gradient(180deg, #101820 0%, #17222d 50%, #101820 100%);
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(254, 231, 21, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(254, 231, 21, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 80%);
+}
+
+.grad-text {
+  background: linear-gradient(100deg, #FEE715 0%, #ffffff 40%, #FEE715 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.grad-btn {
+  background: linear-gradient(135deg, #FEE715 0%, #e0ca00 100%);
+  color: #101820;
+}
+
+.glass {
+  background: rgba(16, 24, 32, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+.card-hover {
+  transition: transform .5s cubic-bezier(.2, .8, .2, 1), box-shadow .5s ease, border-color .4s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px -20px rgba(254, 231, 21, 0.35);
+  border-color: rgba(254, 231, 21, 0.6);
+}
+
+.pulseBtn {
+  background: #FEE715 !important;
+  color: #101820 !important;
+  position: relative;
+  animation: pulseBtnAnim 1.8s infinite;
+  box-shadow: 0 0 0 0 rgba(254, 231, 21, 0.7);
+}
+
+@keyframes pulseBtnAnim {
+  0% {
+    box-shadow: 0 0 0 0 rgba(254, 231, 21, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(254, 231, 21, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(254, 231, 21, 0);
+  }
+}
+
+/* ================================================= */
+/* 3D NOVA FUTURISTIC ANIMATION KEYFRAMES            */
+/* ================================================= */
+.nova-shockwave-ring {
+  animation: novaShockwave 4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.nova-laser-beam {
+  animation: novaLaserScan 3s ease-in-out infinite alternate;
+}
+
+.nova-core-pulse {
+  animation: novaCoreFlare 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes novaShockwave {
+  0% {
+    transform: scale(0.3) rotate(0deg);
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 0.6;
+    stroke-dashoffset: 50;
+  }
+  100% {
+    transform: scale(1.8) rotate(360deg);
+    opacity: 0;
+    stroke-dashoffset: 100;
+  }
+}
+
+@keyframes novaLaserScan {
+  0% {
+    transform: translateY(-20px) rotate(45deg);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(20px) rotate(45deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-20px) rotate(45deg);
+    opacity: 0.2;
+  }
+}
+
+@keyframes novaCoreFlare {
+  0% {
+    box-shadow: 0 0 20px 5px rgba(254, 231, 21, 0.3);
+    transform: scale(0.9);
+  }
+  100% {
+    box-shadow: 0 0 45px 15px rgba(254, 231, 21, 0.8);
+    transform: scale(1.15);
+  }
+}
+
+/* Marquee track animation */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
