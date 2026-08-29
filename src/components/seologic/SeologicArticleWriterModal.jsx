@@ -195,9 +195,14 @@ export default function SeologicArticleWriterModal({ cluster, seed, onClose, onP
     setTimeout(() => {
       setIsPublishing(false);
       const publishedPost = {
+        id: Date.now(),
+        slug: slug || primaryKeyword.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
         title,
         metaDescription,
-        slug,
+        summary: metaDescription,
+        category: cluster.name || 'SEO Strategy',
+        date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+        readTime: `${Math.ceil(semrushAudit.words / 200)} min read`,
         content: stripSpecialChars(content),
         clusterName: cluster.name,
         publishedAt: new Date().toLocaleDateString(),
@@ -211,6 +216,9 @@ export default function SeologicArticleWriterModal({ cluster, seed, onClose, onP
       } catch (e) {}
 
       if (onPublishSuccess) onPublishSuccess(publishedPost);
+
+      // Instantly navigate to live /blogs page to view published article!
+      window.location.href = `/blogs?published=${publishedPost.slug}`;
     }, 1200);
   };
 
