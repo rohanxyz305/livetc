@@ -1,5 +1,5 @@
 import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
-import { SimpleSpanProcessor, ConsoleSpanExporter } from '@opentelemetry/sdk-trace-base';
+import { BatchSpanProcessor, SimpleSpanProcessor, ConsoleSpanExporter } from '@opentelemetry/sdk-trace-base';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';
@@ -19,8 +19,8 @@ try {
     ? `Basic ${window.btoa(authString)}` 
     : '';
 
-  // 1. Initialize OpenTelemetry Web Tracer Provider
-  const provider = new WebTracerProvider();
+  // 1. Build span processors (SDK v2 takes these in the constructor)
+  const spanProcessors = [];
 
   // 2. Configure OTLP Exporter
   if (basicAuthHeader) {
@@ -30,13 +30,15 @@ try {
         Authorization: basicAuthHeader,
       },
     });
-    provider.addSpanProcessor(new SimpleSpanProcessor(otlpExporter));
+    spanProcessors.push(new BatchSpanProcessor(otlpExporter));
   }
 
   // Console exporter for local development
   if (import.meta.env && import.meta.env.DEV) {
-    provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
+    spanProcessors.push(new SimpleSpanProcessor(new ConsoleSpanExporter()));
   }
+
+  const provider = new WebTracerProvider({ spanProcessors });
 
   provider.register();
 

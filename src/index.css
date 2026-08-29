@@ -2,159 +2,173 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =========================================================
+   THE GROWTH LEDGER — design system
+   paper surfaces · ink type · pine depth · marigold accent
+   ========================================================= */
+
 @layer base {
+  html { scroll-behavior: smooth; }
+
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #101820;
-    color: #ffffff;
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    background-color: #F7F3EA;
+    color: #15211A;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4 {
-    font-family: 'Sora', sans-serif;
-    letter-spacing: -0.025em;
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variation-settings: 'opsz' 60;
+  }
+
+  ::selection { background: #E9762B; color: #15211A; }
+
+  :focus-visible {
+    outline: 2px solid #B35310;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-/* Custom Gradients & Animations for #101820 & #FEE715 */
-.hero-bg {
-  background:
-    radial-gradient(1000px 700px at 85% 0%, rgba(254, 231, 21, 0.18), transparent 55%),
-    radial-gradient(800px 600px at 10% 90%, rgba(254, 231, 21, 0.12), transparent 55%),
-    linear-gradient(180deg, #101820 0%, #17222d 50%, #101820 100%);
-}
+@layer components {
 
-.hero-grid {
-  background-image:
-    linear-gradient(rgba(254, 231, 21, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(254, 231, 21, 0.06) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 80%);
-}
+  /* ---------- structure ---------- */
 
-.grad-text {
-  background: linear-gradient(100deg, #FEE715 0%, #ffffff 40%, #FEE715 80%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
+  .shell { @apply max-w-shell mx-auto px-5 sm:px-8 lg:px-10; }
 
-.grad-btn {
-  background: linear-gradient(135deg, #FEE715 0%, #e0ca00 100%);
-  color: #101820;
-}
+  .band { @apply py-20 sm:py-24; }
+  .band-ink { @apply bg-ink text-paper; }        /* dark contrast band */
+  .band-pine { @apply bg-pine text-paper; }      /* deep green band */
+  .well { @apply bg-paper-deep border-y border-ink/10; }
 
-.glass {
-  background: rgba(16, 24, 32, 0.85);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-}
+  .rule { @apply border-ink/15; }
+  .rule-soft { @apply border-ink/8; }
 
-.card-hover {
-  transition: transform .5s cubic-bezier(.2, .8, .2, 1), box-shadow .5s ease, border-color .4s ease;
-}
+  /* ---------- type devices ---------- */
 
-.card-hover:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 30px 60px -20px rgba(254, 231, 21, 0.35);
-  border-color: rgba(254, 231, 21, 0.6);
-}
-
-.pulseBtn {
-  background: #FEE715 !important;
-  color: #101820 !important;
-  position: relative;
-  animation: pulseBtnAnim 1.8s infinite;
-  box-shadow: 0 0 0 0 rgba(254, 231, 21, 0.7);
-}
-
-@keyframes pulseBtnAnim {
-  0% {
-    box-shadow: 0 0 0 0 rgba(254, 231, 21, 0.7);
+  .eyebrow {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-ink-mute inline-flex items-center gap-3;
   }
-  70% {
-    box-shadow: 0 0 0 14px rgba(254, 231, 21, 0);
+  .eyebrow::before {
+    content: '';
+    @apply inline-block h-px w-8 bg-marigold-deep;
   }
-  100% {
-    box-shadow: 0 0 0 0 rgba(254, 231, 21, 0);
-  }
-}
+  .band-ink .eyebrow, .band-pine .eyebrow { color: #E9A46B; }
+  .band-ink .eyebrow::before, .band-pine .eyebrow::before { background: #E9762B; }
 
-/* ================================================= */
-/* 3D NOVA FUTURISTIC ANIMATION KEYFRAMES            */
-/* ================================================= */
-.nova-shockwave-ring {
-  animation: novaShockwave 4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
-}
+  .lede { @apply text-lg sm:text-xl text-ink-mute leading-relaxed; }
+  .band-ink .lede, .band-pine .lede { @apply text-paper/70; }
 
-.nova-laser-beam {
-  animation: novaLaserScan 3s ease-in-out infinite alternate;
-}
+  .stat-num {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    font-variant-numeric: lining-nums;
+  }
 
-.nova-core-pulse {
-  animation: novaCoreFlare 2.5s ease-in-out infinite alternate;
-}
+  /* ---------- buttons ---------- */
 
-@keyframes novaShockwave {
-  0% {
-    transform: scale(0.3) rotate(0deg);
-    opacity: 1;
-    stroke-dashoffset: 0;
+  .btn {
+    @apply inline-flex items-center justify-center gap-2.5 font-semibold text-sm
+           px-6 py-3.5 transition-all duration-200 select-none
+           focus-visible:outline-none;
+    border-radius: 3px;
   }
-  50% {
-    transform: scale(1.2) rotate(180deg);
-    opacity: 0.6;
-    stroke-dashoffset: 50;
-  }
-  100% {
-    transform: scale(1.8) rotate(360deg);
-    opacity: 0;
-    stroke-dashoffset: 100;
-  }
-}
+  .btn:active { transform: translateY(1px); }
 
-@keyframes novaLaserScan {
-  0% {
-    transform: translateY(-20px) rotate(45deg);
-    opacity: 0.2;
-  }
-  50% {
-    transform: translateY(20px) rotate(45deg);
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateY(-20px) rotate(45deg);
-    opacity: 0.2;
-  }
-}
+  .btn .btn-arrow { @apply transition-transform duration-200; }
+  .btn:hover .btn-arrow { transform: translateX(4px); }
 
-@keyframes novaCoreFlare {
-  0% {
-    box-shadow: 0 0 20px 5px rgba(254, 231, 21, 0.3);
-    transform: scale(0.9);
+  .btn-primary { @apply bg-ink text-paper hover:bg-pine-deep; }
+  .btn-accent  { @apply bg-marigold text-ink hover:bg-marigold-hot; }
+  .btn-outline { @apply border border-ink/30 text-ink hover:border-ink hover:bg-ink hover:text-paper; }
+  .band-ink .btn-outline, .band-pine .btn-outline {
+    @apply border-paper/40 text-paper hover:bg-paper hover:text-ink hover:border-paper;
   }
-  100% {
-    box-shadow: 0 0 45px 15px rgba(254, 231, 21, 0.8);
-    transform: scale(1.15);
+  .btn-ghost { @apply text-ink hover:bg-ink/5; }
+
+  /* ---------- cards & rows ---------- */
+
+  .card {
+    @apply bg-cream border border-ink/12;
+    border-radius: 6px;
+    transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
   }
-}
-
-/* Marquee track animation */
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 35s linear infinite;
-}
-
-.marquee-track:hover {
-  animation-play-state: paused;
-}
-
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
+  .card-interactive:hover {
+    @apply border-ink;
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0 0 #15211A;
   }
-  100% {
-    transform: translateX(-50%);
+
+  .num-badge {
+    @apply font-mono text-xs text-ink-mute border border-ink/20 inline-flex items-center justify-center;
+    width: 2.25rem; height: 2.25rem; border-radius: 3px;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em]
+           border border-ink/20 text-ink-mute px-3 py-1.5;
+    border-radius: 999px;
+  }
+  .chip-active { @apply bg-ink text-paper border-ink; }
+
+  /* ---------- forms ---------- */
+
+  .field {
+    @apply w-full bg-cream border border-ink/20 text-ink text-base px-4 py-3
+           placeholder:text-ink-faint transition-colors;
+    border-radius: 3px;
+  }
+  .field:focus { @apply outline-none border-ink ring-2 ring-marigold/40; }
+
+  .field-label { @apply block text-sm font-semibold text-ink mb-2; }
+
+  /* ---------- misc devices ---------- */
+
+  .tick {                       /* live ticker / marquee strip */
+    @apply border-y border-ink/15 bg-paper-soft overflow-hidden;
+  }
+  .tick-track {
+    @apply flex w-max animate-marquee;
+    width: max-content;
+  }
+
+  .ledger-row {                 /* numbered service/feature row */
+    @apply grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_auto] gap-5 sm:gap-8
+           items-start py-7 border-t border-ink/15 group;
+  }
+
+  .link-underline {
+    @apply relative text-ink hover:text-pine transition-colors;
+  }
+  .link-underline::after {
+    content: '';
+    @apply absolute left-0 -bottom-0.5 h-px w-0 bg-marigold-deep transition-all duration-300;
+  }
+  .link-underline:hover::after { @apply w-full; }
+
+  .grid-paper {                 /* faint ledger grid for hero/ink backgrounds */
+    background-image:
+      linear-gradient(rgba(21,33,26,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21,33,26,0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .band-ink .grid-paper, .band-pine .grid-paper {
+    background-image:
+      linear-gradient(rgba(247,243,234,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(247,243,234,0.06) 1px, transparent 1px);
   }
 }

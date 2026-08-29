@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="livetc">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/final react app.zip!/" />
+      <root url="jar://$PROJECT_DIR$/liveteachcreate-production-ready.zip!/" />
+      <root url="jar://$PROJECT_DIR$/liveteachcreate-website-build.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
