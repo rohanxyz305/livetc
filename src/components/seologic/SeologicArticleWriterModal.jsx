@@ -217,8 +217,8 @@ export default function SeologicArticleWriterModal({ cluster, seed, onClose, onP
 
       if (onPublishSuccess) onPublishSuccess(publishedPost);
 
-      // Instantly navigate to live /blogs page to view published article!
-      window.location.href = `/blogs?published=${publishedPost.slug}`;
+      // Instantly navigate to clean SEO permalink blog page!
+      window.location.href = `/blogs/${publishedPost.slug}`;
     }, 1200);
   };
 

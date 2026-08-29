@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import SEO from '../components/common/SEO';
 
 const DEFAULT_BLOG_POSTS = [
@@ -69,9 +69,10 @@ const DEFAULT_BLOG_POSTS = [
 ];
 
 export default function BlogPage() {
-  const [selectedPost, setSelectedPost] = useState(null);
+  const { slug } = useParams();
+  const navigate = useNavigate();
   const [allPosts, setAllPosts] = useState(DEFAULT_BLOG_POSTS);
-  const location = useLocation();
+  const [selectedPost, setSelectedPost] = useState(null);
 
   // Load published articles from LocalStorage on mount
   useEffect(() => {
@@ -80,32 +81,43 @@ export default function BlogPage() {
       if (stored) {
         const userArticles = JSON.parse(stored);
         if (Array.isArray(userArticles) && userArticles.length > 0) {
-          // Merge user published articles at the top of the blog feed
           setAllPosts([...userArticles, ...DEFAULT_BLOG_POSTS]);
         }
       }
     } catch (e) {
-      console.error('Error loading published articles from localStorage', e);
+      console.error('Error loading published articles', e);
     }
   }, []);
 
-  // Check URL query param e.g. ?published=slug to open the post directly
+  // Sync selected article with URL slug param /blogs/:slug
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const pubSlug = queryParams.get('published');
-    if (pubSlug) {
-      const found = allPosts.find(p => p.slug === pubSlug);
+    if (slug) {
+      const found = allPosts.find(p => p.slug.toLowerCase() === slug.toLowerCase());
       if (found) {
         setSelectedPost(found);
+      } else {
+        setSelectedPost(null);
       }
+    } else {
+      setSelectedPost(null);
     }
-  }, [location.search, allPosts]);
+  }, [slug, allPosts]);
+
+  const handleOpenPost = (post) => {
+    setSelectedPost(post);
+    navigate(`/blogs/${post.slug}`);
+  };
+
+  const handleBackToList = () => {
+    setSelectedPost(null);
+    navigate('/blogs');
+  };
 
   return (
     <>
       <SEO 
-        title="E-Commerce Growth Blog & Knowledge Hub | Liveteachcreate" 
-        description="Read comprehensive SEO guides, Flipkart Big Billion Days strategies, Amazon GIF playbooks, and published SEO articles on Liveteachcreate Knowledge Hub." 
+        title={selectedPost ? `${selectedPost.title} | Liveteachcreate Blog` : "E-Commerce Growth Blog & Knowledge Hub | Liveteachcreate"}
+        description={selectedPost ? selectedPost.summary || selectedPost.metaDescription : "Read comprehensive SEO guides, Flipkart Big Billion Days strategies, Amazon GIF playbooks, and published SEO articles on Liveteachcreate Knowledge Hub."}
       />
 
       {/* Hero Banner */}
@@ -131,7 +143,7 @@ export default function BlogPage() {
             <div className="max-w-4xl mx-auto space-y-8 bg-gray-900/60 p-8 sm:p-12 rounded-3xl border border-gray-800 shadow-2xl">
               
               <button
-                onClick={() => setSelectedPost(null)}
+                onClick={handleBackToList}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-[#FEE715] text-[#101820] rounded-xl font-bold text-xs hover:bg-[#e0ca00] transition-colors shadow-yellowGlow"
               >
                 ← Back to All Articles
@@ -168,7 +180,7 @@ export default function BlogPage() {
 
               <div className="pt-8 border-t border-gray-800 flex justify-between items-center">
                 <button
-                  onClick={() => setSelectedPost(null)}
+                  onClick={handleBackToList}
                   className="text-xs font-bold text-[#FEE715] hover:underline"
                 >
                   ← Return to Articles List
@@ -189,7 +201,7 @@ export default function BlogPage() {
                     </div>
                     
                     <h3 
-                      onClick={() => setSelectedPost(post)}
+                      onClick={() => handleOpenPost(post)}
                       className="text-xl font-bold text-white font-display hover:text-[#FEE715] cursor-pointer transition-colors leading-snug"
                     >
                       {post.title}
@@ -203,7 +215,7 @@ export default function BlogPage() {
                   <div className="pt-6 border-t border-gray-800 flex items-center justify-between">
                     <span className="text-[11px] text-gray-400 font-medium">{post.readTime || `${Math.ceil((post.wordCount || 1000)/200)} min read`}</span>
                     <button
-                      onClick={() => setSelectedPost(post)}
+                      onClick={() => handleOpenPost(post)}
                       className="text-xs font-bold text-[#FEE715] hover:text-white flex items-center gap-1.5 transition-colors"
                     >
                       <span>Read Full Article</span>
