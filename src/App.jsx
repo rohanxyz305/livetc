@@ -6,6 +6,7 @@ import Footer from './components/layout/Footer';
 import FloatingActions from './components/layout/FloatingActions';
 import LeadPopupModal from './components/common/LeadPopupModal';
 import AppRoutes from './routes/AppRoutes';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 export default function App() {
   const [contactPopupOpen, setContactPopupOpen] = useState(false);
@@ -23,9 +24,11 @@ export default function App() {
           {/* Sticky Navbar */}
           <Navbar onOpenContactPopup={handleOpenPopup} />
 
-          {/* Main Application Routes */}
+          {/* Main Application Routes wrapped in ErrorBoundary */}
           <main>
-            <AppRoutes onOpenContactPopup={handleOpenPopup} />
+            <ErrorBoundary>
+              <AppRoutes onOpenContactPopup={handleOpenPopup} />
+            </ErrorBoundary>
           </main>
         </div>
 

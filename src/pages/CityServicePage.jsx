@@ -7,7 +7,8 @@ import { servicesCategories } from '../data/servicesData';
 
 export default function CityServicePage({ onOpenContactPopup }) {
   const { slug } = useParams();
-  const city = cityPagesList.find(c => c.slug === slug);
+  const cleanSlug = slug ? slug.toLowerCase().replace('.php', '') : '';
+  const city = cityPagesList.find(c => c.slug.toLowerCase() === cleanSlug);
 
   if (!city) {
     return <Navigate to="/" replace />;
@@ -20,6 +21,7 @@ export default function CityServicePage({ onOpenContactPopup }) {
       <SEO 
         title={city.title} 
         description={city.metaDesc} 
+        canonicalUrl={`https://liveteachcreate.com/locations/${city.slug}`}
       />
 
       <div className="bg-gradient-to-b from-gray-900 to-[#101820] py-16 text-white border-b border-gray-800">
@@ -40,7 +42,7 @@ export default function CityServicePage({ onOpenContactPopup }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {city.highlights.map((hl, idx) => (
+            {city.highlights && city.highlights.map((hl, idx) => (
               <div key={idx} className="p-6 rounded-2xl bg-gray-900/60 border border-gray-800 text-center space-y-2">
                 <div className="w-10 h-10 rounded-full bg-[#FEE715] text-[#101820] flex items-center justify-center mx-auto text-sm font-bold shadow-yellowGlow">
                   <i className="fa-solid fa-check"></i>

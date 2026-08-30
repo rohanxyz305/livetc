@@ -6,14 +6,15 @@ import StatsCounter from '../components/common/StatsCounter';
 
 export default function ServiceDetailPage({ onOpenContactPopup }) {
   const { slug } = useParams();
-  const service = allServicesList.find(s => s.slug === slug);
+  const cleanSlug = slug ? slug.toLowerCase().replace('.php', '') : '';
+  const service = allServicesList.find(s => s.slug.toLowerCase() === cleanSlug);
 
   if (!service) {
     return <Navigate to="/" replace />;
   }
 
   const relatedServices = allServicesList
-    .filter(s => s.category === service.category && s.slug !== service.slug)
+    .filter(s => s.category === service.category && s.slug.toLowerCase() !== service.slug.toLowerCase())
     .slice(0, 3);
 
   return (
@@ -21,6 +22,7 @@ export default function ServiceDetailPage({ onOpenContactPopup }) {
       <SEO 
         title={service.heroTitle || service.name} 
         description={service.shortDesc} 
+        canonicalUrl={`https://liveteachcreate.com/services/${service.slug}`}
       />
 
       {/* Hero Header */}
@@ -79,7 +81,7 @@ export default function ServiceDetailPage({ onOpenContactPopup }) {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {service.features.map((feat, idx) => (
+                {service.features && service.features.map((feat, idx) => (
                   <div key={idx} className="p-6 rounded-2xl bg-gray-900/60 border border-gray-800 space-y-2 hover:border-[#FEE715]/50 transition-colors">
                     <div className="w-8 h-8 rounded-lg bg-[#FEE715] text-[#101820] flex items-center justify-center font-bold text-xs shadow-yellowGlow">
                       {idx + 1}

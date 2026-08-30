@@ -26,6 +26,8 @@ export default function AppRoutes({ onOpenContactPopup }) {
       <Route path="/portfolio.php" element={<Navigate to="/portfolio" replace />} />
       <Route path="/blogs" element={<BlogPage />} />
       <Route path="/blogs/:slug" element={<BlogPage />} />
+      <Route path="/Blog" element={<Navigate to="/blogs" replace />} />
+      <Route path="/Blog/*" element={<Navigate to="/blogs" replace />} />
       <Route path="/blogs.php" element={<Navigate to="/blogs" replace />} />
       <Route path="/careers" element={<CareerPage />} />
       <Route path="/career.php" element={<Navigate to="/careers" replace />} />
