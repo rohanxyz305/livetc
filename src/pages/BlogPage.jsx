@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import SEO from '../components/common/SEO';
 
 const DEFAULT_BLOG_POSTS = [
@@ -113,11 +113,39 @@ export default function BlogPage() {
     navigate('/blogs');
   };
 
+  // Generate BlogPosting JSON-LD Schema for Google Search Console Indexation
+  const blogSchema = selectedPost ? {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": selectedPost.title,
+    "description": selectedPost.summary || selectedPost.metaDescription,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://liveteachcreate.com/blogs/${selectedPost.slug}`
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Liveteachcreate",
+      "url": "https://liveteachcreate.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Liveteachcreate",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://liveteachcreate.com/msme-logo.png"
+      }
+    },
+    "datePublished": "2026-08-29"
+  } : null;
+
   return (
     <>
       <SEO 
-        title={selectedPost ? `${selectedPost.title} | Liveteachcreate Blog` : "E-Commerce Growth Blog & Knowledge Hub | Liveteachcreate"}
+        title={selectedPost ? `${selectedPost.title}` : "E-Commerce Growth Blog & Knowledge Hub"}
         description={selectedPost ? selectedPost.summary || selectedPost.metaDescription : "Read comprehensive SEO guides, Flipkart Big Billion Days strategies, Amazon GIF playbooks, and published SEO articles on Liveteachcreate Knowledge Hub."}
+        canonicalUrl={selectedPost ? `https://liveteachcreate.com/blogs/${selectedPost.slug}` : "https://liveteachcreate.com/blogs"}
+        schemaData={blogSchema}
       />
 
       {/* Hero Banner */}
