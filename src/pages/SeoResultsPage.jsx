@@ -366,7 +366,7 @@ export default function SeoResultsPage({ onOpenContactPopup }) {
               </button>
 
               <a
-                href="https://wa.me/919109266248"
+                href="https://wa.me/918904979375"
                 target="_blank"
                 rel="noreferrer"
                 className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full font-extrabold text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2"

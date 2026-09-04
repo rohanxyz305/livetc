@@ -75,8 +75,18 @@ export default function ContactPage() {
                       <i className="fa-solid fa-mobile-screen"></i>
                     </div>
                     <div>
-                      <h5 className="font-bold text-white">Direct Contact</h5>
-                      <a href="tel:+916377709027" className="text-[#FEE715] font-bold hover:underline">+91 6377709027</a>
+                      <h5 className="font-bold text-white">Direct Phone</h5>
+                      <a href="tel:+918904979375" className="text-[#FEE715] font-bold hover:underline">+91 8904979375</a>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 items-center">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 text-lg font-bold shadow-lg">
+                      <i className="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div>
+                      <h5 className="font-bold text-white">WhatsApp Consultation</h5>
+                      <a href="https://wa.me/918904979375" target="_blank" rel="noreferrer" className="text-emerald-400 font-bold hover:underline">+91 8904979375</a>
                     </div>
                   </div>
 

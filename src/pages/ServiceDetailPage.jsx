@@ -55,11 +55,11 @@ export default function ServiceDetailPage({ onOpenContactPopup }) {
               Get Free Consultation
             </button>
             <a
-              href="tel:+919109266248"
+              href="tel:+918904979375"
               className="px-8 py-4 bg-gray-900 hover:bg-gray-800 border border-gray-800 text-white font-bold text-xs rounded-full shadow-sm text-center flex items-center justify-center gap-2"
             >
               <i className="fa-solid fa-phone text-[#FEE715]"></i>
-              <span>Call +91 9109266248</span>
+              <span>Call +91 8904979375</span>
             </a>
           </div>
         </div>

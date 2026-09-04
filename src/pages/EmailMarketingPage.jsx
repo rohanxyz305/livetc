@@ -25,10 +25,10 @@ export default function EmailMarketingPage() {
   const [subject, setSubject] = useState("Account growth update for your marketplace store");
   const [heading, setHeading] = useState("Exclusive E-Commerce Growth Opportunity");
   const [bodyText, setBodyText] = useState(
-    "Hello,\n\nAre you looking to boost your sales volume on Amazon, Flipkart, Blinkit, and Meesho?\n\nAt Liveteachcreate, we specialize in complete seller central management, ACoS optimization, product cataloging, and quick-commerce onboarding.\n\nReply to this email or call +91 9109266248 to claim your complimentary account audit today!"
+    "Hello,\n\nAre you looking to boost your sales volume on Amazon, Flipkart, Blinkit, and Meesho?\n\nAt Liveteachcreate, we specialize in complete seller central management, ACoS optimization, product cataloging, and quick-commerce onboarding.\n\nReply to this email or call +91 8904979375 to claim your complimentary account audit today!"
   );
   const [ctaText, setCtaText] = useState("Get Free Account Audit");
-  const [ctaLink, setCtaLink] = useState("https://wa.me/919109266248");
+  const [ctaLink, setCtaLink] = useState("https://wa.me/918904979375");
 
   // Sending & Log State
   const [isSending, setIsSending] = useState(false);
@@ -57,7 +57,7 @@ export default function EmailMarketingPage() {
       setSubject("Account growth update for your marketplace store");
       setHeading("Exclusive E-Commerce Growth Opportunity");
       setBodyText(
-        "Hello,\n\nAre you looking to boost your sales volume on Amazon, Flipkart, Blinkit, and Meesho?\n\nAt Liveteachcreate, we specialize in complete seller central management, ACoS optimization, product cataloging, and quick-commerce onboarding.\n\nReply to this email or call +91 9109266248 to claim your complimentary account audit today!"
+        "Hello,\n\nAre you looking to boost your sales volume on Amazon, Flipkart, Blinkit, and Meesho?\n\nAt Liveteachcreate, we specialize in complete seller central management, ACoS optimization, product cataloging, and quick-commerce onboarding.\n\nReply to this email or call +91 8904979375 to claim your complimentary account audit today!"
       );
       setCtaText("Get Free Account Audit");
     }
@@ -108,7 +108,7 @@ export default function EmailMarketingPage() {
     </div>
     <div class="footer">
       Sent from ${senderEmail} | Liveteachcreate E-Commerce Account Management<br/>
-      Bengaluru • Kolkata • Dhanbad | Direct Contact: +91 9109266248<br/>
+      Bengaluru • Kolkata • Dhanbad | Direct Contact: +91 8904979375<br/>
       <a href="https://liveteachcreate.com/contact-us" class="unsub">Unsubscribe / Update Preferences</a>
     </div>
   </div>

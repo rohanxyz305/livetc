@@ -13,11 +13,11 @@ export default function Topbar() {
             <span>info@liveteachcreate.com</span>
           </a>
           <a 
-            href="tel:+919109266248" 
+            href="tel:+918904979375" 
             className="flex items-center gap-2 text-gray-300 hover:text-[#FEE715] transition-colors"
           >
             <i className="fa-solid fa-phone text-[#FEE715]"></i>
-            <span>Direct: +91 9109266248</span>
+            <span>Direct: +91 8904979375</span>
           </a>
         </div>
         <div className="flex items-center gap-2 text-gray-400">

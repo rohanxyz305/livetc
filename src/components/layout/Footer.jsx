@@ -111,7 +111,7 @@ export default function Footer() {
             <div className="space-y-3 text-xs text-gray-300">
               <div className="flex gap-3 items-center">
                 <i className="fa-solid fa-mobile-screen text-[#FEE715] text-base"></i>
-                <span>Direct: <a href="tel:+919109266248" className="hover:text-[#FEE715] font-bold text-sm text-white">+91 9109266248</a></span>
+                <span>Direct / WhatsApp: <a href="https://wa.me/918904979375" target="_blank" rel="noreferrer" className="hover:text-[#FEE715] font-bold text-sm text-white">+91 8904979375</a></span>
               </div>
               <div className="flex gap-3 items-center">
                 <i className="fa-solid fa-envelope text-[#FEE715]"></i>

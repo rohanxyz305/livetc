@@ -71,7 +71,7 @@ export default function SEO({ title, description, canonicalUrl, schemaData }) {
       "logo": "https://liveteachcreate.com/msme-logo.png",
       "contactPoint": {
         "@type": "ContactPoint",
-        "telephone": "+91-9109266248",
+        "telephone": "+91-8904979375",
         "contactType": "customer service",
         "areaServed": "IN",
         "availableLanguage": ["English", "Hindi"]
