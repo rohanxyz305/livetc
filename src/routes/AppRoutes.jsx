@@ -14,6 +14,7 @@ import EmailMarketingPage from '../pages/EmailMarketingPage';
 import SeologicPage from '../pages/SeologicPage';
 import ProductListingGeneratorPage from '../pages/ProductListingGeneratorPage';
 import SeoResultsPage from '../pages/SeoResultsPage';
+import SeoResultsAdminPage from '../pages/SeoResultsAdminPage';
 
 export default function AppRoutes({ onOpenContactPopup }) {
   return (
@@ -38,6 +39,8 @@ export default function AppRoutes({ onOpenContactPopup }) {
       {/* SEO Results & Client Case Studies */}
       <Route path="/seo-results" element={<SeoResultsPage onOpenContactPopup={onOpenContactPopup} />} />
       <Route path="/seo-results.php" element={<Navigate to="/seo-results" replace />} />
+      <Route path="/seo-results/admin" element={<SeoResultsAdminPage />} />
+      <Route path="/seo-results-admin" element={<SeoResultsAdminPage />} />
 
       {/* Free Email Marketing Studio */}
       <Route path="/email-marketing" element={<EmailMarketingPage />} />

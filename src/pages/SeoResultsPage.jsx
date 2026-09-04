@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import SEO from '../components/common/SEO';
 import { 
   Trophy, TrendingUp, Search, Eye, CheckCircle2, Award, Zap, 
-  ArrowUpRight, BarChart3, Filter, Star, ExternalLink, ShieldCheck, ZoomIn, X, Phone, Calendar
+  ArrowUpRight, BarChart3, Filter, Star, ExternalLink, ShieldCheck, ZoomIn, X, Phone, Calendar, Upload
 } from 'lucide-react';
 
 const REAL_SEO_RESULTS_DATA = [
@@ -100,10 +101,46 @@ const REAL_SEO_RESULTS_DATA = [
 export default function SeoResultsPage({ onOpenContactPopup }) {
   const [activeFilter, setActiveFilter] = useState('all');
   const [activeImageModal, setActiveImageModal] = useState(null);
+  const [allCaseStudies, setAllCaseStudies] = useState(REAL_SEO_RESULTS_DATA);
+
+  useEffect(() => {
+    fetchCustomResults();
+  }, []);
+
+  const fetchCustomResults = async () => {
+    let customItems = [];
+    try {
+      const stored = localStorage.getItem('custom_seo_results');
+      if (stored) {
+        customItems = JSON.parse(stored);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+    try {
+      const res = await fetch('/api/get-seo-results.php');
+      if (res.ok) {
+        const json = await res.json();
+        if (json.status === 'success' && Array.isArray(json.data)) {
+          const apiItems = json.data;
+          const mergedCustom = [...apiItems, ...customItems.filter(c => !apiItems.some(a => a.id === c.id))];
+          setAllCaseStudies([...mergedCustom, ...REAL_SEO_RESULTS_DATA]);
+          return;
+        }
+      }
+    } catch (e) {
+      console.log('Using local fallback for custom SEO results');
+    }
+
+    if (customItems.length > 0) {
+      setAllCaseStudies([...customItems, ...REAL_SEO_RESULTS_DATA]);
+    }
+  };
 
   const filteredData = activeFilter === 'all' 
-    ? REAL_SEO_RESULTS_DATA 
-    : REAL_SEO_RESULTS_DATA.filter(item => item.category === activeFilter);
+    ? allCaseStudies 
+    : allCaseStudies.filter(item => item.category === activeFilter);
 
   return (
     <>
@@ -121,9 +158,19 @@ export default function SeoResultsPage({ onOpenContactPopup }) {
           
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
             
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#FEE715]/10 border border-[#FEE715]/30 rounded-full text-xs font-extrabold uppercase tracking-widest text-[#FEE715] shadow-yellowGlow">
-              <Trophy className="w-4 h-4 text-[#FEE715]" />
-              <span>PROVEN CLIENT SUCCESS & SEO MILESTONES</span>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#FEE715]/10 border border-[#FEE715]/30 rounded-full text-xs font-extrabold uppercase tracking-widest text-[#FEE715] shadow-yellowGlow">
+                <Trophy className="w-4 h-4 text-[#FEE715]" />
+                <span>PROVEN CLIENT SUCCESS & SEO MILESTONES</span>
+              </div>
+
+              <Link 
+                to="/seo-results/admin" 
+                className="inline-flex items-center gap-2 px-4 py-1.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-full text-xs font-bold text-gray-300 hover:text-white transition shadow-sm"
+              >
+                <Upload className="w-3.5 h-3.5 text-[#FEE715]" />
+                <span>Upload Screenshots (Admin)</span>
+              </Link>
             </div>
 
             <h1 className="text-4xl sm:text-6xl font-black text-white font-display tracking-tight leading-tight max-w-4xl mx-auto">
