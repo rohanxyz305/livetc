@@ -41,6 +41,12 @@
 
   <!-- Interactive E-Commerce & SEO Tools -->
   <url>
+    <loc>https://liveteachcreate.com/seo-results</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://liveteachcreate.com/seo-keyword-tool</loc>
     <lastmod>2026-08-29</lastmod>
     <changefreq>daily</changefreq>

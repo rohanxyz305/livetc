@@ -70,7 +70,7 @@ export default function Navbar({ onOpenContactPopup }) {
                         {cat.services.map((serv) => (
                           <li key={serv.slug}>
                             <Link 
-                              to={`/services/${serv.slug}`}
+                              to={serv.slug === 'seo-results' ? '/seo-results' : `/services/${serv.slug}`}
                               className="flex items-center gap-2 text-gray-300 hover:text-[#FEE715] hover:translate-x-1 transition-all py-1"
                             >
                               <i className={`${serv.icon} text-[#FEE715] w-4 text-center`}></i>
@@ -166,7 +166,7 @@ export default function Navbar({ onOpenContactPopup }) {
                           {cat.services.map((serv) => (
                             <Link
                               key={serv.slug}
-                              to={`/services/${serv.slug}`}
+                              to={serv.slug === 'seo-results' ? '/seo-results' : `/services/${serv.slug}`}
                               className="block py-1 text-gray-300 hover:text-[#FEE715]"
                             >
                               {serv.name}

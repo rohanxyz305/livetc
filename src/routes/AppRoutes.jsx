@@ -13,6 +13,7 @@ import LegalPage from '../pages/LegalPage';
 import EmailMarketingPage from '../pages/EmailMarketingPage';
 import SeologicPage from '../pages/SeologicPage';
 import ProductListingGeneratorPage from '../pages/ProductListingGeneratorPage';
+import SeoResultsPage from '../pages/SeoResultsPage';
 
 export default function AppRoutes({ onOpenContactPopup }) {
   return (
@@ -33,6 +34,10 @@ export default function AppRoutes({ onOpenContactPopup }) {
       <Route path="/career.php" element={<Navigate to="/careers" replace />} />
       <Route path="/contact-us" element={<ContactPage />} />
       <Route path="/contact-us.php" element={<Navigate to="/contact-us" replace />} />
+
+      {/* SEO Results & Client Case Studies */}
+      <Route path="/seo-results" element={<SeoResultsPage onOpenContactPopup={onOpenContactPopup} />} />
+      <Route path="/seo-results.php" element={<Navigate to="/seo-results" replace />} />
 
       {/* Free Email Marketing Studio */}
       <Route path="/email-marketing" element={<EmailMarketingPage />} />

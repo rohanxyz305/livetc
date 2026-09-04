@@ -92,6 +92,7 @@ export default function Footer() {
               <ul className="space-y-2 text-xs text-gray-300">
                 <li><Link to="/about-us" className="hover:text-[#FEE715] transition-colors">About Us</Link></li>
                 <li><Link to="/portfolio" className="hover:text-[#FEE715] transition-colors">Portfolio</Link></li>
+                <li><Link to="/seo-results" className="hover:text-[#FEE715] text-[#FEE715] font-bold transition-colors">🏆 SEO Case Studies & Results</Link></li>
                 <li><Link to="/blogs" className="hover:text-[#FEE715] transition-colors">Blog</Link></li>
                 <li><Link to="/careers" className="hover:text-[#FEE715] transition-colors">Career</Link></li>
                 <li><Link to="/seo-keyword-tool" className="hover:text-[#FEE715] text-[#FEE715] font-bold transition-colors">🔍 SEO Keyword Tool</Link></li>

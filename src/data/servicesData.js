@@ -118,34 +118,34 @@ export const servicesCategories = [
       {
         slug: "ecommerce-product-listing-services",
         name: "Ecommerce Product Upload Listing",
-        shortDesc: "Bulk catalog upload across multiple Indian ecommerce portals with complete accuracy.",
-        icon: "fa-solid fa-cloud-arrow-up",
+        shortDesc: "Bulk catalog upload across platforms, variation setup & multi-channel product mapping.",
+        icon: "fa-solid fa-file-csv",
         category: "Marketplace Management",
         features: [
-          "Multi-Platform Bulk Catalog Upload",
-          "Data Cleaning & Attribute Mapping",
-          "Image Formatting & Resizing",
-          "Inventory Matrix Creation",
-          "Quality Check & Compliance Audit"
+          "Multi-Marketplace Bulk CSV Upload",
+          "SKU & Barcode Mapping",
+          "Attribute Standardization",
+          "Category Classification Verification",
+          "Fast-Track Error Resolution"
         ],
-        heroTitle: "Fast & Accurate Multi-Channel Product Uploads",
-        heroSubtitle: "Save hours of manual data entry with our systematic multi-marketplace listing service."
+        heroTitle: "Fast Bulk E-Commerce Product Listing & Uploads",
+        heroSubtitle: "Save hundreds of hours with automated, error-free product upload services."
       },
       {
-        slug: "ecommerce-account-management-services",
+        slug: "ecommerce-management-services",
         name: "Ecommerce Management Services",
-        shortDesc: "360-degree ecommerce business consulting, multi-channel strategy & sales growth.",
+        shortDesc: "360-degree online retail management, multi-channel growth & operational execution.",
         icon: "fa-solid fa-chart-line",
         category: "Marketplace Management",
         features: [
           "Multi-Channel Sales Strategy",
-          "Pricing & Profitability Analysis",
-          "Ad Budget Allocation & ROI Tracking",
-          "Returns & Logistics Optimization",
-          "Quarterly Growth Audits"
+          "Pricing Strategy & Profit Margin Audit",
+          "Order & Returns Workflow Optimization",
+          "Vendor Account Performance Tuning",
+          "Monthly Executive Growth Reporting"
         ],
-        heroTitle: "Complete 360° E-Commerce Management Solutions",
-        heroSubtitle: "End-to-end operational execution and growth strategy for burgeoning Indian D2C brands."
+        heroTitle: "360° E-Commerce Growth & Operations Management",
+        heroSubtitle: "Partner with industry veterans to build a multi-channel online retail enterprise."
       }
     ]
   },
@@ -288,6 +288,22 @@ export const servicesCategories = [
         heroSubtitle: "Increase organic revenue and capture high-intent search traffic on Google."
       },
       {
+        slug: "seo-results",
+        name: "SEO Results & Client Case Studies",
+        shortDesc: "Real client organic traffic growth, #1 Google rankings, Search Console proof & revenue scale.",
+        icon: "fa-solid fa-trophy",
+        category: "Digital Marketing",
+        features: [
+          "Verified Google Search Console Proof",
+          "+300% Avg Organic Traffic Growth",
+          "#1 Google Rankings for Competitive Terms",
+          "Transparent Revenue & Sales Scaling Data",
+          "Multi-Industry Case Studies & Audits"
+        ],
+        heroTitle: "Verified SEO Results & Delivered Client Achievements",
+        heroSubtitle: "Discover how we scale organic traffic by 300%+, secure #1 Google rankings, and drive millions in client revenue."
+      },
+      {
         slug: "meta-ads-management-company-in-india",
         name: "Meta Ads Management",
         shortDesc: "High-ROI Facebook & Instagram ad campaigns focused on direct sales & low CAC.",
@@ -374,103 +390,104 @@ export const servicesCategories = [
     title: "WEB DEVELOPMENT",
     services: [
       {
-        slug: "wordpress-development",
+        slug: "wordpress-development-company-in-india",
         name: "WordPress Development",
-        shortDesc: "Custom high-speed WordPress website design, custom themes, and elementor customization.",
+        shortDesc: "Custom, SEO-friendly WordPress websites with fast speed & responsive layout.",
         icon: "fa-brands fa-wordpress",
         category: "Web Development",
         features: [
-          "Custom Theme Design & Development",
-          "Page Speed & Core Web Vitals Optimization",
-          "Custom Plugin Integration",
-          "SEO-Friendly Clean Code Base",
-          "Security Hardening & Malware Protection"
+          "Custom Theme Development",
+          "Plugin Integration & Custom Code",
+          "WooCommerce Integration",
+          "Speed & Security Optimization",
+          "SEO-Friendly Code Architecture"
         ],
-        heroTitle: "Custom WordPress Web Development Services",
-        heroSubtitle: "Build lightning-fast, SEO-optimized business websites tailored to your corporate goals."
+        heroTitle: "Custom WordPress Websites Built for Speed & Conversion",
+        heroSubtitle: "Empower your business with a scalable, easy-to-manage WordPress platform."
       },
       {
-        slug: "shopify-development",
+        slug: "shopify-development-company-in-india",
         name: "Shopify Development",
-        shortDesc: "Tailored Shopify store creation, theme customization, custom apps & checkout optimization.",
+        shortDesc: "High-converting D2C Shopify store design, theme customization & app integration.",
         icon: "fa-brands fa-shopify",
         category: "Web Development",
         features: [
-          "Shopify Liquid Theme Customization",
-          "Custom App Development & Integration",
-          "Custom Checkout Flow & Local Gateways",
-          "Speed Optimization for Mobile Browsers",
-          "Migrate from WordPress / Magento to Shopify"
+          "Shopify Store Design & Setup",
+          "Custom Liquid Theme Editing",
+          "Payment Gateway Integration",
+          "App & Checkout Customization",
+          "Mobile-First Responsive Layout"
         ],
-        heroTitle: "Build & Custom Scale Your Shopify E-Commerce Store",
-        heroSubtitle: "Deliver stunning shopping experiences designed specifically for maximum conversions."
+        heroTitle: "Build High-Converting D2C Shopify Stores",
+        heroSubtitle: "Launch a visually stunning, lightning-fast online store that turns visitors into repeat customers."
       },
       {
-        slug: "woocommerce-development",
+        slug: "woocommerce-development-company-in-india",
         name: "WooCommerce Development",
-        shortDesc: "Flexible WordPress WooCommerce online stores tailored for complex inventory cataloging.",
-        icon: "fa-solid fa-cart-shopping",
+        shortDesc: "Flexible e-commerce stores powered by WooCommerce with customized checkout flows.",
+        icon: "fa-solid fa-[#FEE715] fa-cart-shopping",
         category: "Web Development",
         features: [
-          "WooCommerce Store Architecture",
-          "Custom Payment & COD Verification Addons",
-          "ERP & Logistics API Integrations",
-          "High-Load Database Tuning",
-          "Mobile App API Readiness"
+          "WooCommerce Setup & Configuration",
+          "Custom Payment Gateway Integration",
+          "Product Import & Catalog Setup",
+          "Shipping & Tax Module Configuration",
+          "Speed & Database Optimization"
         ],
-        heroTitle: "Flexible WooCommerce Solutions for Growing Brands",
-        heroSubtitle: "Combine the flexibility of WordPress with heavy-duty e-commerce store architecture."
+        heroTitle: "Scalable WooCommerce Online Stores",
+        heroSubtitle: "Custom e-commerce functionality tailored to your specific business model."
       },
       {
-        slug: "wix-development",
+        slug: "wix-development-company-in-india",
         name: "Wix Development",
-        shortDesc: "Modern Wix Studio website design, responsive layouts, booking systems & online store.",
-        icon: "fa-solid fa-laptop-code",
+        shortDesc: "Modern, visually engaging Wix website design & custom Velo code integration.",
+        icon: "fa-solid fa-[#FEE715] fa-layer-group",
         category: "Web Development",
         features: [
-          "Wix Studio Custom Layouts",
-          "Responsive Mobile & Tablet Styling",
-          "Wix Bookings & Event Setup",
-          "Wix Store E-Commerce Features",
-          "Custom Velo Code Scripts"
+          "Wix Website Design & Revamp",
+          "Wix Studio & Velo Code Setup",
+          "Mobile Responsiveness Optimization",
+          "Wix SEO Wiz Setup",
+          "Domain & Hosting Configuration"
         ],
-        heroTitle: "Sleek & Professional Wix Website Design",
-        heroSubtitle: "Launch your brand quickly with stunning Wix visuals and seamless mobile responsiveness."
+        heroTitle: "Stunning Wix Website Design & Custom Functionality",
+        heroSubtitle: "Get a beautifully crafted website that reflects your brand identity."
       },
       {
-        slug: "custom-web-development",
+        slug: "custom-web-development-company-in-india",
         name: "Custom Web Development",
-        shortDesc: "Bespoke full-stack web applications using ReactJS, Node.js, and modern APIs.",
-        icon: "fa-solid fa-code",
+        shortDesc: "Tailored React, Node.js & full-stack web applications for custom enterprise needs.",
+        icon: "fa-solid fa-[#FEE715] fa-code",
         category: "Web Development",
         features: [
-          "ReactJS & Modern Frontend Engineering",
-          "Node.js / Express REST & GraphQL APIs",
-          "Custom Database Architecture",
-          "Third-Party Service Integrations",
-          "Scalable Cloud Deployment (AWS/Vercel)"
+          "React.js & Next.js Frontend Setup",
+          "Node.js & PHP Backend APIs",
+          "Database Architecture & Design",
+          "RESTful API Development & Sync",
+          "Cloud Hosting & Deployment"
         ],
-        heroTitle: "Custom ReactJS & Full-Stack Web Development",
-        heroSubtitle: "Engineered from scratch for unmatched performance, security, and customized business logic."
+        heroTitle: "Full-Stack Custom Web Application Development",
+        heroSubtitle: "Transform complex business ideas into robust, high-performance web applications."
       },
       {
-        slug: "website-maintenance-web-design",
+        slug: "website-maintenance-services",
         name: "Website Maintenance & Web Design",
-        shortDesc: "Continuous website updates, security audits, backups, UI revamp & redesign.",
-        icon: "fa-solid fa-gears",
+        shortDesc: "Regular updates, bug fixes, malware cleanup, speed optimization & design tweaks.",
+        icon: "fa-solid fa-[#FEE715] fa-gears",
         category: "Web Development",
         features: [
-          "24/7 Server Uptime Monitoring",
-          "Regular Daily/Weekly Site Backups",
-          "Security Patching & Core Updates",
-          "UI/UX Design Revamp & Modernization",
-          "Bug Fixes & Speed Audit"
+          "Core & Plugin Updates",
+          "Security Monitoring & Malware Removal",
+          "Daily/Weekly Offsite Backups",
+          "Content Updates & Design Tweaks",
+          "Uptime & Speed Monitoring"
         ],
-        heroTitle: "Proactive Website Maintenance & Modern Web Redesign",
-        heroSubtitle: "Keep your digital presence secure, bug-free, and ahead of modern web design standards."
+        heroTitle: "Hassle-Free Website Maintenance & Support",
+        heroSubtitle: "Keep your website secure, fast, and always up-to-date with our expert maintenance plans."
       }
     ]
   }
 ];
 
 export const allServicesList = servicesCategories.flatMap(cat => cat.services);
+
