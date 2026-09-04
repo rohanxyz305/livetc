@@ -10,18 +10,25 @@ const DEFAULT_BLOG_POSTS = [
     category: "Flipkart Strategy",
     date: "August 28, 2026",
     readTime: "12 min read",
+    image: "https://images.unsplash.com/photo-1556742049-0a670f4a4591?w=1200&auto=format&fit=crop",
     summary: "Master inventory planning, Flipkart PLA advertising, Smart Fulfillment (FBF), Price Lock mechanics, and catalog readiness to maximize Big Billion Days revenue.",
     content: `
-<h2>1. Catalog & Listing Optimization (45 Days Before BBD)</h2>
-<p>Your catalog quality score directly influences Flipkart search ranking algorithm during high traffic surges.</p>
-<ul class="list-disc pl-6 space-y-2">
-  <li><strong>Title Keyword Injection:</strong> Ensure primary search phrases appear within the first 60 characters.</li>
-  <li><strong>Infographics & Lifestyle Images:</strong> Replace plain white background thumbnails with multi angle lifestyle images.</li>
-  <li><strong>Attributes Completeness Score:</strong> Achieve 100% completion on all optional product attributes.</li>
-</ul>
+<div>
+  <img src="https://images.unsplash.com/photo-1556742049-0a670f4a4591?w=1200&auto=format&fit=crop" alt="Flipkart Big Billion Days Strategy" style="width:100%; height:auto; border-radius:1rem; margin:1.5rem 0; display:block; border:1px solid #374151;" />
 
-<h2>2. Inventory Planning & Fulfillment Strategy</h2>
-<p>Stockouts during BBD are catastrophic. Transit 60% to 70% of projected BBD inventory into Flipkart regional warehouses at least 25 days before launch.</p>
+  <h2>1. Catalog & Listing Optimization (45 Days Before BBD)</h2>
+  <p>Your catalog quality score directly influences Flipkart search ranking algorithm during high traffic surges.</p>
+  <ul style="line-height:1.8;">
+    <li><strong>Title Keyword Injection:</strong> Ensure primary search phrases appear within the first 60 characters.</li>
+    <li><strong>Infographics & Lifestyle Images:</strong> Replace plain white background thumbnails with multi angle lifestyle images.</li>
+    <li><strong>Attributes Completeness Score:</strong> Achieve 100% completion on all optional product attributes.</li>
+  </ul>
+
+  <h2>2. Inventory Planning & Fulfillment Strategy</h2>
+  <p>Stockouts during BBD are catastrophic. Transit 60% to 70% of projected BBD inventory into Flipkart regional warehouses at least 25 days before launch.</p>
+  
+  <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop" alt="E-Commerce Fulfillment & Warehousing" style="width:100%; height:auto; border-radius:1rem; margin:1.5rem 0; display:block; border:1px solid #374151;" />
+</div>
     `
   },
   {
@@ -31,13 +38,18 @@ const DEFAULT_BLOG_POSTS = [
     category: "Amazon PPC & FBA",
     date: "August 27, 2026",
     readTime: "14 min read",
+    image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1200&auto=format&fit=crop",
     summary: "Comprehensive guide to dominating Amazon GIF 2026: Lightning Deals, A+ Brand Store, Sponsored Products PPC optimization, and Prime inventory routing.",
     content: `
-<h2>1. Prime Eligibility & FBA Inbound Planning</h2>
-<p>During the Great Indian Festival, non-Prime listings suffer a severe conversion drop. Buyers prioritize Prime badged products with free 1 day delivery.</p>
+<div>
+  <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1200&auto=format&fit=crop" alt="Amazon Great Indian Festival Strategy" style="width:100%; height:auto; border-radius:1rem; margin:1.5rem 0; display:block; border:1px solid #374151;" />
 
-<h2>2. A+ Content & Brand Store Revamp</h2>
-<p>Highlighting festive gift packaging and premium quality elevates conversion rates by up to 30%.</p>
+  <h2>1. Prime Eligibility & FBA Inbound Planning</h2>
+  <p>During the Great Indian Festival, non-Prime listings suffer a severe conversion drop. Buyers prioritize Prime badged products with free 1 day delivery.</p>
+
+  <h2>2. A+ Content & Brand Store Revamp</h2>
+  <p>Highlighting festive gift packaging and premium quality elevates conversion rates by up to 30%.</p>
+</div>
     `
   },
   {
@@ -47,10 +59,15 @@ const DEFAULT_BLOG_POSTS = [
     category: "Quick Commerce",
     date: "August 25, 2026",
     readTime: "8 min read",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&auto=format&fit=crop",
     summary: "Step-by-step master guide for vendor registration, FSSAI compliance, dark store inventory mapping, and PO management on 10-minute delivery apps.",
     content: `
-<h2>Step 1: Legal & Regulatory Documentation Checklist</h2>
-<p>Prepare GST registration, FSSAI license, and brand authorization letters before submitting vendor applications.</p>
+<div>
+  <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&auto=format&fit=crop" alt="Quick Commerce Onboarding Blinkit Zepto" style="width:100%; height:auto; border-radius:1rem; margin:1.5rem 0; display:block; border:1px solid #374151;" />
+
+  <h2>Step 1: Legal & Regulatory Documentation Checklist</h2>
+  <p>Prepare GST registration, FSSAI license, and brand authorization letters before submitting vendor applications.</p>
+</div>
     `
   },
   {
@@ -60,10 +77,15 @@ const DEFAULT_BLOG_POSTS = [
     category: "Marketplace Growth",
     date: "August 22, 2026",
     readTime: "9 min read",
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop",
     summary: "Deconstructing Zepto hyper-local marketing engine: micro-warehouse density, impulse buy mechanics, in-app banner placement, and notification funnels.",
     content: `
-<h2>1. The Psychology of Instant Gratification</h2>
-<p>Zepto entire brand messaging revolves around eliminating waiting times and instant micro warehouse availability.</p>
+<div>
+  <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop" alt="Zepto Hyperlocal Marketing Strategy" style="width:100%; height:auto; border-radius:1rem; margin:1.5rem 0; display:block; border:1px solid #374151;" />
+
+  <h2>1. The Psychology of Instant Gratification</h2>
+  <p>Zepto entire brand messaging revolves around eliminating waiting times and instant micro warehouse availability.</p>
+</div>
     `
   }
 ];
@@ -91,14 +113,17 @@ function generateFallbackArticle(rawSlug) {
     category: "E-Commerce & SEO",
     date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
     readTime: "10 min read",
+    image: "https://images.unsplash.com/photo-1556742049-0a670f4a4591?w=1200&auto=format&fit=crop",
     summary: `Comprehensive guide and strategic breakdown for ${cleanTitle}. Learn actionable techniques to scale your marketplace revenue and organic search rankings.`,
     content: `
 <div>
+  <img src="https://images.unsplash.com/photo-1556742049-0a670f4a4591?w=1200&auto=format&fit=crop" alt="${cleanTitle} strategy" style="width:100%; height:auto; border-radius:1rem; margin:1.5rem 0; display:block; border:1px solid #374151;" />
+
   <p>Welcome to Liveteachcreate's official strategy breakdown on <strong>${cleanTitle}</strong>. Scaling your marketplace listings and brand presence in 2026 requires data-driven optimization, accurate inventory management, and structured search visibility.</p>
 
-  <div style="background: #17222d; padding: 20px; border-radius: 12px; border-left: 4px solid #FEE715; margin: 24px 0; color: #ffffff;">
-    <h3 style="margin-top:0; color: #FEE715; font-size: 16px;">📌 Key Action Points for ${cleanTitle}</h3>
-    <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.6;">
+  <div style="background: #17222d; padding: 24px; border-radius: 16px; border-left: 5px solid #FEE715; margin: 28px 0; color: #ffffff;">
+    <h3 style="margin-top:0; color: #FEE715; font-size: 18px;">📌 Key Action Points for ${cleanTitle}</h3>
+    <ul style="margin: 12px 0 0 0; padding-left: 20px; font-size: 14px; line-height: 1.8;">
       <li>Optimize product titles, bullet points, and backend search terms.</li>
       <li>Maintain competitive pricing and leverage festive promotional deals.</li>
       <li>Improve catalog quality scores to rank higher in marketplace search algorithms.</li>
@@ -109,8 +134,10 @@ function generateFallbackArticle(rawSlug) {
   <h2>1. Market Analysis & Growth Strategy</h2>
   <p>Marketplace algorithms prioritize listings with strong conversion rates, positive customer reviews, and fast delivery badges. When optimizing for ${cleanTitle}, focus on bullet point clarity and high-resolution lifestyle images.</p>
 
+  <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop" alt="${cleanTitle} analytics" style="width:100%; height:auto; border-radius:1rem; margin:1.5rem 0; display:block; border:1px solid #374151;" />
+
   <h2>2. Step-by-Step Execution Plan</h2>
-  <ol class="list-decimal pl-6 space-y-2">
+  <ol style="line-height: 1.8;">
     <li><strong>Keyword Alignment:</strong> Conduct weekly search query audits to identify top buyer search phrases.</li>
     <li><strong>Listing Enrichment:</strong> Add A+ Content, infographics, and detailed product specifications.</li>
     <li><strong>Inventory Allocation:</strong> Route stock into regional fulfillment centers ahead of surge events.</li>
@@ -145,7 +172,11 @@ export default function BlogPage() {
           const norm = normalizeSlug(post.slug);
           if (norm && !seenSlugs.has(norm)) {
             seenSlugs.add(norm);
-            uniqueCustom.push({ ...post, slug: norm });
+            uniqueCustom.push({ 
+              ...post, 
+              slug: norm,
+              image: post.image || 'https://images.unsplash.com/photo-1556742049-0a670f4a4591?w=1200&auto=format&fit=crop'
+            });
           }
         });
 
@@ -163,7 +194,6 @@ export default function BlogPage() {
       let found = allPosts.find(p => normalizeSlug(p.slug) === targetNorm);
 
       if (!found) {
-        // Partial or fuzzy match (e.g. "how-to-amazon-great-indian-festival" vs "how-to-increase-sales-in-amazon-great-indian-festival-2026")
         found = allPosts.find(p => {
           const pNorm = normalizeSlug(p.slug);
           return pNorm.includes(targetNorm) || targetNorm.includes(pNorm);
@@ -173,7 +203,6 @@ export default function BlogPage() {
       if (found) {
         setSelectedPost(found);
       } else {
-        // Dynamically render a structured full article for any requested URL so no visitor ever gets a blank screen!
         setSelectedPost(generateFallbackArticle(slug));
       }
     } else {
@@ -197,6 +226,7 @@ export default function BlogPage() {
     "@type": "BlogPosting",
     "headline": selectedPost.title,
     "description": selectedPost.summary || selectedPost.metaDescription || selectedPost.excerpt,
+    "image": selectedPost.image || "https://images.unsplash.com/photo-1556742049-0a670f4a4591?w=1200&auto=format&fit=crop",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": `https://liveteachcreate.com/blogs/${selectedPost.slug}`
@@ -269,9 +299,11 @@ export default function BlogPage() {
                     </span>
                   )}
                 </div>
+                
                 <h1 className="text-2xl sm:text-4xl font-extrabold text-white font-display leading-tight">
                   {selectedPost.title}
                 </h1>
+                
                 {(selectedPost.summary || selectedPost.metaDescription || selectedPost.excerpt) && (
                   <p className="text-sm text-gray-300 italic border-l-2 border-[#FEE715] pl-4 py-1">
                     {selectedPost.summary || selectedPost.metaDescription || selectedPost.excerpt}
@@ -279,8 +311,19 @@ export default function BlogPage() {
                 )}
               </div>
 
-              {/* Rendered Article HTML Body */}
-              <div className="prose prose-invert max-w-none text-gray-200 text-sm leading-relaxed space-y-6 font-sans">
+              {/* Featured Header Banner Image */}
+              {selectedPost.image && (
+                <div className="rounded-2xl overflow-hidden border border-gray-800 shadow-2xl">
+                  <img 
+                    src={selectedPost.image} 
+                    alt={selectedPost.title} 
+                    className="w-full h-[350px] object-cover block"
+                  />
+                </div>
+              )}
+
+              {/* Rendered Article HTML Body with Forced Visible Images */}
+              <div className="prose prose-invert max-w-none text-gray-200 text-sm leading-relaxed space-y-6 font-sans [&_img]:block [&_img]:w-full [&_img]:h-auto [&_img]:rounded-2xl [&_img]:my-6 [&_img]:border [&_img]:border-gray-800 [&_img]:shadow-xl">
                 <div dangerouslySetInnerHTML={{ __html: selectedPost.content }} />
               </div>
 
@@ -297,8 +340,20 @@ export default function BlogPage() {
             /* Articles Grid View */
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {allPosts.map((post, idx) => (
-                <article key={post.id || idx} className="p-8 rounded-3xl bg-gray-900/60 border border-gray-800 shadow-lg hover:border-[#FEE715]/60 transition-all space-y-4 flex flex-col justify-between">
+                <article key={post.id || idx} className="p-6 sm:p-8 rounded-3xl bg-gray-900/60 border border-gray-800 shadow-lg hover:border-[#FEE715]/60 transition-all space-y-4 flex flex-col justify-between overflow-hidden">
                   <div className="space-y-4">
+                    
+                    {/* Featured Thumbnail Image */}
+                    {post.image && (
+                      <div className="rounded-2xl overflow-hidden h-48 border border-gray-800">
+                        <img 
+                          src={post.image} 
+                          alt={post.title} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-between text-xs text-gray-400">
                       <span className="px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] rounded-full font-bold uppercase border border-[#FEE715]/20">
                         {post.category || post.clusterName || 'SEO & Content'}
