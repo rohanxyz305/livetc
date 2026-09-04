@@ -37,6 +37,104 @@ export async function fetchTopics(seed) {
 }
 
 /**
+ * OpenAI API Article Generator Helper (inspired by SEOArticlegenAI)
+ */
+export async function generateAiSeoArticle({
+  apiKey,
+  model = 'gpt-4o-mini',
+  primaryKeyword,
+  secondaryKeywords = [],
+  tone = 'Professional & Authoritative',
+  audience = 'E-Commerce Sellers & D2C Brands',
+  wordCountTarget = 1700,
+  includeToc = true,
+  includeFaq = true,
+  includeKeyTakeaways = true
+}) {
+  const prompt = `
+Generate a comprehensive, Semrush 10-point On-Page SEO optimized article based on the following specifications:
+
+Primary Keyword: "${primaryKeyword}"
+Secondary / LSI Keywords: ${secondaryKeywords.slice(0, 8).join(', ')}
+Target Word Count: ~${wordCountTarget} words
+Tone & Style: ${tone}
+Target Audience: ${audience}
+
+STRUCTURAL REQUIREMENTS:
+1. Return ONLY valid clean HTML content inside <div> wrapper (do not wrap in markdown \`\`\`html blocks).
+2. Include a compelling H1 title at the top containing the primary keyword "${primaryKeyword}".
+3. First paragraph (within first 100 words) MUST naturally include the exact primary keyword "${primaryKeyword}".
+4. ${includeToc ? 'Include a styled Table of Contents navigation section near the top.' : ''}
+5. ${includeKeyTakeaways ? 'Include a prominent "Key Takeaways" callout box.' : ''}
+6. Use hierarchical H2 and H3 subheadings naturally incorporating secondary keywords (${secondaryKeywords.join(', ')}).
+7. Incorporate structured bullet points, numbered steps, and actionable advice.
+8. ${includeFaq ? 'Include an FAQ section with 3-4 common questions and detailed answers.' : ''}
+9. Include internal service link recommendations (e.g. <a href="/services/amazon-seller-account-management-services">Amazon Account Management</a>).
+10. Include an image tag with relevant keyword alt text: <img src="https://images.unsplash.com/photo-1556742049-0a670f4a4591?w=1200&auto=format&fit=crop" alt="${primaryKeyword} strategies" class="w-full h-auto rounded-2xl my-6 border border-gray-800" />.
+11. Ensure keyword density for "${primaryKeyword}" stays naturally between 1.0% and 2.5%.
+`;
+
+  // First try direct client-side OpenAI call if CORS allows or proxy fallback
+  if (apiKey) {
+    try {
+      const response = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          model: model || 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert SEO Content Strategist and AI Article Generator. Output clean HTML articles without markdown backticks.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 3800
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          timeout: 60000
+        }
+      );
+
+      if (response.data && response.data.choices && response.data.choices[0]) {
+        let content = response.data.choices[0].message.content;
+        content = content.replace(/^```html\s*/i, '').replace(/```$/i, '').trim();
+        return { status: 'success', content, model };
+      }
+    } catch (clientErr) {
+      console.warn('Direct OpenAI API call failed or CORS restriction. Trying PHP backend proxy...', clientErr);
+    }
+
+    // Try PHP Backend Proxy endpoint
+    try {
+      const proxyRes = await axios.post('/api/generate-ai-article.php', {
+        apiKey,
+        model,
+        prompt
+      });
+      if (proxyRes.data && proxyRes.data.status === 'success') {
+        let content = proxyRes.data.content;
+        content = content.replace(/^```html\s*/i, '').replace(/```$/i, '').trim();
+        return { status: 'success', content, model };
+      } else if (proxyRes.data && proxyRes.data.message) {
+        throw new Error(proxyRes.data.message);
+      }
+    } catch (proxyErr) {
+      throw new Error(proxyErr.response?.data?.message || proxyErr.message || 'OpenAI API request failed');
+    }
+  }
+
+  throw new Error('Please enter a valid OpenAI API Key.');
+}
+
+/**
  * Client-side heuristic expansion fallback engine
  */
 function generateClientFallbackResults(seed, mode) {

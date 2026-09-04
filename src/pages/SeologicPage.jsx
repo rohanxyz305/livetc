@@ -81,11 +81,11 @@ export default function SeologicPage() {
   return (
     <>
       <SEO
-        title="Seologic - Free SEO Keyword & AI Product Listing Tool | Liveteachcreate"
-        description="Free SEO Keyword Research & AI Product Listing Studio by Liveteachcreate. Upload ImgBB images to generate Amazon, Flipkart, Meesho, Myntra & Ajio listings."
+        title="Seologic - OpenAI AI SEO Article Generator & Keyword Research | Liveteachcreate"
+        description="Free SEO Keyword Research, OpenAI AI Article Generator & Product Listing Studio by Liveteachcreate. Semrush 10-Point On-Page SEO Checklist & 1-Click Publishing."
       />
 
-      <div className="min-h-screen bg-[#101820] text-white">
+      <div className="min-h-screen bg-[#101820] text-[#ffffff]">
         
         {/* Tool Header Sub-Navbar */}
         <SeologicNavbar
@@ -95,7 +95,7 @@ export default function SeologicPage() {
         />
 
         {/* Hero Search Section (shown when on keyword tabs) */}
-        {activeTab !== 'generator' && (
+        {activeTab !== 'generator' && activeTab !== 'article-writer' && (
           <SeologicHero
             onSearch={handleSearch}
             isLoading={isLoading}
@@ -139,17 +139,22 @@ export default function SeologicPage() {
             <SeologicClusters keywords={data.keywords} seed={currentSeed} />
           )}
 
-          {/* Tab 4: AI Listing Generator */}
+          {/* Tab 4: AI Article Generator */}
+          {activeTab === 'article-writer' && (
+            <SeologicClusters keywords={data.keywords} seed={currentSeed} />
+          )}
+
+          {/* Tab 5: AI Listing Generator */}
           {activeTab === 'generator' && (
             <ProductListingGenerator />
           )}
 
-          {/* Tab 5: SERP Simulator */}
+          {/* Tab 6: SERP Simulator */}
           {!isLoading && activeTab === 'serp' && (
             <SeologicSERP targetKeyword={selectedSerpKeyword || currentSeed} />
           )}
 
-          {/* Tab 6: Saved Project List */}
+          {/* Tab 7: Saved Project List */}
           {!isLoading && activeTab === 'saved' && (
             <SeologicSaved
               savedKeywords={savedKeywords}

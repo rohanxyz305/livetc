@@ -1,11 +1,12 @@
 import React from 'react';
-import { Search, Sparkles, Bookmark, Layers, HelpCircle, Compass, Package } from 'lucide-react';
+import { Search, Sparkles, Bookmark, Layers, HelpCircle, Compass, Package, PenTool } from 'lucide-react';
 
 export default function SeologicNavbar({ activeTab, setActiveTab, savedCount = 0 }) {
   const tabs = [
     { id: 'overview', label: 'Keyword Research', icon: Search },
     { id: 'questions', label: 'Questions', icon: HelpCircle },
     { id: 'clusters', label: 'Topic Clusters', icon: Layers },
+    { id: 'article-writer', label: 'AI Article Generator', icon: PenTool },
     { id: 'generator', label: 'AI Listing Generator', icon: Package },
     { id: 'serp', label: 'SERP Simulator', icon: Compass },
     { id: 'saved', label: `Saved Lists (${savedCount})`, icon: Bookmark },
