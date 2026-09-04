@@ -372,38 +372,20 @@ export default function SeoResultsAdminPage() {
               </div>
             </div>
 
-            {/* 2. LINE 1: CLIENT NAME & LINE 2: WEBSITE NAME */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <User className="w-4 h-4 text-[#FEE715]" />
-                  <span>1) Client Name <span className="text-red-400">*</span></span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Royal Apparel & Ethnic Wear"
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-xs placeholder:text-gray-500 focus:outline-none focus:border-[#FEE715]"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <Globe className="w-4 h-4 text-[#FEE715]" />
-                  <span>2) Website Name / URL</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. www.royalethnicwear.com"
-                  value={websiteName}
-                  onChange={(e) => setWebsiteName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-xs placeholder:text-gray-500 focus:outline-none focus:border-[#FEE715]"
-                />
-              </div>
-
+            {/* 1. CLIENT NAME */}
+            <div className="space-y-2">
+              <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+                <User className="w-4 h-4 text-[#FEE715]" />
+                <span>1) Client Name <span className="text-red-400">*</span></span>
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="e.g. Royal Apparel & Ethnic Wear"
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-xs placeholder:text-gray-500 focus:outline-none focus:border-[#FEE715]"
+              />
             </div>
 
             {/* 3. LINE 3: RATINGS & DESCRIPTION */}
@@ -539,15 +521,7 @@ export default function SeoResultsAdminPage() {
                         <span>{item.clientName}</span>
                       </h3>
 
-                      {/* Line 2: Website Name */}
-                      {item.websiteName && (
-                        <p className="text-xs font-bold text-[#FEE715] flex items-center gap-1.5">
-                          <Globe className="w-3.5 h-3.5 text-[#FEE715]" />
-                          <span>{item.websiteName}</span>
-                        </p>
-                      )}
-
-                      {/* Line 3: Rating & Description */}
+                      {/* Line 2: Rating & Description */}
                       <div className="pt-2 border-t border-gray-800/60 space-y-1">
                         <div className="flex items-center gap-1 text-amber-400 text-xs font-bold">
                           <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />

@@ -310,7 +310,7 @@ export default function SeoResultsPage({ onOpenContactPopup }) {
                       </div>
                     </div>
 
-                    {/* 3 TEXT LINES AS REQUESTED BY USER */}
+                    {/* TEXT LINES AS REQUESTED BY USER */}
                     <div className="space-y-3 bg-gray-950/80 p-5 rounded-2xl border border-gray-800">
                       
                       {/* Line 1: Client Name */}
@@ -321,13 +321,7 @@ export default function SeoResultsPage({ onOpenContactPopup }) {
                         </h3>
                       </div>
 
-                      {/* Line 2: Website Name */}
-                      <div className="flex items-center gap-2 text-xs font-bold text-[#FEE715]">
-                        <Globe className="w-4 h-4 text-[#FEE715] shrink-0" />
-                        <span>{caseStudy.websiteName || (caseStudy.industry + ' • ' + caseStudy.period)}</span>
-                      </div>
-
-                      {/* Line 3: Ratings & Description */}
+                      {/* Line 2: Ratings & Description */}
                       <div className="pt-2 border-t border-gray-800 space-y-1.5">
                         <div className="flex items-center gap-1 text-amber-400 text-xs font-bold">
                           <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -335,7 +329,7 @@ export default function SeoResultsPage({ onOpenContactPopup }) {
                           <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                           <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                           <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                          <span className="ml-1 text-white font-extrabold">{caseStudy.rating || '5.0'} / 5.0</span>
+                          <span className="ml-1 text-white font-extrabold">{caseStudy.rating || '5.0'} / 5.0 Rating</span>
                         </div>
                         <p className="text-xs text-gray-300 leading-relaxed italic border-l-2 border-l-[#FEE715] pl-3 py-1">
                           "{caseStudy.description || caseStudy.quote}"
