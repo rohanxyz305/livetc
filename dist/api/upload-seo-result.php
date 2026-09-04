@@ -18,7 +18,6 @@ if (!file_exists($uploadDir)) {
     @mkdir($uploadDir, 0777, true);
 }
 
-// Function to load existing json
 function getSavedData($path) {
     if (file_exists($path)) {
         $content = @file_get_contents($path);
@@ -30,12 +29,11 @@ function getSavedData($path) {
     return [];
 }
 
-// Function to save json
 function saveData($path, $data) {
     return @file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT));
 }
 
-// Handle GET request to return uploaded results
+// GET request
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode([
         "status" => "success",
@@ -44,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit();
 }
 
-// Handle DELETE request to remove item by ID
+// DELETE request
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE' || (isset($_GET['action']) && $_GET['action'] === 'delete')) {
     $rawInput = file_get_contents("php://input");
     $inputData = json_decode($rawInput, true);
@@ -65,11 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE' || (isset($_GET['action']) && $_GET[
     exit();
 }
 
-// Handle POST request (Add/Upload)
+// POST request (Upload/Publish)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imageUrl = '';
 
-    // Check if an image file was uploaded
     if (isset($_FILES['proofImageFile']) && $_FILES['proofImageFile']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['proofImageFile']['tmp_name'];
         $fileName = $_FILES['proofImageFile']['name'];
@@ -86,8 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Read form fields (multipart or json)
     $clientName = isset($_POST['clientName']) ? $_POST['clientName'] : '';
+    $websiteName = isset($_POST['websiteName']) ? $_POST['websiteName'] : '';
+    $rating = isset($_POST['rating']) ? $_POST['rating'] : '5';
+    $description = isset($_POST['description']) ? $_POST['description'] : '';
     $category = isset($_POST['category']) ? $_POST['category'] : 'e-commerce';
     $industry = isset($_POST['industry']) ? $_POST['industry'] : '';
     $period = isset($_POST['period']) ? $_POST['period'] : '';
@@ -101,11 +100,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $imageUrl = $_POST['proofImageUrl'];
     }
 
-    // JSON payload fallback
+    // JSON fallback
     if (empty($clientName)) {
         $jsonInput = json_decode(file_get_contents("php://input"), true);
         if ($jsonInput) {
             $clientName = isset($jsonInput['clientName']) ? $jsonInput['clientName'] : '';
+            $websiteName = isset($jsonInput['websiteName']) ? $jsonInput['websiteName'] : '';
+            $rating = isset($jsonInput['rating']) ? $jsonInput['rating'] : '5';
+            $description = isset($jsonInput['description']) ? $jsonInput['description'] : '';
             $category = isset($jsonInput['category']) ? $jsonInput['category'] : 'e-commerce';
             $industry = isset($jsonInput['industry']) ? $jsonInput['industry'] : '';
             $period = isset($jsonInput['period']) ? $jsonInput['period'] : '';
@@ -125,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($clientName)) {
-        echo json_encode(["status" => "error", "message" => "Client name / title is required."]);
+        echo json_encode(["status" => "error", "message" => "Client name is required."]);
         exit();
     }
 
@@ -144,26 +146,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $newItem = [
         'id' => 'custom-' . time() . '-' . rand(100, 999),
-        'category' => $category,
         'clientName' => $clientName,
-        'industry' => $industry,
-        'period' => $period,
-        'growthBadge' => $growthBadge,
-        'rankBadge' => $rankBadge,
+        'websiteName' => $websiteName,
+        'rating' => $rating,
+        'description' => $description ?: $quote,
+        'category' => $category,
+        'industry' => $industry ?: 'Client Achievement',
+        'period' => $period ?: 'Verified Campaign',
+        'growthBadge' => $growthBadge ?: '+300% Organic Growth',
+        'rankBadge' => $rankBadge ?: '#1 Rank on Google',
         'metrics' => $metrics,
         'highlights' => array_values($highlights),
         'proofImage' => $imageUrl ?: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&auto=format&fit=crop',
-        'quote' => $quote,
+        'quote' => $description ?: $quote,
         'createdAt' => date('c')
     ];
 
     $existing = getSavedData($jsonFilePath);
-    array_unshift($existing, $newItem); // new uploaded results appear first
+    array_unshift($existing, $newItem);
     saveData($jsonFilePath, $existing);
 
     echo json_encode([
         "status" => "success",
-        "message" => "SEO Result Screenshot uploaded and published successfully!",
+        "message" => "Client achievement uploaded and published successfully!",
         "data" => $newItem,
         "all" => $existing
     ]);

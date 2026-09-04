@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import SEO from '../components/common/SEO';
 import { 
   Trophy, TrendingUp, Search, Eye, CheckCircle2, Award, Zap, 
-  ArrowUpRight, BarChart3, Filter, Star, ExternalLink, ShieldCheck, ZoomIn, X, Phone, Calendar, Upload
+  ArrowUpRight, BarChart3, Filter, Star, ExternalLink, ShieldCheck, ZoomIn, X, Phone, Calendar, Upload, Globe, User
 } from 'lucide-react';
 
 const REAL_SEO_RESULTS_DATA = [
@@ -299,48 +299,66 @@ export default function SeoResultsPage({ onOpenContactPopup }) {
                       <img 
                         src={caseStudy.proofImage} 
                         alt={caseStudy.clientName} 
-                        className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                       />
+                      <div className="absolute top-3 left-3 px-3 py-1 bg-[#FEE715] text-[#101820] rounded-full font-black text-xs uppercase shadow-md">
+                        {caseStudy.growthBadge}
+                      </div>
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-white font-bold text-xs">
                         <ZoomIn className="w-5 h-5 text-[#FEE715]" />
-                        <span>Click to Inspect Proof Screenshot</span>
+                        <span>Click to Inspect Full Resolution Proof Screenshot</span>
                       </div>
                     </div>
 
-                    {/* BEFORE VS AFTER METRICS GRID */}
-                    <div className="grid grid-cols-3 gap-3 bg-black/60 p-4 rounded-2xl border border-gray-800 text-center">
-                      {caseStudy.metrics.map((m, idx) => (
-                        <div key={idx} className="space-y-1">
-                          <span className="block text-[10px] text-gray-400 uppercase font-bold tracking-wider">{m.label}</span>
-                          <div className="flex items-center justify-center gap-1.5 text-xs">
-                            <span className="text-gray-500 line-through">{m.before}</span>
-                            <span className="text-white font-extrabold">{m.after}</span>
-                          </div>
-                          <span className="block text-[10px] font-black text-emerald-400">{m.increase}</span>
+                    {/* 3 TEXT LINES AS REQUESTED BY USER */}
+                    <div className="space-y-3 bg-gray-950/80 p-5 rounded-2xl border border-gray-800">
+                      
+                      {/* Line 1: Client Name */}
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4 text-[#FEE715] shrink-0" />
+                        <h3 className="text-lg sm:text-xl font-extrabold text-white font-display">
+                          {caseStudy.clientName}
+                        </h3>
+                      </div>
+
+                      {/* Line 2: Website Name */}
+                      <div className="flex items-center gap-2 text-xs font-bold text-[#FEE715]">
+                        <Globe className="w-4 h-4 text-[#FEE715] shrink-0" />
+                        <span>{caseStudy.websiteName || (caseStudy.industry + ' • ' + caseStudy.period)}</span>
+                      </div>
+
+                      {/* Line 3: Ratings & Description */}
+                      <div className="pt-2 border-t border-gray-800 space-y-1.5">
+                        <div className="flex items-center gap-1 text-amber-400 text-xs font-bold">
+                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                          <span className="ml-1 text-white font-extrabold">{caseStudy.rating || '5.0'} / 5.0</span>
                         </div>
-                      ))}
+                        <p className="text-xs text-gray-300 leading-relaxed italic border-l-2 border-l-[#FEE715] pl-3 py-1">
+                          "{caseStudy.description || caseStudy.quote}"
+                        </p>
+                      </div>
+
                     </div>
 
-                    {/* KEY EXECUTION HIGHLIGHTS */}
-                    <div className="space-y-2">
-                      <h4 className="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
-                        <Zap className="w-3.5 h-3.5 text-[#FEE715]" />
-                        <span>Optimization Strategy Applied</span>
-                      </h4>
-                      <ul className="space-y-1.5 text-xs text-gray-300">
-                        {caseStudy.highlights.map((h, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 mt-0.5 shrink-0" />
-                            <span>{h}</span>
-                          </li>
+                    {/* BEFORE VS AFTER METRICS GRID */}
+                    {caseStudy.metrics && caseStudy.metrics.length > 0 && (
+                      <div className="grid grid-cols-3 gap-3 bg-black/60 p-4 rounded-2xl border border-gray-800 text-center">
+                        {caseStudy.metrics.map((m, idx) => (
+                          <div key={idx} className="space-y-1">
+                            <span className="block text-[10px] text-gray-400 uppercase font-bold tracking-wider">{m.label}</span>
+                            <div className="flex items-center justify-center gap-1.5 text-xs">
+                              <span className="text-gray-500 line-through">{m.before}</span>
+                              <span className="text-white font-extrabold">{m.after}</span>
+                            </div>
+                            <span className="block text-[10px] font-black text-emerald-400">{m.increase}</span>
+                          </div>
                         ))}
-                      </ul>
-                    </div>
-
-                    {/* QUOTE */}
-                    <div className="p-4 rounded-2xl bg-gray-800/40 border border-gray-700/50 text-xs italic text-gray-300 border-l-4 border-l-[#FEE715]">
-                      "{caseStudy.quote}"
-                    </div>
+                      </div>
+                    )}
 
                   </div>
 
