@@ -4,13 +4,26 @@
   AddType text/css .css
 </IfModule>
 
-# Single Page Application (SPA) Routing for React Router
+# Apache Configuration for Single Page React Application (SPA) & Static Sitemaps
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-l
-  RewriteRule . /index.html [L]
+
+  # 1. Do NOT rewrite existing physical files or directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 2. Explicitly serve static XML sitemaps, robots.txt, and PHP endpoints directly
+  RewriteRule ^(sitemap\.xml|post-sitemap\.xml|robots\.txt|api/.*)$ - [L]
+
+  # 3. Fallback to index.html for all client-side React routes
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Force correct MIME Content-Type header for XML Sitemaps
+<IfModule mod_headers.c>
+  <FilesMatch "\.(xml)$">
+    Header set Content-Type "text/xml; charset=UTF-8"
+  </FilesMatch>
 </IfModule>

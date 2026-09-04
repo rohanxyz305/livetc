@@ -1,5 +1,10 @@
-# Apache Configuration for Single Page React Application (SPA) & Static Sitemaps
+# Ensure JavaScript and CSS MIME types are recognized by LiteSpeed / Apache
+<IfModule mod_mime.c>
+  AddType application/javascript .js
+  AddType text/css .css
+</IfModule>
 
+# Apache Configuration for Single Page React Application (SPA) & Static Sitemaps
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /

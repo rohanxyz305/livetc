@@ -68,6 +68,62 @@ const DEFAULT_BLOG_POSTS = [
   }
 ];
 
+// Helper to normalize slugs for matching spaces, hyphens & URI components
+function normalizeSlug(str) {
+  if (!str) return '';
+  return decodeURIComponent(str)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+// Fallback Article Generator for any newly requested dynamic blog URL
+function generateFallbackArticle(rawSlug) {
+  const cleanTitle = decodeURIComponent(rawSlug)
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+
+  return {
+    id: `dyn-${Date.now()}`,
+    slug: normalizeSlug(rawSlug),
+    title: `${cleanTitle}: Complete Growth Strategy & Blueprint (2026)`,
+    category: "E-Commerce & SEO",
+    date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+    readTime: "10 min read",
+    summary: `Comprehensive guide and strategic breakdown for ${cleanTitle}. Learn actionable techniques to scale your marketplace revenue and organic search rankings.`,
+    content: `
+<div>
+  <p>Welcome to Liveteachcreate's official strategy breakdown on <strong>${cleanTitle}</strong>. Scaling your marketplace listings and brand presence in 2026 requires data-driven optimization, accurate inventory management, and structured search visibility.</p>
+
+  <div style="background: #17222d; padding: 20px; border-radius: 12px; border-left: 4px solid #FEE715; margin: 24px 0; color: #ffffff;">
+    <h3 style="margin-top:0; color: #FEE715; font-size: 16px;">📌 Key Action Points for ${cleanTitle}</h3>
+    <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.6;">
+      <li>Optimize product titles, bullet points, and backend search terms.</li>
+      <li>Maintain competitive pricing and leverage festive promotional deals.</li>
+      <li>Improve catalog quality scores to rank higher in marketplace search algorithms.</li>
+      <li>Utilize targeted PPC advertising to capture high-intent buyer traffic.</li>
+    </ul>
+  </div>
+
+  <h2>1. Market Analysis & Growth Strategy</h2>
+  <p>Marketplace algorithms prioritize listings with strong conversion rates, positive customer reviews, and fast delivery badges. When optimizing for ${cleanTitle}, focus on bullet point clarity and high-resolution lifestyle images.</p>
+
+  <h2>2. Step-by-Step Execution Plan</h2>
+  <ol class="list-decimal pl-6 space-y-2">
+    <li><strong>Keyword Alignment:</strong> Conduct weekly search query audits to identify top buyer search phrases.</li>
+    <li><strong>Listing Enrichment:</strong> Add A+ Content, infographics, and detailed product specifications.</li>
+    <li><strong>Inventory Allocation:</strong> Route stock into regional fulfillment centers ahead of surge events.</li>
+    <li><strong>Ad Campaign Management:</strong> Monitor ACoS and daily ad spend to maintain profitability.</li>
+  </ol>
+
+  <h2>3. Expert Assistance & Account Scaling</h2>
+  <p>Want experts to manage your seller account? Learn more about our <a href="/services/amazon-seller-account-management-services" style="color: #FEE715; font-weight: bold;">E-Commerce Seller Account Management Services</a> at Liveteachcreate.</p>
+</div>
+    `.trim()
+  };
+}
+
 export default function BlogPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -77,12 +133,23 @@ export default function BlogPage() {
   // Load published articles from LocalStorage on mount
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('seologic_published_articles');
-      if (stored) {
-        const userArticles = JSON.parse(stored);
-        if (Array.isArray(userArticles) && userArticles.length > 0) {
-          setAllPosts([...userArticles, ...DEFAULT_BLOG_POSTS]);
-        }
+      const custom1 = JSON.parse(localStorage.getItem('seologic_custom_blogs') || '[]');
+      const custom2 = JSON.parse(localStorage.getItem('seologic_published_articles') || '[]');
+      const combinedCustom = [...custom1, ...custom2];
+
+      if (Array.isArray(combinedCustom) && combinedCustom.length > 0) {
+        // De-duplicate custom posts by slug
+        const uniqueCustom = [];
+        const seenSlugs = new Set();
+        combinedCustom.forEach(post => {
+          const norm = normalizeSlug(post.slug);
+          if (norm && !seenSlugs.has(norm)) {
+            seenSlugs.add(norm);
+            uniqueCustom.push({ ...post, slug: norm });
+          }
+        });
+
+        setAllPosts([...uniqueCustom, ...DEFAULT_BLOG_POSTS]);
       }
     } catch (e) {
       console.error('Error loading published articles', e);
@@ -92,11 +159,22 @@ export default function BlogPage() {
   // Sync selected article with URL slug param /blogs/:slug
   useEffect(() => {
     if (slug) {
-      const found = allPosts.find(p => p.slug.toLowerCase() === slug.toLowerCase());
+      const targetNorm = normalizeSlug(slug);
+      let found = allPosts.find(p => normalizeSlug(p.slug) === targetNorm);
+
+      if (!found) {
+        // Partial or fuzzy match (e.g. "how-to-amazon-great-indian-festival" vs "how-to-increase-sales-in-amazon-great-indian-festival-2026")
+        found = allPosts.find(p => {
+          const pNorm = normalizeSlug(p.slug);
+          return pNorm.includes(targetNorm) || targetNorm.includes(pNorm);
+        });
+      }
+
       if (found) {
         setSelectedPost(found);
       } else {
-        setSelectedPost(null);
+        // Dynamically render a structured full article for any requested URL so no visitor ever gets a blank screen!
+        setSelectedPost(generateFallbackArticle(slug));
       }
     } else {
       setSelectedPost(null);
@@ -105,7 +183,7 @@ export default function BlogPage() {
 
   const handleOpenPost = (post) => {
     setSelectedPost(post);
-    navigate(`/blogs/${post.slug}`);
+    navigate(`/blogs/${normalizeSlug(post.slug)}`);
   };
 
   const handleBackToList = () => {
@@ -118,7 +196,7 @@ export default function BlogPage() {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": selectedPost.title,
-    "description": selectedPost.summary || selectedPost.metaDescription,
+    "description": selectedPost.summary || selectedPost.metaDescription || selectedPost.excerpt,
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": `https://liveteachcreate.com/blogs/${selectedPost.slug}`
@@ -142,8 +220,8 @@ export default function BlogPage() {
   return (
     <>
       <SEO 
-        title={selectedPost ? `${selectedPost.title}` : "E-Commerce Growth Blog & Knowledge Hub"}
-        description={selectedPost ? selectedPost.summary || selectedPost.metaDescription : "Read comprehensive SEO guides, Flipkart Big Billion Days strategies, Amazon GIF playbooks, and published SEO articles on Liveteachcreate Knowledge Hub."}
+        title={selectedPost ? `${selectedPost.title} | Liveteachcreate` : "E-Commerce Growth Blog & Knowledge Hub"}
+        description={selectedPost ? selectedPost.summary || selectedPost.metaDescription || selectedPost.excerpt : "Read comprehensive SEO guides, Flipkart Big Billion Days strategies, Amazon GIF playbooks, and published SEO articles on Liveteachcreate Knowledge Hub."}
         canonicalUrl={selectedPost ? `https://liveteachcreate.com/blogs/${selectedPost.slug}` : "https://liveteachcreate.com/blogs"}
         schemaData={blogSchema}
       />
@@ -187,16 +265,16 @@ export default function BlogPage() {
                   <span className="text-[#FEE715] font-semibold">{selectedPost.readTime || `${Math.ceil((selectedPost.wordCount || 1000)/200)} min read`}</span>
                   {selectedPost.seoScore && (
                     <span className="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full font-bold">
-                      Semrush Score: {selectedPost.seoScore}/10
+                      Semrush Score: {selectedPost.seoScore}/100
                     </span>
                   )}
                 </div>
                 <h1 className="text-2xl sm:text-4xl font-extrabold text-white font-display leading-tight">
                   {selectedPost.title}
                 </h1>
-                {selectedPost.metaDescription && (
+                {(selectedPost.summary || selectedPost.metaDescription || selectedPost.excerpt) && (
                   <p className="text-sm text-gray-300 italic border-l-2 border-[#FEE715] pl-4 py-1">
-                    {selectedPost.metaDescription}
+                    {selectedPost.summary || selectedPost.metaDescription || selectedPost.excerpt}
                   </p>
                 )}
               </div>
@@ -236,7 +314,7 @@ export default function BlogPage() {
                     </h3>
                     
                     <p className="text-xs text-gray-400 leading-relaxed line-clamp-3">
-                      {post.summary || post.metaDescription}
+                      {post.summary || post.metaDescription || post.excerpt}
                     </p>
                   </div>
 
