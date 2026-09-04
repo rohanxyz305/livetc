@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SEO from '../components/common/SEO';
 
 export default function EmailMarketingPage() {
-  const DEFAULT_SENDER = "rohankumar19980211@gmail.com";
+  const DEFAULT_SENDER = "connectliveteachcreate@gmail.com";
   
   const [senderEmail, setSenderEmail] = useState(DEFAULT_SENDER);
   const [senderName, setSenderName] = useState("Liveteachcreate E-Commerce");
@@ -216,7 +216,7 @@ export default function EmailMarketingPage() {
     <>
       <SEO 
         title="Free Email Marketing Studio"
-        description="Internal Email Marketing Tool for Liveteachcreate. Send daily broadcasts to client lists directly from rohankumar19980211@gmail.com."
+        description="Internal Email Marketing Tool for Liveteachcreate. Send daily broadcasts to client lists directly from connectliveteachcreate@gmail.com."
       />
 
       <div className="bg-gradient-to-b from-gray-900 via-[#101820] to-[#101820] py-12 text-white border-b border-gray-800">

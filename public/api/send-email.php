@@ -26,13 +26,13 @@ if (!$inputData || empty($inputData['to_email'])) {
     exit();
 }
 
-$senderEmail = !empty($inputData['sender_email']) ? filter_var($inputData['sender_email'], FILTER_SANITIZE_EMAIL) : "rohankumar19980211@gmail.com";
+$senderEmail = !empty($inputData['sender_email']) ? filter_var($inputData['sender_email'], FILTER_SANITIZE_EMAIL) : "connectliveteachcreate@gmail.com";
 $senderName = !empty($inputData['sender_name']) ? htmlspecialchars($inputData['sender_name']) : "Liveteachcreate";
 $toEmail = filter_var($inputData['to_email'], FILTER_SANITIZE_EMAIL);
 $subject = !empty($inputData['subject']) ? htmlspecialchars($inputData['subject']) : "Update regarding your e-commerce seller account";
 $htmlContent = !empty($inputData['html_content']) ? $inputData['html_content'] : "<p>Hello from Liveteachcreate!</p>";
 
-$smtpUser = !empty($inputData['smtp_user']) ? $inputData['smtp_user'] : "rohankumar19980211@gmail.com";
+$smtpUser = !empty($inputData['smtp_user']) ? $inputData['smtp_user'] : "connectliveteachcreate@gmail.com";
 $smtpPass = !empty($inputData['smtp_pass']) ? trim($inputData['smtp_pass']) : "";
 $smtpPass = str_replace(' ', '', $smtpPass);
 
@@ -132,7 +132,7 @@ if (!empty($smtpPass)) {
 }
 
 // 2. Fail-Safe Server Delivery (Always succeeds on cPanel / Shared Hosting)
-$domainSender = "info@liveteachcreate.com";
+$domainSender = "connectliveteachcreate@gmail.com";
 $headers = [];
 $headers[] = 'MIME-Version: 1.0';
 $headers[] = 'Content-type: text/html; charset=UTF-8';

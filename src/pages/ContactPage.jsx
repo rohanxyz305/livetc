@@ -96,7 +96,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h5 className="font-bold text-white">Email Address</h5>
-                      <a href="mailto:info@liveteachcreate.com" className="text-[#FEE715] font-bold hover:underline">info@liveteachcreate.com</a>
+                      <a href="mailto:connectliveteachcreate@gmail.com" className="text-[#FEE715] font-bold hover:underline">connectliveteachcreate@gmail.com</a>
                     </div>
                   </div>
                 </div>

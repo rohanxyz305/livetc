@@ -115,7 +115,7 @@ export default function Footer() {
               </div>
               <div className="flex gap-3 items-center">
                 <i className="fa-solid fa-envelope text-[#FEE715]"></i>
-                <a href="mailto:rohankumar19980211@gmail.com" className="hover:text-[#FEE715]">rohankumar19980211@gmail.com</a>
+                <a href="mailto:connectliveteachcreate@gmail.com" className="hover:text-[#FEE715]">connectliveteachcreate@gmail.com</a>
               </div>
             </div>
           </div>

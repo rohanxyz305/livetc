@@ -6,11 +6,11 @@ export default function Topbar() {
       <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
         <div className="flex items-center gap-6">
           <a 
-            href="mailto:info@liveteachcreate.com" 
+            href="mailto:connectliveteachcreate@gmail.com" 
             className="flex items-center gap-2 text-gray-300 hover:text-[#FEE715] transition-colors"
           >
             <i className="fa-solid fa-envelope text-[#FEE715]"></i>
-            <span>info@liveteachcreate.com</span>
+            <span>connectliveteachcreate@gmail.com</span>
           </a>
           <a 
             href="tel:+918904979375" 

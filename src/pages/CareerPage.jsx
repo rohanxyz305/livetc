@@ -47,7 +47,7 @@ export default function CareerPage() {
               </div>
 
               <a
-                href={`mailto:info@liveteachcreate.com?subject=Application%20for%20${encodeURIComponent(job.title)}`}
+                href={`mailto:connectliveteachcreate@gmail.com?subject=Application%20for%20${encodeURIComponent(job.title)}`}
                 className="shrink-0 px-6 py-3 bg-[#FEE715] hover:bg-[#e0ca00] text-[#101820] font-bold text-xs rounded-xl text-center shadow-yellowGlow transition-transform hover:scale-105"
               >
                 Apply Now

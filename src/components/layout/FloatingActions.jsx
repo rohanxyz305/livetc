@@ -25,7 +25,7 @@ export default function FloatingActions() {
 
       {/* Email Button */}
       <a
-        href="mailto:info@liveteachcreate.com"
+        href="mailto:connectliveteachcreate@gmail.com"
         className="group relative flex items-center justify-center w-12 h-12 bg-[#101820] hover:bg-[#FEE715] rounded-2xl shadow-yellowGlow border border-gray-800 text-[#FEE715] hover:text-[#101820] transition-all duration-300 hover:-translate-y-1"
         title="Send Email"
       >
