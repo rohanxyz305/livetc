@@ -122,10 +122,8 @@ export default function SeoResultsPage({ onOpenContactPopup }) {
       const res = await fetch('/api/get-seo-results.php');
       if (res.ok) {
         const json = await res.json();
-        if (json.status === 'success' && Array.isArray(json.data)) {
-          const apiItems = json.data;
-          const mergedCustom = [...apiItems, ...customItems.filter(c => !apiItems.some(a => a.id === c.id))];
-          setAllCaseStudies([...mergedCustom, ...REAL_SEO_RESULTS_DATA]);
+        if (json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
+          setAllCaseStudies(json.data);
           return;
         }
       }
@@ -134,7 +132,7 @@ export default function SeoResultsPage({ onOpenContactPopup }) {
     }
 
     if (customItems.length > 0) {
-      setAllCaseStudies([...customItems, ...REAL_SEO_RESULTS_DATA]);
+      setAllCaseStudies(customItems);
     }
   };
 
