@@ -112,7 +112,7 @@ export default function LegalPage() {
             <p><strong className="text-white">Entity:</strong> Liveteachcreate</p>
             <p><strong className="text-white">Email:</strong> <a href="mailto:connectliveteachcreate@gmail.com" className="text-[#FEE715]">connectliveteachcreate@gmail.com</a></p>
             <p><strong className="text-white">Phone / WhatsApp:</strong> <a href="tel:+918904979375" className="text-[#FEE715]">+91 8904979375</a> / <a href="https://wa.me/918904979375" target="_blank" rel="noreferrer" className="text-emerald-400 font-bold">Chat on WhatsApp</a></p>
-            <p><strong className="text-white">Head Office Address:</strong> C-5, 1st Floor, 80 Feet Road, Kiran Path, Shanthi Nagar, Mansarovar, Jaipur, Rajasthan 302019, India</p>
+            <p><strong className="text-white">Head Office Address:</strong> Shakti Appartment, Near Barmasia, Dhanbad, Jharkhand 826001, India</p>
             <p><strong className="text-white">Website:</strong> <a href="https://liveteachcreate.com" className="text-[#FEE715] underline">https://liveteachcreate.com</a></p>
           </div>
         </div>
