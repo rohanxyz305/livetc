@@ -1,6 +1,6 @@
 <?php
 // Complete Google Search Console & AI Indexer Endpoint
-// Dynamically consolidates ALL Core Pages, Service Pages, Location Pages, Tool Pages, and Blog Pages
+// Dynamically updates sitemap.xml and post-sitemap.xml <lastmod> timestamps on every cron run
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -154,7 +154,19 @@ $allConsolidatedUrls = array_values(array_unique(array_merge($masterCoreUrls, $s
 // Write back to gsc-urls.json
 file_put_contents($dataFile, json_encode(["urls" => $allConsolidatedUrls], JSON_PRETTY_PRINT));
 
-// Automatically write/update post-sitemap.xml for blog posts
+// FEATURE: AUTOMATED SITEMAP <lastmod> TIMESTAMP UPDATER
+// Automatically refreshes all <lastmod> dates to today's date (date('Y-m-d'))
+$todayDate = date('Y-m-d');
+
+// 1. Update sitemap.xml <lastmod> timestamps
+if (file_exists($sitemapPath)) {
+    $sitemapContent = file_get_contents($sitemapPath);
+    // Regex replace all existing <lastmod>YYYY-MM-DD</lastmod> with current date
+    $updatedSitemap = preg_replace('/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/i', "<lastmod>{$todayDate}</lastmod>", $sitemapContent);
+    file_put_contents($sitemapPath, $updatedSitemap);
+}
+
+// 2. Update post-sitemap.xml <lastmod> timestamps & ensure all blog URLs are present
 $blogUrlsOnly = array_values(array_filter($allConsolidatedUrls, function($u) {
     return (strpos($u, '/blogs/') !== false);
 }));
@@ -164,7 +176,7 @@ if (!empty($blogUrlsOnly) && file_exists($postSitemapFile)) {
     foreach ($blogUrlsOnly as $bUrl) {
         $xmlDoc .= "  <url>\n";
         $xmlDoc .= "    <loc>" . htmlspecialchars($bUrl) . "</loc>\n";
-        $xmlDoc .= "    <lastmod>" . date('Y-m-d') . "</lastmod>\n";
+        $xmlDoc .= "    <lastmod>{$todayDate}</lastmod>\n";
         $xmlDoc .= "    <changefreq>weekly</changefreq>\n";
         $xmlDoc .= "    <priority>0.8</priority>\n";
         $xmlDoc .= "  </url>\n";
@@ -173,7 +185,7 @@ if (!empty($blogUrlsOnly) && file_exists($postSitemapFile)) {
     @file_put_contents($postSitemapFile, $xmlDoc);
 }
 
-// 4. IndexNow Pings (Bing, Perplexity, OpenAI, Yandex)
+// 3. IndexNow Pings (Bing, Perplexity, OpenAI, Yandex)
 $apiKey = "8f9a2b3c4d5e6f7a8b9c0d1e2f3a4b5c";
 $host   = "liveteachcreate.com";
 $keyLoc = "https://liveteachcreate.com/8f9a2b3c4d5e6f7a8b9c0d1e2f3a4b5c.txt";
@@ -197,16 +209,19 @@ curl_close($ch);
 
 // Audit Log
 $logEntry = [
-    "lastTriggered" => date("Y-m-d H:i:s T"),
-    "totalUrls"     => count($allConsolidatedUrls),
-    "indexNowCode"  => $indexNowHttp,
-    "urlsPushed"    => $allConsolidatedUrls
+    "lastTriggered"   => date("Y-m-d H:i:s T"),
+    "lastmodUpdated"  => $todayDate,
+    "totalUrls"       => count($allConsolidatedUrls),
+    "indexNowCode"    => $indexNowHttp,
+    "urlsPushed"      => $allConsolidatedUrls
 ];
 file_put_contents($logFile, json_encode($logEntry, JSON_PRETTY_PRINT));
 
 echo json_encode([
     "success" => true,
     "totalBlogUrls" => count($allConsolidatedUrls),
+    "lastmodUpdated" => $todayDate,
+    "sitemapAutoUpdated" => true,
     "indexNowStatus" => $indexNowHttp,
     "googleApiStatus" => file_exists($serviceAccountFile) ? "Service Account Authorized" : "Fallback Mode Active",
     "hasServiceAccount" => file_exists($serviceAccountFile),

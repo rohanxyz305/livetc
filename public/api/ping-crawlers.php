@@ -1,14 +1,26 @@
 <?php
 // Dynamic Crawl Automation Script for Liveteachcreate
-// Parses all sitemaps dynamically and pings IndexNow for 100% of website pages
+// Parses all sitemaps dynamically, auto-updates <lastmod> timestamps, and pings IndexNow
 
 header('Content-Type: application/json');
 
 $apiKey = "8f9a2b3c4d5e6f7a8b9c0d1e2f3a4b5c";
 $host = "liveteachcreate.com";
 $keyLocation = "https://liveteachcreate.com/8f9a2b3c4d5e6f7a8b9c0d1e2f3a4b5c.txt";
+$todayDate = date('Y-m-d');
 
-// 1. Base files to always include
+$rootDir = dirname(__DIR__); // public directory
+$sitemapPath = $rootDir . '/sitemap.xml';
+$postSitemapFile = $rootDir . '/post-sitemap.xml';
+
+// 1. Auto-update <lastmod> timestamps in sitemap.xml
+if (file_exists($sitemapPath)) {
+    $sContent = file_get_contents($sitemapPath);
+    $uContent = preg_replace('/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/i', "<lastmod>{$todayDate}</lastmod>", $sContent);
+    file_put_contents($sitemapPath, $uContent);
+}
+
+// 2. Base files to always include
 $urls = [
     "https://liveteachcreate.com/",
     "https://liveteachcreate.com/llms.txt",
@@ -16,7 +28,7 @@ $urls = [
     "https://liveteachcreate.com/sitemap.xml"
 ];
 
-// 2. Helper function to parse XML sitemap for <loc> links
+// Helper function to parse XML sitemap for <loc> links
 function extractSitemapUrls($filePath, &$urls) {
     if (file_exists($filePath)) {
         $xmlContent = @file_get_contents($filePath);
@@ -34,12 +46,11 @@ function extractSitemapUrls($filePath, &$urls) {
     }
 }
 
-// 3. Dynamically load all URLs from sitemaps on the server
-$rootDir = dirname(__DIR__); // public directory
-extractSitemapUrls($rootDir . '/sitemap.xml', $urls);
-extractSitemapUrls($rootDir . '/post-sitemap.xml', $urls);
+// Dynamically load all URLs from sitemaps
+extractSitemapUrls($sitemapPath, $urls);
+extractSitemapUrls($postSitemapFile, $urls);
 
-// 4. Batch send to IndexNow (IndexNow supports up to 10,000 URLs per payload)
+// Batch send to IndexNow
 $payload = [
     "host" => $host,
     "key" => $apiKey,
@@ -62,17 +73,17 @@ curl_close($ch);
 $logFile = __DIR__ . '/last-ping-log.json';
 $logData = [
     "timestamp" => date("Y-m-d H:i:s T"),
+    "lastmodUpdated" => $todayDate,
     "httpCode" => $httpCode,
-    "totalUrlsPushed" => count($payload["urlList"]),
-    "urls" => $payload["urlList"]
+    "totalUrlsPushed" => count($payload["urlList"])
 ];
 @file_put_contents($logFile, json_encode($logData, JSON_PRETTY_PRINT));
 
 echo json_encode([
     "success" => ($httpCode === 200 || $httpCode === 202),
     "httpCode" => $httpCode,
+    "lastmodUpdated" => $todayDate,
     "totalPagesPings" => count($payload["urlList"]),
-    "timestamp" => date("c"),
-    "allPages" => $payload["urlList"]
+    "timestamp" => date("c")
 ]);
 ?>
