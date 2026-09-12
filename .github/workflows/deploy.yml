@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -26,7 +27,7 @@ jobs:
           npm ci
           npm run build
 
-      # Step 4: Incremental FTP Sync to public_html
+      # Step 4: Incremental FTP Sync to public_html with Security & Retry fallback
       - name: 4. Incremental FTP Deploy to Hosting
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -36,3 +37,5 @@ jobs:
           server-dir: /public_html/
           local-dir: ./dist/
           state-name: .ftp-deploy-sync-state.json
+          security: loose
+          log-level: verbose
