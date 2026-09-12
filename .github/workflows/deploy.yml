@@ -27,11 +27,13 @@ jobs:
           npm ci
           npm run build
 
-      # Step 3b: Sanitize FTP Hostname (Strips protocol prefixes, ports, and trailing slashes)
+      # Step 3b: Sanitize FTP Hostname from Secret Env Variable
       - name: 3b. Sanitize FTP Server Hostname
         id: clean-server
+        env:
+          RAW_SERVER: ${{ secrets.FTP_SERVER }}
         run: |
-          CLEAN=$(echo "${{ secrets.FTP_SERVER }}" | sed -e 's|^[a-zA-Z]*://||' -e 's|/.*$||' -e 's|:.*$||' | tr -d '[:space:]')
+          CLEAN=$(echo "$RAW_SERVER" | sed -e 's|^[a-zA-Z]*://||' -e 's|/.*$||' -e 's|:.*$||' | tr -d '[:space:]')
           echo "CLEAN_SERVER=$CLEAN" >> $GITHUB_OUTPUT
 
       # Step 4: Incremental FTP Sync to public_html
