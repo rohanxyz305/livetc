@@ -27,28 +27,57 @@ jobs:
           npm ci
           npm run build
 
-      # Step 3b: Resolve FTP Host IP to bypass DNS EAI_AGAIN errors
-      - name: 3b. Resolve Clean Host IP
-        id: resolve-ip
-        run: |
-          CLEAN_HOST=$(python3 -c "import socket, os; raw=os.environ.get('RAW_HOST','').replace('ftp://','').replace('ftps://','').strip('/ '); print(socket.gethostbyname(raw) if raw else '')" 2>/dev/null || echo "")
-          if [ -z "$CLEAN_HOST" ]; then
-            echo "CLEAN_HOST=${{ secrets.FTP_SERVER }}" >> $GITHUB_OUTPUT
-          else
-            echo "CLEAN_HOST=$CLEAN_HOST" >> $GITHUB_OUTPUT
-          fi
+      # Step 4: Python-based Zero-Dependency Bulletproof FTP Sync to cPanel
+      - name: 4. Deploy Dist to cPanel Hosting
         env:
-          RAW_HOST: ${{ secrets.FTP_SERVER }}
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          python3 -c '
+          import os, sys, ftplib, socket
 
-      # Step 4: Incremental FTP Sync with IP resolution & retry fallback
-      - name: 4. Incremental FTP Deploy to Hosting
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ steps.resolve-ip.outputs.CLEAN_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /public_html/
-          local-dir: ./dist/
-          state-name: .ftp-deploy-sync-state.json
-          security: loose
-          log-level: verbose
+          raw_server = os.environ.get("FTP_SERVER", "").replace("ftp://", "").replace("ftps://", "").strip("/ ")
+          username = os.environ.get("FTP_USERNAME", "")
+          password = os.environ.get("FTP_PASSWORD", "")
+
+          if not raw_server or not username or not password:
+              print("Error: FTP credentials missing!")
+              sys.exit(1)
+
+          try:
+              host_ip = socket.gethostbyname(raw_server)
+              print(f"Resolved {raw_server} -> {host_ip}")
+          except Exception as e:
+              print(f"DNS fallback to raw server: {e}")
+              host_ip = raw_server
+
+          print(f"Connecting to FTP at {host_ip}...")
+          ftp = ftplib.FTP(host_ip, timeout=60)
+          ftp.login(user=username, passwd=password)
+          print("FTP Connected & Authenticated Successfully!")
+
+          def upload_folder(local_folder, target_dir):
+              try:
+                  ftp.cwd(target_dir)
+              except Exception:
+                  ftp.mkd(target_dir)
+                  ftp.cwd(target_dir)
+
+              for item in os.listdir(local_folder):
+                  lpath = os.path.join(local_folder, item)
+                  if os.path.isfile(lpath):
+                      ext = os.path.splitext(item)[1].lower()
+                      with open(lpath, "rb") as f:
+                          if ext in [".html", ".js", ".css", ".txt", ".xml", ".php", ".json", ".svg", ".md"]:
+                              ftp.storlines(f"STOR {item}", f)
+                          else:
+                              ftp.storbinary(f"STOR {item}", f)
+                      print(f"Uploaded: {item}")
+                  elif os.path.isdir(lpath):
+                      upload_folder(lpath, f"{target_dir}/{item}")
+
+          upload_folder("./dist", "/public_html")
+          ftp.quit()
+          print("🎉 Production Deployment to cPanel Completed Successfully!")
+          '
