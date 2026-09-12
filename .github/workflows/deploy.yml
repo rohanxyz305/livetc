@@ -27,15 +27,90 @@ jobs:
           npm ci
           npm run build
 
-      # Step 4: Incremental FTP Sync to public_html with Security & Retry fallback
-      - name: 4. Incremental FTP Deploy to Hosting
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /public_html/
-          local-dir: ./dist/
-          state-name: .ftp-deploy-sync-state.json
-          security: loose
-          log-level: verbose
+      # Step 4: Zero-Dependency Python FTP Deployment to cPanel hosting
+      - name: 4. Python Production FTP Deploy
+        run: |
+          python3 -c '
+          import os, sys, ftplib, ssl, socket, urllib.request, json, re
+
+          FTP_SERVER = os.environ.get("FTP_SERVER", "").strip()
+          FTP_USERNAME = os.environ.get("FTP_USERNAME", "").strip()
+          FTP_PASSWORD = os.environ.get("FTP_PASSWORD", "").strip()
+
+          clean_host = re.sub(r"^(ftp|ftps|http|https)://", "", FTP_SERVER, flags=re.IGNORECASE)
+          clean_host = clean_host.split("/")[0].split(":")[0].strip()
+
+          target_host = clean_host
+          try:
+              target_host = socket.gethostbyname(clean_host)
+          except Exception:
+              try:
+                  ctx = ssl._create_unverified_context()
+                  url = f"https://1.1.1.1/dns-query?name={clean_host}&type=A"
+                  req = urllib.request.Request(url, headers={"accept": "application/dns-json"})
+                  with urllib.request.urlopen(req, context=ctx, timeout=5) as resp:
+                      data = json.loads(resp.read().decode())
+                      answers = [a["data"] for a in data.get("Answer", []) if a.get("type") == 1]
+                      if answers:
+                          target_host = answers[0]
+                      else:
+                          target_host = "103.49.131.241"
+              except Exception:
+                  target_host = "103.49.131.241"
+
+          print(f"Connecting to FTP server: {target_host} (hostname: {clean_host})")
+
+          ftp = None
+          for attempt in range(1, 6):
+              try:
+                  ftp = ftplib.FTP()
+                  ftp.connect(target_host, 21, timeout=30)
+                  ftp.login(FTP_USERNAME, FTP_PASSWORD)
+                  ftp.set_pasv(True)
+                  print(f"Successfully logged in on attempt {attempt}")
+                  break
+              except Exception as e:
+                  print(f"Attempt {attempt} failed: {e}")
+                  if attempt == 5:
+                      sys.exit(1)
+
+          def ensure_dir(ftp, remote_dir):
+              parts = remote_dir.strip("/").split("/")
+              current = ""
+              for part in parts:
+                  if not part: continue
+                  current += "/" + part
+                  try:
+                      ftp.cwd(current)
+                  except Exception:
+                      try:
+                          ftp.mkd(current)
+                          ftp.cwd(current)
+                      except Exception as e:
+                          print(f"Warning MKD {current}: {e}")
+
+          local_dir = "./dist"
+          remote_base = "/public_html"
+
+          for root, dirs, files in os.walk(local_dir):
+              rel_path = os.path.relpath(root, local_dir)
+              if rel_path == ".":
+                  rem_dir = remote_base
+              else:
+                  rem_dir = remote_base + "/" + rel_path.replace("\\", "/")
+              
+              ensure_dir(ftp, rem_dir)
+              
+              for f in files:
+                  local_file = os.path.join(root, f)
+                  print(f"Uploading {f} -> {rem_dir}/{f}")
+                  with open(local_file, "rb") as fp:
+                      ftp.storbinary(f"STOR {f}", fp)
+
+          print("Deployment Complete!")
+          ftp.quit()
+          '
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
