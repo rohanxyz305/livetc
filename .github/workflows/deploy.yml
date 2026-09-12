@@ -27,13 +27,21 @@ jobs:
           npm ci
           npm run build
 
+      # Step 3b: Sanitize FTP Hostname (Strips protocol prefixes, ports, and trailing slashes)
+      - name: 3b. Sanitize FTP Server Hostname
+        id: clean-server
+        run: |
+          CLEAN=$(echo "${{ secrets.FTP_SERVER }}" | sed -e 's|^[a-zA-Z]*://||' -e 's|/.*$||' -e 's|:.*$||' | tr -d '[:space:]')
+          echo "CLEAN_SERVER=$CLEAN" >> $GITHUB_OUTPUT
+
       # Step 4: Incremental FTP Sync to public_html
       - name: 4. Incremental FTP Deploy to Hosting
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: ${{ steps.clean-server.outputs.CLEAN_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /public_html/
           local-dir: ./dist/
           state-name: .ftp-deploy-sync-state.json
+          security: loose
