@@ -157,7 +157,7 @@ export default function BlogPage() {
   const [allPosts, setAllPosts] = useState(DEFAULT_BLOG_POSTS);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  // Load published articles from LocalStorage on mount
+  // Load published articles from LocalStorage on mount & auto-sync to server indexer
   useEffect(() => {
     try {
       const custom1 = JSON.parse(localStorage.getItem('seologic_custom_blogs') || '[]');
@@ -168,10 +168,14 @@ export default function BlogPage() {
         // De-duplicate custom posts by slug
         const uniqueCustom = [];
         const seenSlugs = new Set();
+        const customUrlsToSync = [];
+
         combinedCustom.forEach(post => {
           const norm = normalizeSlug(post.slug);
           if (norm && !seenSlugs.has(norm)) {
             seenSlugs.add(norm);
+            const fullUrl = `https://liveteachcreate.com/blogs/${norm}`;
+            customUrlsToSync.push(fullUrl);
             uniqueCustom.push({ 
               ...post, 
               slug: norm,
@@ -181,13 +185,22 @@ export default function BlogPage() {
         });
 
         setAllPosts([...uniqueCustom, ...DEFAULT_BLOG_POSTS]);
+
+        // Background auto-sync all custom LocalStorage blog URLs to gsc-indexer.php
+        if (customUrlsToSync.length > 0) {
+          fetch('/api/gsc-indexer.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bulkUrls: customUrlsToSync })
+          }).catch(err => console.error("Auto-sync blog error:", err));
+        }
       }
     } catch (e) {
       console.error('Error loading published articles', e);
     }
   }, []);
 
-  // Sync selected article with URL slug param /blogs/:slug
+  // Sync selected article with URL slug param /blogs/:slug & auto-register URL with server
   useEffect(() => {
     if (slug) {
       const targetNorm = normalizeSlug(slug);
@@ -205,6 +218,15 @@ export default function BlogPage() {
       } else {
         setSelectedPost(generateFallbackArticle(slug));
       }
+
+      // Auto-register current active blog URL with server indexer
+      const currentBlogUrl = `https://liveteachcreate.com/blogs/${targetNorm}`;
+      fetch('/api/gsc-indexer.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newUrl: currentBlogUrl })
+      }).catch(err => console.error("Auto-register URL error:", err));
+
     } else {
       setSelectedPost(null);
     }
