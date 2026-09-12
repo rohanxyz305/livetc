@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import SEO from '../components/common/SEO';
-import { Send, RefreshCw, CheckCircle2, Clock, ShieldCheck, Globe, Copy, Check, ListFilter } from 'lucide-react';
+import { Send, RefreshCw, CheckCircle2, Clock, ShieldCheck, Globe, Copy, Check, ListFilter, PlusCircle, Layers } from 'lucide-react';
 
 export default function GscIndexerAdminPage() {
   const [newUrl, setNewUrl] = useState('');
+  const [bulkUrlsText, setBulkUrlsText] = useState('');
+  const [showBulkInput, setShowBulkInput] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
   const [indexerState, setIndexerState] = useState(null);
@@ -19,6 +21,9 @@ export default function GscIndexerAdminPage() {
       const res = await fetch('/api/gsc-indexer.php');
       const data = await res.json();
       setIndexerState(data);
+      if (data.urls) {
+        setAllSiteUrls(data.urls);
+      }
     } catch (err) {
       console.error("Failed to load GSC Indexer state", err);
     } finally {
@@ -30,6 +35,7 @@ export default function GscIndexerAdminPage() {
     fetchIndexerStatus();
   }, []);
 
+  // Single URL Submit
   const handleAddAndPushUrl = async (e) => {
     e.preventDefault();
     if (!newUrl.trim()) return;
@@ -45,11 +51,40 @@ export default function GscIndexerAdminPage() {
       });
       const data = await res.json();
       setIndexerState(data);
-      setStatusMsg(`Successfully submitted "${newUrl}" to indexing queue!`);
+      if (data.urls) setAllSiteUrls(data.urls);
+      setStatusMsg(`Successfully added "${newUrl}" to website index list & post-sitemap.xml!`);
       setNewUrl('');
     } catch (err) {
       console.error(err);
-      setStatusMsg('Failed to push URL. Check console or server connection.');
+      setStatusMsg('Failed to push URL.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Bulk URLs Submit (Pasting 10, 20, 50 blog URLs at once)
+  const handleBulkSubmit = async (e) => {
+    e.preventDefault();
+    if (!bulkUrlsText.trim()) return;
+
+    setLoading(true);
+    setStatusMsg('');
+
+    try {
+      const res = await fetch('/api/gsc-indexer.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bulkUrls: bulkUrlsText.trim() })
+      });
+      const data = await res.json();
+      setIndexerState(data);
+      if (data.urls) setAllSiteUrls(data.urls);
+      setStatusMsg(`Bulk Indexing Success: Total ${data.totalBlogUrls} URLs registered & synced to sitemaps!`);
+      setBulkUrlsText('');
+      setShowBulkInput(false);
+    } catch (err) {
+      console.error(err);
+      setStatusMsg('Failed to process bulk URLs.');
     } finally {
       setLoading(false);
     }
@@ -62,7 +97,8 @@ export default function GscIndexerAdminPage() {
       const res = await fetch('/api/gsc-indexer.php');
       const data = await res.json();
       setIndexerState(data);
-      setStatusMsg('Manual 30-Minute Indexing Trigger Executed Successfully!');
+      if (data.urls) setAllSiteUrls(data.urls);
+      setStatusMsg(`Manual Push Completed: ${data.totalBlogUrls} URLs submitted to search engines!`);
     } catch (err) {
       console.error(err);
       setStatusMsg('Error executing manual trigger.');
@@ -71,18 +107,17 @@ export default function GscIndexerAdminPage() {
     }
   };
 
-  // Feature: Fetch all website URLs dynamically
+  // Fetch all website URLs dynamically
   const fetchAllWebsiteUrls = async () => {
     setFetchingAllUrls(true);
     setStatusMsg('');
     try {
-      const res = await fetch('/api/ping-crawlers.php');
+      const res = await fetch('/api/gsc-indexer.php');
       const data = await res.json();
-      if (data.allPages && Array.isArray(data.allPages)) {
-        setAllSiteUrls(data.allPages);
-        setStatusMsg(`Successfully fetched all ${data.allPages.length} pages from your website!`);
-      } else {
-        setStatusMsg('Could not fetch site URLs list.');
+      if (data.urls && Array.isArray(data.urls)) {
+        setAllSiteUrls(data.urls);
+        setIndexerState(data);
+        setStatusMsg(`Successfully fetched all ${data.urls.length} live website pages & blogs!`);
       }
     } catch (err) {
       console.error(err);
@@ -92,7 +127,7 @@ export default function GscIndexerAdminPage() {
     }
   };
 
-  // Feature: Copy all fetched URLs to clipboard
+  // Copy all fetched URLs to clipboard
   const copyAllUrlsToClipboard = () => {
     if (allSiteUrls.length === 0) return;
     const textToCopy = allSiteUrls.join('\n');
@@ -125,7 +160,7 @@ export default function GscIndexerAdminPage() {
                 className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-3 rounded-2xl transition shadow-lg disabled:opacity-50"
               >
                 <ListFilter className={`w-4 h-4 ${fetchingAllUrls ? 'animate-spin' : ''}`} />
-                Fetch All Site URLs
+                Fetch All Pages ({allSiteUrls.length})
               </button>
 
               <button 
@@ -147,39 +182,69 @@ export default function GscIndexerAdminPage() {
             </div>
           )}
 
-          {/* Form to Add Blog URL */}
+          {/* SINGLE & BULK BLOG URL ADDITION FORM */}
           <div className="bg-gray-900/60 p-6 rounded-3xl border border-gray-800 shadow-lg space-y-4">
-            <h2 className="text-sm font-bold text-[#FEE715] uppercase tracking-wider">Add New Blog URL to Indexing Queue</h2>
-            
-            <form onSubmit={handleAddAndPushUrl} className="flex flex-col sm:flex-row gap-3">
-              <input 
-                type="url"
-                required
-                placeholder="https://liveteachcreate.com/blogs/your-new-blog-slug"
-                value={newUrl}
-                onChange={(e) => setNewUrl(e.target.value)}
-                className="flex-1 bg-gray-950 border border-gray-800 rounded-2xl px-4 py-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#FEE715]"
-              />
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-bold text-[#FEE715] uppercase tracking-wider">Add Live Blog URLs to Website & Sitemap</h2>
               <button 
-                type="submit"
-                disabled={loading}
-                className="bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs px-6 py-3 rounded-2xl transition flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
+                onClick={() => setShowBulkInput(!showBulkInput)}
+                className="text-xs text-blue-400 hover:text-blue-300 font-bold flex items-center gap-1.5 underline"
               >
-                <Send className="w-4 h-4" /> Push & Index Now
+                <Layers className="w-3.5 h-3.5" />
+                {showBulkInput ? 'Switch to Single URL Mode' : 'Paste Multiple / Bulk URLs'}
               </button>
-            </form>
+            </div>
+            
+            {!showBulkInput ? (
+              <form onSubmit={handleAddAndPushUrl} className="flex flex-col sm:flex-row gap-3">
+                <input 
+                  type="url"
+                  required
+                  placeholder="https://liveteachcreate.com/blogs/your-new-blog-slug"
+                  value={newUrl}
+                  onChange={(e) => setNewUrl(e.target.value)}
+                  className="flex-1 bg-gray-950 border border-gray-800 rounded-2xl px-4 py-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#FEE715]"
+                />
+                <button 
+                  type="submit"
+                  disabled={loading}
+                  className="bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs px-6 py-3 rounded-2xl transition flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
+                >
+                  <Send className="w-4 h-4" /> Add & Index Now
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleBulkSubmit} className="space-y-3">
+                <p className="text-xs text-gray-400">Paste your published blog URLs below (one URL per line or separated by commas):</p>
+                <textarea 
+                  rows={6}
+                  required
+                  placeholder={`https://liveteachcreate.com/blogs/my-first-blog-slug\nhttps://liveteachcreate.com/blogs/my-second-blog-slug\nhttps://liveteachcreate.com/blogs/my-third-blog-slug`}
+                  value={bulkUrlsText}
+                  onChange={(e) => setBulkUrlsText(e.target.value)}
+                  className="w-full bg-gray-950 border border-gray-800 rounded-2xl p-4 font-mono text-xs text-white placeholder-gray-600 focus:outline-none focus:border-blue-500"
+                />
+                <button 
+                  type="submit"
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-6 py-3 rounded-2xl transition flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
+                >
+                  <PlusCircle className="w-4 h-4" /> Add All Bulk URLs & Sync to Sitemap
+                </button>
+              </form>
+            )}
           </div>
 
-          {/* FEATURE: Fetch & Copy All Website URLs for Indexing */}
+          {/* FETCH & COPY ALL WEBSITE URLS FOR INDEXING */}
           <div className="bg-gray-900/80 p-6 rounded-3xl border border-blue-500/30 shadow-xl space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h2 className="text-base font-bold text-white flex items-center gap-2">
                   <ListFilter className="w-5 h-5 text-blue-400" />
-                  Fetch & Copy All Website URLs ({allSiteUrls.length} Pages Loaded)
+                  Fetch & Copy All Live Website URLs ({allSiteUrls.length} Pages Loaded)
                 </h2>
                 <p className="text-xs text-gray-400 mt-0.5">
-                  Click below to grab all URLs across your website in 1-click so you can copy and paste them directly into Google Search Console or indexing tools.
+                  Click below to grab 100% of all website pages & blogs in 1-click so you can copy and paste them into Google Search Console or indexing tools.
                 </p>
               </div>
 
@@ -215,7 +280,7 @@ export default function GscIndexerAdminPage() {
                 />
                 <div className="text-[11px] text-gray-400 flex items-center justify-between">
                   <span>Tip: Click inside the box or click "Copy All" to grab all URLs ready for Google Search Console.</span>
-                  <span className="text-emerald-400 font-bold">{allSiteUrls.length} Total URLs</span>
+                  <span className="text-emerald-400 font-bold">{allSiteUrls.length} Total URLs Registered</span>
                 </div>
               </div>
             )}
@@ -224,8 +289,8 @@ export default function GscIndexerAdminPage() {
           {/* System Status Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-gray-900/60 p-5 rounded-2xl border border-gray-800 space-y-1">
-              <div className="text-xs text-gray-400 flex items-center gap-1.5"><Globe className="w-4 h-4 text-[#FEE715]" /> Total Tracked URLs</div>
-              <div className="text-2xl font-black text-white">{indexerState?.totalBlogUrls || 0}</div>
+              <div className="text-xs text-gray-400 flex items-center gap-1.5"><Globe className="w-4 h-4 text-[#FEE715]" /> Total Registered URLs</div>
+              <div className="text-2xl font-black text-white">{allSiteUrls.length || indexerState?.totalBlogUrls || 0}</div>
             </div>
 
             <div className="bg-gray-900/60 p-5 rounded-2xl border border-gray-800 space-y-1">
@@ -242,19 +307,19 @@ export default function GscIndexerAdminPage() {
           {/* URL Queue List */}
           <div className="bg-gray-900/60 p-6 rounded-3xl border border-gray-800 shadow-lg space-y-4">
             <h2 className="text-sm font-bold text-white flex items-center justify-between">
-              <span>Active Blog URLs in 30-Min Cron Queue</span>
-              <span className="text-xs text-gray-400 font-normal">Auto-synced from sitemap & manual inputs</span>
+              <span>Active URLs Registered for 30-Min Cron & Search Engines</span>
+              <span className="text-xs text-gray-400 font-normal">Auto-synced to post-sitemap.xml</span>
             </h2>
 
             <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
-              {indexerState?.urls && indexerState.urls.length > 0 ? (
-                indexerState.urls.map((url, idx) => (
+              {allSiteUrls && allSiteUrls.length > 0 ? (
+                allSiteUrls.map((url, idx) => (
                   <div key={idx} className="bg-gray-950 p-3 rounded-xl border border-gray-800/80 flex items-center justify-between text-xs text-gray-300">
                     <a href={url} target="_blank" rel="noreferrer" className="hover:text-[#FEE715] truncate font-mono">
                       {url}
                     </a>
                     <span className="shrink-0 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] px-2 py-0.5 rounded-full font-bold">
-                      Queued for 30m Cron
+                      Synced & Queued
                     </span>
                   </div>
                 ))
@@ -271,7 +336,7 @@ export default function GscIndexerAdminPage() {
                 <Clock className="w-4 h-4" /> cPanel 30-Minute Cron Setup
               </h3>
               <p className="text-xs text-gray-400 leading-relaxed">
-                To run automatic pings every 30 minutes, add this command to your cPanel Cron Jobs:
+                To run automatic pings every 30 minutes for all registered URLs, add this command to your cPanel Cron Jobs:
               </p>
               <div className="bg-black/60 p-3 rounded-xl border border-gray-800 font-mono text-[11px] text-emerald-400 select-all">
                 curl -s https://liveteachcreate.com/api/gsc-indexer.php &gt; /dev/null 2&gt;&amp;1
