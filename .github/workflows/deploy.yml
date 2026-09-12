@@ -27,17 +27,11 @@ jobs:
           npm ci
           npm run build
 
-      # Step 4: Robust LFTP Deployment to cPanel hosting
-      - name: 4. LFTP Sync to cPanel Hosting
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq lftp
-          lftp -c "
-          set ftp:ssl-allow no;
-          set net:max-retries 5;
-          set net:timeout 30;
-          set net:reconnect-interval-base 5;
-          open -u '${{ secrets.FTP_USERNAME }}','${{ secrets.FTP_PASSWORD }}' '${{ secrets.FTP_SERVER }}';
-          mirror --reverse --delete --verbose ./dist/ /public_html/;
-          quit;
-          "
+      # Step 4: Incremental FTP Sync with Automatic Retry on Network Glitch
+      - name: 4. Incremental FTP Deploy to Hosting (with Retries)
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 3
+          max_attempts: 3
+          retry_wait_seconds: 5
+          command: npx @samkirkland/ftp-deploy --server "${{ secrets.FTP_SERVER }}" --username "${{ secrets.FTP_USERNAME }}" --password "${{ secrets.FTP_PASSWORD }}" --server-dir "/public_html/" --local-dir "./dist/" --state-name ".ftp-deploy-sync-state.json"
