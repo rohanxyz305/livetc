@@ -27,11 +27,28 @@ jobs:
           npm ci
           npm run build
 
-      # Step 4: Incremental FTP Sync with Automatic Retry on Network Glitch
-      - name: 4. Incremental FTP Deploy to Hosting (with Retries)
-        uses: nick-fields/retry@v3
+      # Step 3b: Resolve FTP Host IP to bypass DNS EAI_AGAIN errors
+      - name: 3b. Resolve Clean Host IP
+        id: resolve-ip
+        run: |
+          CLEAN_HOST=$(python3 -c "import socket, os; raw=os.environ.get('RAW_HOST','').replace('ftp://','').replace('ftps://','').strip('/ '); print(socket.gethostbyname(raw) if raw else '')" 2>/dev/null || echo "")
+          if [ -z "$CLEAN_HOST" ]; then
+            echo "CLEAN_HOST=${{ secrets.FTP_SERVER }}" >> $GITHUB_OUTPUT
+          else
+            echo "CLEAN_HOST=$CLEAN_HOST" >> $GITHUB_OUTPUT
+          fi
+        env:
+          RAW_HOST: ${{ secrets.FTP_SERVER }}
+
+      # Step 4: Incremental FTP Sync with IP resolution & retry fallback
+      - name: 4. Incremental FTP Deploy to Hosting
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          timeout_minutes: 3
-          max_attempts: 3
-          retry_wait_seconds: 5
-          command: npx @samkirkland/ftp-deploy --server "${{ secrets.FTP_SERVER }}" --username "${{ secrets.FTP_USERNAME }}" --password "${{ secrets.FTP_PASSWORD }}" --server-dir "/public_html/" --local-dir "./dist/" --state-name ".ftp-deploy-sync-state.json"
+          server: ${{ steps.resolve-ip.outputs.CLEAN_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /public_html/
+          local-dir: ./dist/
+          state-name: .ftp-deploy-sync-state.json
+          security: loose
+          log-level: verbose
