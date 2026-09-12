@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import SEO from '../components/common/SEO';
-import { Send, RefreshCw, CheckCircle2, Clock, ShieldCheck, AlertCircle, Plus, Globe } from 'lucide-react';
+import { Send, RefreshCw, CheckCircle2, Clock, ShieldCheck, Globe, Copy, Check, ListFilter } from 'lucide-react';
 
 export default function GscIndexerAdminPage() {
   const [newUrl, setNewUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
   const [indexerState, setIndexerState] = useState(null);
+
+  // State for Fetch All Website URLs feature
+  const [allSiteUrls, setAllSiteUrls] = useState([]);
+  const [fetchingAllUrls, setFetchingAllUrls] = useState(false);
+  const [copiedStatus, setCopiedStatus] = useState(false);
 
   const fetchIndexerStatus = async () => {
     setLoading(true);
@@ -66,9 +71,39 @@ export default function GscIndexerAdminPage() {
     }
   };
 
+  // Feature: Fetch all website URLs dynamically
+  const fetchAllWebsiteUrls = async () => {
+    setFetchingAllUrls(true);
+    setStatusMsg('');
+    try {
+      const res = await fetch('/api/ping-crawlers.php');
+      const data = await res.json();
+      if (data.allPages && Array.isArray(data.allPages)) {
+        setAllSiteUrls(data.allPages);
+        setStatusMsg(`Successfully fetched all ${data.allPages.length} pages from your website!`);
+      } else {
+        setStatusMsg('Could not fetch site URLs list.');
+      }
+    } catch (err) {
+      console.error(err);
+      setStatusMsg('Failed to fetch website URLs.');
+    } finally {
+      setFetchingAllUrls(false);
+    }
+  };
+
+  // Feature: Copy all fetched URLs to clipboard
+  const copyAllUrlsToClipboard = () => {
+    if (allSiteUrls.length === 0) return;
+    const textToCopy = allSiteUrls.join('\n');
+    navigator.clipboard.writeText(textToCopy);
+    setCopiedStatus(true);
+    setTimeout(() => setCopiedStatus(false), 3000);
+  };
+
   return (
     <>
-      <SEO title="Google Search Console & Blog Indexer Admin" description="Automated Blog URL Indexer for Google Search Console and AI Search Models." />
+      <SEO title="Google Search Console & Blog Indexer Admin" description="Automated Blog & Website URL Indexer for Google Search Console and AI Search Models." />
       
       <div className="bg-[#101820] min-h-screen py-12 text-white">
         <div className="max-w-5xl mx-auto px-4 space-y-8">
@@ -83,14 +118,25 @@ export default function GscIndexerAdminPage() {
               <p className="text-xs text-gray-400 mt-1">Push blog URLs automatically to Google Search Console, Bing, and AI Models every 30 minutes.</p>
             </div>
             
-            <button 
-              onClick={triggerManualCron}
-              disabled={loading}
-              className="flex items-center justify-center gap-2 bg-[#FEE715] hover:bg-yellow-400 text-black font-bold text-xs px-5 py-3 rounded-2xl transition shadow-lg disabled:opacity-50"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-              Trigger 30-Min Push Now
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button 
+                onClick={fetchAllWebsiteUrls}
+                disabled={fetchingAllUrls}
+                className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-3 rounded-2xl transition shadow-lg disabled:opacity-50"
+              >
+                <ListFilter className={`w-4 h-4 ${fetchingAllUrls ? 'animate-spin' : ''}`} />
+                Fetch All Site URLs
+              </button>
+
+              <button 
+                onClick={triggerManualCron}
+                disabled={loading}
+                className="flex items-center justify-center gap-2 bg-[#FEE715] hover:bg-yellow-400 text-black font-bold text-xs px-4 py-3 rounded-2xl transition shadow-lg disabled:opacity-50"
+              >
+                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                Trigger 30-Min Push
+              </button>
+            </div>
           </div>
 
           {/* Alert Message */}
@@ -122,6 +168,57 @@ export default function GscIndexerAdminPage() {
                 <Send className="w-4 h-4" /> Push & Index Now
               </button>
             </form>
+          </div>
+
+          {/* FEATURE: Fetch & Copy All Website URLs for Indexing */}
+          <div className="bg-gray-900/80 p-6 rounded-3xl border border-blue-500/30 shadow-xl space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h2 className="text-base font-bold text-white flex items-center gap-2">
+                  <ListFilter className="w-5 h-5 text-blue-400" />
+                  Fetch & Copy All Website URLs ({allSiteUrls.length} Pages Loaded)
+                </h2>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  Click below to grab all URLs across your website in 1-click so you can copy and paste them directly into Google Search Console or indexing tools.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={fetchAllWebsiteUrls}
+                  disabled={fetchingAllUrls}
+                  className="bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl border border-gray-700 transition flex items-center gap-1.5 disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${fetchingAllUrls ? 'animate-spin' : ''}`} />
+                  {fetchingAllUrls ? 'Fetching...' : 'Fetch All URLs'}
+                </button>
+
+                {allSiteUrls.length > 0 && (
+                  <button
+                    onClick={copyAllUrlsToClipboard}
+                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-md"
+                  >
+                    {copiedStatus ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
+                    {copiedStatus ? 'Copied to Clipboard!' : `Copy All (${allSiteUrls.length} URLs)`}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {allSiteUrls.length > 0 && (
+              <div className="space-y-2">
+                <textarea
+                  readOnly
+                  rows={8}
+                  value={allSiteUrls.join('\n')}
+                  className="w-full bg-black/70 border border-gray-800 rounded-2xl p-4 font-mono text-xs text-emerald-400 focus:outline-none select-all"
+                />
+                <div className="text-[11px] text-gray-400 flex items-center justify-between">
+                  <span>Tip: Click inside the box or click "Copy All" to grab all URLs ready for Google Search Console.</span>
+                  <span className="text-emerald-400 font-bold">{allSiteUrls.length} Total URLs</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* System Status Summary */}
