@@ -27,31 +27,15 @@ jobs:
           npm ci
           npm run build
 
-      # Step 3b: Bind domain IP directly into /etc/hosts to eliminate DNS EAI_AGAIN errors
-      - name: 3b. Bind Target Domain in /etc/hosts
-        id: resolve-ip
-        run: |
-          CLEAN_HOST=$(python3 -c '
-          import os, re
-          raw = os.environ.get("RAW_SERVER", "").strip()
-          clean = re.sub(r"^(ftp|ftps|http|https)://", "", raw, flags=re.IGNORECASE)
-          clean = clean.split("/")[0].split(":")[0].strip()
-          print(clean if clean else "liveteachcreate.com")
-          ')
-          echo "CLEAN_HOST=$CLEAN_HOST" >> $GITHUB_OUTPUT
-          echo "103.49.131.241 $CLEAN_HOST liveteachcreate.com ftp.liveteachcreate.com" | sudo tee -a /etc/hosts
-          echo "Successfully mapped 103.49.131.241 to $CLEAN_HOST in runner /etc/hosts"
-        env:
-          RAW_SERVER: ${{ secrets.FTP_SERVER }}
-
-      # Step 4: Incremental FTP Sync to public_html
+      # Step 4: Incremental FTP Sync to public_html with Security & Retry fallback
       - name: 4. Incremental FTP Deploy to Hosting
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ steps.resolve-ip.outputs.CLEAN_HOST }}
+          server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /public_html/
           local-dir: ./dist/
           state-name: .ftp-deploy-sync-state.json
           security: loose
+          log-level: verbose
