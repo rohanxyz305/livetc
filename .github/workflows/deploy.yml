@@ -27,13 +27,56 @@ jobs:
           npm ci
           npm run build
 
-      # Step 4: Incremental FTP Sync to public_html with IPv4 DNS order
+      # Step 3b: Resolve Host IP for FTP Sync to prevent DNS EAI_AGAIN errors
+      - name: 3b. Resolve FTP Server IP
+        id: resolve-ip
+        run: |
+          FINAL_IP=$(python3 -c '
+          import os, urllib.request, json, ssl, socket, re
+          raw = os.environ.get("RAW_SERVER", "").strip()
+          clean = re.sub(r"^(ftp|ftps|http|https)://", "", raw, flags=re.IGNORECASE)
+          clean = clean.split("/")[0].split(":")[0].strip()
+          res_ip = ""
+          if clean:
+              try:
+                  res_ip = socket.gethostbyname(clean)
+              except Exception:
+                  pass
+          if not res_ip:
+              candidates = [clean]
+              if "ftp." in clean: candidates.append(clean.replace("ftp.", ""))
+              if "www." in clean: candidates.append(clean.replace("www.", ""))
+              if "liveteachcreate.com" not in candidates: candidates.append("liveteachcreate.com")
+              ctx = ssl._create_unverified_context()
+              for d in candidates:
+                  if not d: continue
+                  try:
+                      url = f"https://1.1.1.1/dns-query?name={d}&type=A"
+                      req = urllib.request.Request(url, headers={"accept": "application/dns-json"})
+                      with urllib.request.urlopen(req, context=ctx, timeout=5) as resp:
+                          data = json.loads(resp.read().decode())
+                          answers = [a["data"] for a in data.get("Answer", []) if a.get("type") == 1]
+                          if answers:
+                              res_ip = answers[0]
+                              break
+                  except Exception:
+                      pass
+          if not res_ip:
+              res_ip = "103.49.131.241"
+          print(res_ip)
+          ')
+          echo "RESOLVED_IP=$FINAL_IP" >> $GITHUB_OUTPUT
+          echo "Resolved FTP Server target IP: $FINAL_IP"
+        env:
+          RAW_SERVER: ${{ secrets.FTP_SERVER }}
+
+      # Step 4: Incremental FTP Sync to public_html using resolved IP target
       - name: 4. Incremental FTP Deploy to Hosting
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         env:
           NODE_OPTIONS: "--dns-result-order=ipv4first"
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: ${{ steps.resolve-ip.outputs.RESOLVED_IP }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /public_html/
