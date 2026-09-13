@@ -9,8 +9,8 @@ export default function WhyChooseUs() {
     },
     {
       icon: "fa-solid fa-chart-line",
-      title: "Data-Driven PPC Management",
-      desc: "Maximize Return on Ad Spend (ROAS) and minimize wasted ad dollars with keyword bid tuning."
+      title: "Ads Engine",
+      desc: "Move beyond standard keyword bidding with AI-driven audience targeting, real-time conversion"
     },
     {
       icon: "fa-solid fa-wand-magic-sparkles",
