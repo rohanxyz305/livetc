@@ -92,8 +92,158 @@ export default function ServiceDetailPage({ onOpenContactPopup }) {
                 ))}
               </div>
 
+              {/* Comprehensive On-Page SEO Section */}
+              {service.onPageSeo && (
+                <div className="space-y-6 pt-6 border-t border-gray-800">
+                  <div className="space-y-2">
+                    <span className="inline-block px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                      <i className="fa-solid fa-file-code mr-1.5"></i>
+                      On-Page SEO Optimization
+                    </span>
+                    <h3 className="text-2xl font-extrabold text-white font-display">
+                      Comprehensive On-Page SEO Services
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      We optimize every element on your website to ensure search engines understand your content structure and users enjoy an exceptional browsing experience.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {service.onPageSeo.map((item, idx) => (
+                      <div key={idx} className="p-6 rounded-2xl bg-gray-900/80 border border-gray-800 hover:border-[#FEE715]/50 transition-all space-y-2">
+                        <div className="flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-md bg-[#FEE715]/20 text-[#FEE715] flex items-center justify-center font-bold text-xs">
+                            <i className="fa-solid fa-check"></i>
+                          </div>
+                          <h4 className="font-bold text-sm text-white">{item.title}</h4>
+                        </div>
+                        <p className="text-xs text-gray-400 leading-relaxed pl-10">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Comprehensive Off-Page SEO Section */}
+              {service.offPageSeo && (
+                <div className="space-y-6 pt-6 border-t border-gray-800">
+                  <div className="space-y-2">
+                    <span className="inline-block px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                      <i className="fa-solid fa-link mr-1.5"></i>
+                      Off-Page & Authority Building
+                    </span>
+                    <h3 className="text-2xl font-extrabold text-white font-display">
+                      High-Authority Off-Page SEO & Backlink Building
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      Build domain authority, earn contextual backlinks, and establish industry leadership with 100% white-hat link acquisition strategies.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {service.offPageSeo.map((item, idx) => (
+                      <div key={idx} className="p-6 rounded-2xl bg-gray-900/80 border border-gray-800 hover:border-[#FEE715]/50 transition-all space-y-2">
+                        <div className="flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-md bg-[#FEE715]/20 text-[#FEE715] flex items-center justify-center font-bold text-xs">
+                            <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                          </div>
+                          <h4 className="font-bold text-sm text-white">{item.title}</h4>
+                        </div>
+                        <p className="text-xs text-gray-400 leading-relaxed pl-10">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Comprehensive Technical SEO Section */}
+              {service.technicalSeo && (
+                <div className="space-y-6 pt-6 border-t border-gray-800">
+                  <div className="space-y-2">
+                    <span className="inline-block px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                      <i className="fa-solid fa-gear mr-1.5"></i>
+                      Technical SEO Infrastructure
+                    </span>
+                    <h3 className="text-2xl font-extrabold text-white font-display">
+                      Technical SEO & Site Speed Optimization
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      Eliminate technical roadblocks, accelerate page loading speeds, and optimize crawl efficiency so Google indexers rank your pages seamlessly.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {service.technicalSeo.map((item, idx) => (
+                      <div key={idx} className="p-6 rounded-2xl bg-gray-900/80 border border-gray-800 hover:border-[#FEE715]/50 transition-all space-y-2">
+                        <div className="flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-md bg-[#FEE715]/20 text-[#FEE715] flex items-center justify-center font-bold text-xs">
+                            <i className="fa-solid fa-microchip"></i>
+                          </div>
+                          <h4 className="font-bold text-sm text-white">{item.title}</h4>
+                        </div>
+                        <p className="text-xs text-gray-400 leading-relaxed pl-10">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Structured 4-Step SEO Growth Roadmap */}
+              {service.seoProcess && (
+                <div className="space-y-6 pt-6 border-t border-gray-800">
+                  <div className="space-y-2">
+                    <span className="inline-block px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                      <i className="fa-solid fa-route mr-1.5"></i>
+                      Proven Growth Process
+                    </span>
+                    <h3 className="text-2xl font-extrabold text-white font-display">
+                      Our 4-Step SEO Execution Methodology
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {service.seoProcess.map((proc, idx) => (
+                      <div key={idx} className="p-6 rounded-2xl bg-gray-900/90 border border-gray-800 space-y-3 relative overflow-hidden">
+                        <div className="text-3xl font-extrabold text-[#FEE715]/20 absolute top-4 right-4 select-none">
+                          {proc.step}
+                        </div>
+                        <div className="w-8 h-8 rounded-lg bg-[#FEE715] text-[#101820] flex items-center justify-center font-extrabold text-xs shadow-yellowGlow">
+                          {proc.step}
+                        </div>
+                        <h4 className="font-bold text-sm text-white">{proc.title}</h4>
+                        <p className="text-xs text-gray-400 leading-relaxed">{proc.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* SEO Tech Stack & Tools We Use */}
+              {service.seoTools && (
+                <div className="space-y-6 pt-6 border-t border-gray-800">
+                  <div className="space-y-2">
+                    <span className="inline-block px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                      <i className="fa-solid fa-toolbox mr-1.5"></i>
+                      Enterprise Tech Stack
+                    </span>
+                    <h3 className="text-2xl font-extrabold text-white font-display">
+                      Premium SEO Tools & Analytics Software We Leverage
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {service.seoTools.map((tool, idx) => (
+                      <div key={idx} className="p-4 rounded-xl bg-gray-900/70 border border-gray-800 text-center space-y-1 hover:border-[#FEE715]/40 transition-all">
+                        <div className="font-bold text-xs text-[#FEE715]">{tool.name}</div>
+                        <div className="text-[10px] text-gray-400">{tool.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="p-8 rounded-3xl bg-gray-900 border border-gray-800 text-white space-y-4">
-                <h3 className="text-xl font-bold font-display text-white">Why Outsource Your Seller Management to Liveteachcreate?</h3>
+                <h3 className="text-xl font-bold font-display text-white">Why Outsource Your Seller & SEO Management to Liveteachcreate?</h3>
                 <p className="text-xs text-gray-300 leading-relaxed">
                   Managing e-commerce accounts in-house requires dedicated graphic designers, PPC analysts, catalog writers, and policy specialists. Partnering with Liveteachcreate gives you access to an entire team of senior e-commerce strategists at a fraction of in-house payroll costs.
                 </p>

@@ -273,19 +273,128 @@ export const servicesCategories = [
     services: [
       {
         slug: "seo-company-in-india",
-        name: "Search Engine Optimization",
-        shortDesc: "Rank #1 on Google with data-driven Technical SEO, On-Page optimization & backlink building.",
+        name: "Search Engine Optimization (SEO Services)",
+        shortDesc: "Rank #1 on Google with comprehensive On-Page SEO, Off-Page Link Building, and Technical SEO infrastructure optimization.",
         icon: "fa-solid fa-magnifying-glass-chart",
         category: "Digital Marketing",
         features: [
-          "Comprehensive Technical SEO Audit",
-          "Keyword Intent Research & Mapping",
-          "On-Page Optimization & Schema Markup",
-          "High-Authority Backlink Acquisition",
-          "Local SEO & Google Business Optimization"
+          "Comprehensive Technical & Architectural SEO Audit",
+          "High-Intent Keyword Research & Search Intent Mapping",
+          "On-Page Optimization & Advanced Schema Markup",
+          "White-Hat High-Authority Backlink Acquisition",
+          "Core Web Vitals & Page Speed Optimization",
+          "Google Business Profile & Hyper-Local SEO"
         ],
-        heroTitle: "Drive Sustained Organic Traffic with India's Top SEO Experts",
-        heroSubtitle: "Increase organic revenue and capture high-intent search traffic on Google."
+        heroTitle: "Drive Sustained Organic Revenue with India's Premier SEO Company",
+        heroSubtitle: "Dominate Google search results with our end-to-end On-Page, Off-Page, and Technical SEO services tailored for e-commerce, D2C brands, and growing enterprises.",
+        onPageSeo: [
+          {
+            title: "High-Intent Keyword Research & Intent Mapping",
+            desc: "Identifying commercial, transactional, and informational search terms using advanced competitor gap analysis to target users ready to convert."
+          },
+          {
+            title: "Meta Title, Description & CTR Optimization",
+            desc: "Crafting compelling, keyword-rich meta tags and open graph tags designed to maximize Click-Through-Rates (CTR) on Google SERPs."
+          },
+          {
+            title: "Content & Heading Architecture (H1-H6)",
+            desc: "Structuring content with clear heading hierarchies, semantic LSI keywords, and engaging formatting to improve readability and search indexing."
+          },
+          {
+            title: "Advanced Schema Markup & Structured Data",
+            desc: "Deploying JSON-LD Schema markup for Products, FAQs, Organization, Articles, Reviews, and Breadcrumbs to earn rich snippets on search results."
+          },
+          {
+            title: "Image SEO & Visual Asset Compression",
+            desc: "Converting images to modern WebP formats, reducing file sizes, and adding descriptive Alt text for Google Image Search rankings."
+          },
+          {
+            title: "Internal Link Architecture & PageRank Sculpting",
+            desc: "Building strategic internal linking networks to pass link authority, decrease bounce rates, and guide crawlers to high-value priority pages."
+          }
+        ],
+        offPageSeo: [
+          {
+            title: "White-Hat High-Authority Backlink Acquisition",
+            desc: "Building natural, high DA/DR contextual backlinks through manual outreach to real, traffic-verified blogs and industry publications."
+          },
+          {
+            title: "Digital PR & Brand Authority Mentions",
+            desc: "Securing features and editorial mentions in top online news portals, press releases, and niche authority websites to boost domain trust."
+          },
+          {
+            title: "Guest Article Outreach & Content Syndication",
+            desc: "Publishing value-driven articles on contextually relevant blogs to capture referral traffic and pass high editorial authority."
+          },
+          {
+            title: "Local Citation Building & Directory Sync",
+            desc: "Submitting consistent NAP (Name, Address, Phone) details across Google Business Profile, Justdial, Sulekha, IndiaMART, and regional directories."
+          },
+          {
+            title: "Competitor Backlink Intersect Analysis",
+            desc: "Reverse-engineering competitor link profiles to uncover unlinked brand mentions and replicate high-performing link sources."
+          },
+          {
+            title: "Spam Audit & Disavow File Management",
+            desc: "Continuous monitoring of link velocity and toxic backlink disavow filing to protect your domain against Google algorithm penalties."
+          }
+        ],
+        technicalSeo: [
+          {
+            title: "Core Web Vitals & Page Speed Acceleration",
+            desc: "Optimizing Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS) for 90+ PageSpeed scores."
+          },
+          {
+            title: "Dynamic XML Sitemap & Robots.txt Directives",
+            desc: "Configuring automated XML sitemaps with accurate <lastmod> timestamps and optimizing robots.txt to direct search crawlers efficiently."
+          },
+          {
+            title: "Crawl Budget & Indexation Issue Resolution",
+            desc: "Fixing 404 errors, 301 redirect loops, canonical tag conflicts, and resolving unindexed pages in Google Search Console."
+          },
+          {
+            title: "Mobile-First Indexing & Responsiveness Audit",
+            desc: "Ensuring 100% fluid mobile viewport rendering, touch target sizing, and zero mobile usability errors."
+          },
+          {
+            title: "HTTPS, SSL & Security Header Enforcement",
+            desc: "Securing HTTP-to-HTTPS redirects, enforcing HSTS headers, and eliminating mixed content vulnerabilities across all subdomains."
+          },
+          {
+            title: "Hreflang & Multi-Language / Global SEO",
+            desc: "Implementing multi-region and multi-language hreflang annotations for international e-commerce and multi-country audience targeting."
+          }
+        ],
+        seoProcess: [
+          {
+            step: "01",
+            title: "Technical Crawl & Keyword Blueprint",
+            desc: "Deep technical site audit, competitor gap analysis, and mapping high-conversion search keywords to landing pages."
+          },
+          {
+            step: "02",
+            title: "Technical & On-Page Execution",
+            desc: "Fixing site speed, meta tags, heading structures, internal links, and deploying structured JSON-LD Schema markup."
+          },
+          {
+            step: "03",
+            title: "Authority Building & Content Scaling",
+            desc: "Acquiring high-DA niche backlinks, publishing SEO-optimized blogs, and optimizing local business citations."
+          },
+          {
+            step: "04",
+            title: "Rank Monitoring & Monthly ROI Reporting",
+            desc: "Tracking keyword rankings, Google Search Console clicks, impressions, GA4 traffic, and revenue conversion growth."
+          }
+        ],
+        seoTools: [
+          { name: "Google Search Console", desc: "Index monitoring & search query performance" },
+          { name: "Google Analytics 4 (GA4)", desc: "Traffic, user behavior & conversion tracking" },
+          { name: "Ahrefs", desc: "Backlink auditing & competitor keyword gap analysis" },
+          { name: "SEMrush", desc: "Position tracking & SERP feature monitoring" },
+          { name: "Screaming Frog", desc: "Technical site crawl & link architecture analysis" },
+          { name: "PageSpeed Insights", desc: "Core Web Vitals & performance optimization" }
+        ]
       },
       {
         slug: "seo-results",
