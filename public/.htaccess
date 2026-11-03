@@ -21,6 +21,11 @@
   RewriteRule ^ index.html [L]
 </IfModule>
 
+# Block direct web access to server secrets/helpers
+<FilesMatch "^hosting-(config|common)\.php$">
+  Require all denied
+</FilesMatch>
+
 # Force correct MIME Content-Type header for XML Sitemaps
 <IfModule mod_headers.c>
   <FilesMatch "\.(xml)$">

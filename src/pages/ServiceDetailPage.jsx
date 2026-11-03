@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import SEO from '../components/common/SEO';
 import { allServicesList } from '../data/servicesData';
 import StatsCounter from '../components/common/StatsCounter';
+import CustomerAuthForm from '../components/common/CustomerAuthForm';
+import HostingCheckoutModal from '../components/common/HostingCheckoutModal';
+import { getCurrentCustomer, logoutCustomer } from '../services/customerApi';
 
 export default function ServiceDetailPage({ onOpenContactPopup }) {
   const { slug } = useParams();
   const cleanSlug = slug ? slug.toLowerCase().replace('.php', '') : '';
+  const [checkoutPlan, setCheckoutPlan] = useState(null);
+  const [customer, setCustomer] = useState(null);
+  const [authOpen, setAuthOpen] = useState(false);
   const service = allServicesList.find(s => s.slug.toLowerCase() === cleanSlug);
+  const hasPlans = Boolean(service?.pricingPlans);
+
+  // Customer login is only used on pages with buyable plans (Web Hosting)
+  useEffect(() => {
+    if (hasPlans) getCurrentCustomer().then(setCustomer).catch(() => {});
+  }, [hasPlans]);
 
   if (!service) {
     return <Navigate to="/" replace />;
@@ -69,6 +81,32 @@ export default function ServiceDetailPage({ onOpenContactPopup }) {
       {service.pricingPlans && (
         <section className="py-20 bg-[#0b1218] text-white border-b border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 text-xs">
+              {customer ? (
+                <>
+                  <span className="text-gray-400">
+                    <i className="fa-solid fa-circle-user text-[#FEE715] mr-1.5"></i>Hi, <span className="text-white font-semibold">{customer.name}</span>
+                  </span>
+                  <Link to="/my-account" className="px-4 py-2 rounded-lg bg-[#FEE715] text-[#101820] font-bold uppercase tracking-wider hover:bg-[#e0ca00]">
+                    My Orders
+                  </Link>
+                  <button
+                    onClick={() => logoutCustomer().finally(() => setCustomer(null))}
+                    className="px-4 py-2 rounded-lg border border-gray-700 hover:border-[#FEE715] font-bold uppercase tracking-wider"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => setAuthOpen(true)}
+                  className="px-4 py-2 rounded-lg border border-gray-700 hover:border-[#FEE715] font-bold uppercase tracking-wider"
+                >
+                  <i className="fa-solid fa-right-to-bracket mr-1.5"></i>Sign In / Sign Up
+                </button>
+              )}
+            </div>
+
             <div className="text-center space-y-3">
               <span className="inline-block px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider">
                 <i className="fa-solid fa-tags mr-1.5"></i>
@@ -114,19 +152,36 @@ export default function ServiceDetailPage({ onOpenContactPopup }) {
                     ))}
                   </ul>
                   <button
-                    onClick={onOpenContactPopup}
+                    onClick={() => setCheckoutPlan(plan)}
                     className={`mt-8 w-full font-bold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-colors ${
                       plan.popular
                         ? 'bg-[#FEE715] hover:bg-[#e0ca00] text-[#101820]'
                         : 'bg-[#101820] border border-gray-700 hover:border-[#FEE715] text-white'
                     }`}
                   >
-                    Get Started
+                    Buy Now
                   </button>
                 </div>
               ))}
             </div>
           </div>
+          <HostingCheckoutModal
+            plan={checkoutPlan}
+            customer={customer}
+            onCustomerChange={setCustomer}
+            onClose={() => setCheckoutPlan(null)}
+          />
+          {authOpen && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-4" onClick={() => setAuthOpen(false)}>
+              <div className="relative w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8" onClick={(e) => e.stopPropagation()}>
+                <button onClick={() => setAuthOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white" aria-label="Close">
+                  <i className="fa-solid fa-xmark text-lg"></i>
+                </button>
+                <h3 className="text-xl font-bold font-display mb-5 pr-6">My Hosting Account</h3>
+                <CustomerAuthForm onAuthed={(c) => { setCustomer(c); setAuthOpen(false); }} />
+              </div>
+            </div>
+          )}
         </section>
       )}
 

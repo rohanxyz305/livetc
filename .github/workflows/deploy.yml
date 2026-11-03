@@ -27,6 +27,27 @@ jobs:
           npm ci
           npm run build
 
+      # Step 3b: Generate server config from GitHub Secrets (never committed to git)
+      - name: 3b. Write Hosting & Razorpay Config
+        env:
+          RAZORPAY_KEY_ID: ${{ secrets.RAZORPAY_KEY_ID }}
+          RAZORPAY_KEY_SECRET: ${{ secrets.RAZORPAY_KEY_SECRET }}
+          RAZORPAY_NOTIFY_EMAIL: ${{ secrets.RAZORPAY_NOTIFY_EMAIL }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+        run: |
+          php -r 'file_put_contents("dist/api/hosting-config.php", "<?php" . PHP_EOL . "return " . var_export([
+            "rzp_key_id" => getenv("RAZORPAY_KEY_ID"),
+            "rzp_key_secret" => getenv("RAZORPAY_KEY_SECRET"),
+            "notify_email" => getenv("RAZORPAY_NOTIFY_EMAIL") ?: "connectliveteachcreate@gmail.com",
+            "db_host" => getenv("DB_HOST") ?: "localhost",
+            "db_name" => getenv("DB_NAME"),
+            "db_user" => getenv("DB_USER"),
+            "db_pass" => getenv("DB_PASS"),
+          ], true) . ";" . PHP_EOL);'
+
       # Step 4: Robust LFTP Deployment to cPanel hosting
       - name: 4. LFTP Sync to cPanel Hosting
         run: |

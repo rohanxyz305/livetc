@@ -16,6 +16,7 @@ import ProductListingGeneratorPage from '../pages/ProductListingGeneratorPage';
 import SeoResultsPage from '../pages/SeoResultsPage';
 import SeoResultsAdminPage from '../pages/SeoResultsAdminPage';
 import GscIndexerAdminPage from '../pages/GscIndexerAdminPage';
+import MyAccountPage from '../pages/MyAccountPage';
 
 export default function AppRoutes({ onOpenContactPopup }) {
   return (
@@ -42,6 +43,9 @@ export default function AppRoutes({ onOpenContactPopup }) {
       <Route path="/seo-results.php" element={<Navigate to="/seo-results" replace />} />
       <Route path="/seo-results/admin" element={<SeoResultsAdminPage />} />
       <Route path="/seo-results-admin" element={<SeoResultsAdminPage />} />
+
+      {/* Hosting Customer Account & Orders */}
+      <Route path="/my-account" element={<MyAccountPage />} />
 
       {/* Google Search Console & AI Blog Indexer Admin Dashboard */}
       <Route path="/gsc-admin" element={<GscIndexerAdminPage />} />
