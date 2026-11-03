@@ -65,6 +65,71 @@ export default function ServiceDetailPage({ onOpenContactPopup }) {
         </div>
       </div>
 
+      {/* Pricing Plans */}
+      {service.pricingPlans && (
+        <section className="py-20 bg-[#0b1218] text-white border-b border-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div className="text-center space-y-3">
+              <span className="inline-block px-3 py-1 bg-[#FEE715]/10 text-[#FEE715] border border-[#FEE715]/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                <i className="fa-solid fa-tags mr-1.5"></i>
+                Pricing Plans
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-white font-display">
+                Choose the Right {service.name} Plan
+              </h2>
+              <p className="text-sm text-gray-400 max-w-2xl mx-auto">
+                Transparent pricing with no hidden charges. All plans include free SSL, cPanel access and 24/7 support.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {service.pricingPlans.map((plan) => (
+                <div
+                  key={plan.name}
+                  className={`relative flex flex-col p-8 rounded-3xl border transition-all ${
+                    plan.popular
+                      ? 'bg-gray-900 border-[#FEE715] shadow-yellowGlow'
+                      : 'bg-gray-900/60 border-gray-800 hover:border-[#FEE715]/50'
+                  }`}
+                >
+                  {plan.popular && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#FEE715] text-[#101820] rounded-full text-[10px] font-extrabold uppercase tracking-wider whitespace-nowrap">
+                      Most Popular
+                    </span>
+                  )}
+                  <h3 className="text-lg font-bold text-white font-display">{plan.name}</h3>
+                  <p className="text-xs text-gray-400 mt-1">{plan.tagline}</p>
+                  <div className="mt-6 flex items-end gap-1">
+                    <span className="text-4xl font-extrabold text-[#FEE715]">
+                      ₹{plan.price.toLocaleString('en-IN')}
+                    </span>
+                    <span className="text-xs text-gray-400 mb-1.5">/{plan.period}</span>
+                  </div>
+                  <ul className="mt-6 space-y-3 flex-1">
+                    {plan.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2 text-xs text-gray-300">
+                        <i className="fa-solid fa-check text-[#FEE715] mt-0.5"></i>
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    onClick={onOpenContactPopup}
+                    className={`mt-8 w-full font-bold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-colors ${
+                      plan.popular
+                        ? 'bg-[#FEE715] hover:bg-[#e0ca00] text-[#101820]'
+                        : 'bg-[#101820] border border-gray-700 hover:border-[#FEE715] text-white'
+                    }`}
+                  >
+                    Get Started
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Main Service Content & Deliverables */}
       <section className="py-20 bg-[#101820] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

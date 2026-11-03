@@ -593,6 +593,90 @@ export const servicesCategories = [
         ],
         heroTitle: "Hassle-Free Website Maintenance & Support",
         heroSubtitle: "Keep your website secure, fast, and always up-to-date with our expert maintenance plans."
+      },
+      {
+        slug: "web-hosting-services-in-india",
+        name: "Web Hosting",
+        shortDesc: "Fast, secure SSD web hosting with free SSL, daily backups, cPanel & 24/7 expert support.",
+        icon: "fa-solid fa-server",
+        category: "Web Development",
+        features: [
+          "High-Speed NVMe SSD Storage",
+          "Free SSL Certificate & Security Firewall",
+          "Easy cPanel Control Panel",
+          "Automated Daily Backups",
+          "99.9% Uptime Guarantee",
+          "24/7 Technical Support"
+        ],
+        heroTitle: "Fast, Secure & Affordable Web Hosting Plans",
+        heroSubtitle: "Host your website on high-performance servers with free SSL, business email, daily backups and round-the-clock expert support.",
+        pricingPlans: [
+          {
+            name: "Starter",
+            price: 1399,
+            period: "year",
+            tagline: "Perfect for personal sites & blogs",
+            features: [
+              "10 Websites",
+              "10 GB NVMe SSD Storage",
+              "Unmetered Bandwidth",
+              "Free SSL Certificate",
+              "2 Business Email Accounts",
+              "Weekly Backups",
+              "cPanel Control Panel",
+              "24/7 Support"
+            ]
+          },
+          {
+            name: "Business",
+            price: 1799,
+            period: "year",
+            tagline: "Ideal for small business websites",
+            features: [
+              "30 Websites",
+              "20 GB NVMe SSD Storage",
+              "Unmetered Bandwidth",
+              "Free SSL Certificate",
+              "3 Business Email Accounts",
+              "Daily Backups",
+              "1-Click WordPress Install",
+              "24/7 Support"
+            ]
+          },
+          {
+            name: "Pro",
+            price: 2199,
+            period: "year",
+            tagline: "Best for growing businesses & stores",
+            popular: true,
+            features: [
+              "40 Websites",
+              "50 GB NVMe SSD Storage",
+              "Unmetered Bandwidth",
+              "Free SSL Certificate",
+              "10 Business Email Accounts",
+              "Daily Backups",
+              "Free CDN & LiteSpeed Cache",
+              "Priority 24/7 Support"
+            ]
+          },
+          {
+            name: "Ultimate",
+            price: 2599,
+            period: "year",
+            tagline: "Maximum power for e-commerce & agencies",
+            features: [
+              "Unlimited Websites",
+              "100 GB NVMe SSD Storage",
+              "Unmetered Bandwidth",
+              "Free SSL Certificate",
+              "20 Business Email Accounts",
+              "Daily Backups + 1-Click Restore",
+              "Free CDN & Malware Scanner",
+              "Dedicated Priority Support"
+            ]
+          }
+        ]
       }
     ]
   }
