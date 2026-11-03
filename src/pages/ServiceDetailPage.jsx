@@ -137,7 +137,17 @@ export default function ServiceDetailPage({ onOpenContactPopup }) {
                   )}
                   <h3 className="text-lg font-bold text-white font-display">{plan.name}</h3>
                   <p className="text-xs text-gray-400 mt-1">{plan.tagline}</p>
-                  <div className="mt-6 flex items-end gap-1">
+                  {plan.originalPrice && (
+                    <div className="mt-6 flex items-center gap-2">
+                      <span className="text-sm text-gray-500 line-through">
+                        ₹{plan.originalPrice.toLocaleString('en-IN')}
+                      </span>
+                      <span className="px-2 py-0.5 bg-green-500/15 text-green-400 rounded-full text-[10px] font-extrabold uppercase tracking-wider">
+                        {plan.discountPercent}% OFF
+                      </span>
+                    </div>
+                  )}
+                  <div className={`${plan.originalPrice ? 'mt-1' : 'mt-6'} flex items-end gap-1`}>
                     <span className="text-4xl font-extrabold text-[#FEE715]">
                       ₹{plan.price.toLocaleString('en-IN')}
                     </span>

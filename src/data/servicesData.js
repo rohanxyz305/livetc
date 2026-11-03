@@ -614,6 +614,8 @@ export const servicesCategories = [
           {
             name: "Starter",
             price: 1399,
+            originalPrice: 2332,
+            discountPercent: 40,
             period: "year",
             tagline: "Perfect for personal sites & blogs",
             features: [
@@ -630,6 +632,8 @@ export const servicesCategories = [
           {
             name: "Business",
             price: 1799,
+            originalPrice: 2998,
+            discountPercent: 40,
             period: "year",
             tagline: "Ideal for small business websites",
             features: [
@@ -646,6 +650,8 @@ export const servicesCategories = [
           {
             name: "Pro",
             price: 2199,
+            originalPrice: 3665,
+            discountPercent: 40,
             period: "year",
             tagline: "Best for growing businesses & stores",
             popular: true,
@@ -663,6 +669,8 @@ export const servicesCategories = [
           {
             name: "Ultimate",
             price: 2599,
+            originalPrice: 4332,
+            discountPercent: 40,
             period: "year",
             tagline: "Maximum power for e-commerce & agencies",
             features: [

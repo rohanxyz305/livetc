@@ -92,6 +92,12 @@ export default function HostingCheckoutModal({ plan, customer, onCustomerChange,
           <p className="text-sm text-gray-400 mt-1">
             <span className="text-2xl font-extrabold text-[#FEE715]">{priceLabel}</span>
             <span className="ml-1">/{plan.period}</span>
+            {plan.originalPrice && (
+              <>
+                <span className="ml-3 text-gray-500 line-through">₹{plan.originalPrice.toLocaleString('en-IN')}</span>
+                <span className="ml-2 text-green-400 font-bold text-xs">{plan.discountPercent}% OFF</span>
+              </>
+            )}
           </p>
         </div>
 
